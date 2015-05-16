@@ -88,3 +88,21 @@ One quick start:
   }
 ```
 For more examples see tests/
+
+# Tests #
+To run tests simply do the following:
+```sh
+$ cmake .
+$ make
+$ ctest
+```
+If you want an more detailed look at the tests run the binary instead
+```sh
+$ cmake .
+$ make
+$ cd tests
+$ ./clangmm_tests --log_level=all
+```
+To see more log parameters see [here](http://www.boost.org/doc/libs/1_58_0/libs/test/doc/html/utf/user-guide/runtime-config/reference.html).
+
+
