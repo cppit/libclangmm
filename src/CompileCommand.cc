@@ -1,6 +1,5 @@
 #include "CompileCommand.h"
 #include "CompileCommands.h"
-#include <iostream>
 
 clang::CompileCommand::
 CompileCommand(int nth, clang::CompileCommands *commands) {

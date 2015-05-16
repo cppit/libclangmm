@@ -5,7 +5,6 @@
 #include <vector>
 #include <map>
 #include <memory>
-#include <iostream>
 #include "Index.h"
 
 namespace clang {

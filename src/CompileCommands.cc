@@ -1,5 +1,4 @@
 #include "CompileCommands.h"
-#include <iostream>
 
 clang::CompileCommands::
 CompileCommands(const std::string &filename, CompilationDatabase *db) {

@@ -1,5 +1,4 @@
 #include "Tokens.h"
-#include <iostream>
 clang::Tokens::Tokens(clang::TranslationUnit *tu, clang::SourceRange *range) {
   clang_tokenize(tu->tu_,
                  range->range_,
