@@ -1,0 +1,7 @@
+cmake_minimum_required (VERSION 2.8.4)
+set(project_name clangmm)
+project(${project_name})
+set(library_installation_path "/usr/local/lib/libclangmm/")
+enable_testing()
+add_subdirectory(src)
+add_subdirectory(tests)
