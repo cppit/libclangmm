@@ -1,5 +1,4 @@
 #include "CompilationDatabase.h"
-#include <iostream>
 
 clang::CompilationDatabase::
 CompilationDatabase(const std::string &project_path) {
