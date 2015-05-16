@@ -21,8 +21,7 @@ You can download the zip [here](https://github.com/cppit/libclangmm/archive/mast
 
 ### Cloning the repository ###
 
-```
-#!bash
+```sh
 $ git clone https://github.com/cppit/libclangmm.git
 
 ```
@@ -30,18 +29,16 @@ $ git clone https://github.com/cppit/libclangmm.git
 
 ## Installation ##
 
-```
-#!sh
-cmake .
-make install
+```sh
+$ cmake .
+$ make install
 ```
 **Notice:** *make install* needs root privileges
 
 # Usage #
 One quick start:
 
-```
-#!c++
+```cpp
   // lets say it is empty
   std::string path("your file here");
 
