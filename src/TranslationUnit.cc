@@ -2,7 +2,7 @@
 
 clang::TranslationUnit::
 ~TranslationUnit() {
-  clang_disposeTranslationUnit(tu_);
+  //  clang_disposeTranslationUnit(tu_);
 }
 
 
