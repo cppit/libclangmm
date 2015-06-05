@@ -7,16 +7,21 @@ CompletionString(const CXCompletionString &str) {
 
 int clang::CompletionString::
 get_num_chunks() {
-  return clang_getNumCompletionChunks(str_);
+  if (clang_getCompletionAvailability(str_) == CXAvailability_Available)
+    return clang_getNumCompletionChunks(str_);
+  else
+    return 0;
 }
 
 std::vector<clang::CompletionChunk> clang::CompletionString::
 get_chunks() {
   std::vector<clang::CompletionChunk> res;
-  for (auto i = 0; i < get_num_chunks(); i++) {
-    res.emplace_back(clang_getCString(clang_getCompletionChunkText(str_, i)),
-                     static_cast<CompletionChunkKind>
-                     (clang_getCompletionChunkKind(str_, i)));
+  if (clang_getCompletionAvailability(str_) == CXAvailability_Available) {
+    for (auto i = 0; i < get_num_chunks(); i++) {
+      res.emplace_back(clang_getCString(clang_getCompletionChunkText(str_, i)),
+		       static_cast<CompletionChunkKind>
+		       (clang_getCompletionChunkKind(str_, i)));
+    }
   }
   return res;
 }
