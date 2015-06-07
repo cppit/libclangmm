@@ -17,11 +17,15 @@ operator=(const clang::TranslationUnit &tu) {
 clang::TranslationUnit::
 TranslationUnit(Index *index,
                 const std::string &filepath,
-                const std::vector<const char*> &command_line_args) {
+                const std::vector<std::string> &command_line_args) {
+  std::vector<const char*> args;
+  for(auto &a: command_line_args) {
+    args.push_back(a.c_str());
+  }
   tu_ = clang_createTranslationUnitFromSourceFile(index->index_,
                                                   filepath.c_str(),
-                                                  command_line_args.size(),
-                                                  command_line_args.data(),
+                                                  args.size(),
+                                                  args.data(),
                                                   0,
                                                   NULL);
 }
@@ -40,7 +44,7 @@ TranslationUnit(Index *index,
 clang::TranslationUnit::
 TranslationUnit(clang::Index *index,
                 const std::string &filepath,
-                const std::vector<const char*> &command_line_args,
+                const std::vector<std::string> &command_line_args,
                 const std::map<std::string, std::string> &buffers) {
   std::vector<CXUnsavedFile> files;
   for (auto &buffer : buffers) {
@@ -50,11 +54,15 @@ TranslationUnit(clang::Index *index,
     file.Length = buffer.second.size();
     files.push_back(file);
   }
+  std::vector<const char*> args;
+  for(auto &a: command_line_args) {
+    args.push_back(a.c_str());
+  }
   tu_ =
     clang_parseTranslationUnit(index->index_,
                                filepath.c_str(),
-                               command_line_args.data(),
-                               command_line_args.size(),
+                               args.data(),
+                               args.size(),
                                files.data(),
                                files.size(),
                                TranslationUnitOptions);
