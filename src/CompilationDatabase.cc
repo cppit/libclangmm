@@ -6,7 +6,7 @@ CompilationDatabase(const std::string &project_path) {
   CXCompilationDatabase_Error error;
   db_ = clang_CompilationDatabase_fromDirectory(project_path.c_str(), &error);
   if(error) {
-    throw std::invalid_argument("clang::CompilationDatabase::CompilationDatabase): CXCompilationDatabase_Error");
+    //TODO: compile_commands.json is missing, create it?
   }
 }
 
