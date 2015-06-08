@@ -4,6 +4,8 @@ clang::CompileCommands::
 CompileCommands(const std::string &filename, CompilationDatabase *db) {
   commands_ =
     clang_CompilationDatabase_getCompileCommands(db->db_, filename.c_str());
+  if(clang_CompileCommands_getSize(commands_)==0)
+    commands_ = clang_CompilationDatabase_getAllCompileCommands(db->db_);
 }
 
 clang::CompileCommands::
