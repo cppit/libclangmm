@@ -41,6 +41,7 @@ namespace clang {
     friend Cursor;
     friend CodeCompleteResults;
     CXTranslationUnit tu_;
+    unsigned flags=CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete;
   };
 }  // namespace clang
 #endif  // TRANSLATIONUNIT_H_

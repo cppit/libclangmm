@@ -1,16 +1,14 @@
 #include "TranslationUnit.h"
 
-const int TranslationUnitOptions = CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete;
-
 clang::TranslationUnit::
 ~TranslationUnit() {
   //  clang_disposeTranslationUnit(tu_);
 }
 
-
 clang::TranslationUnit& clang::TranslationUnit::
 operator=(const clang::TranslationUnit &tu) {
   tu_ = tu.tu_;
+  flags = tu.flags;
   return *this;
 }
 
@@ -65,7 +63,7 @@ TranslationUnit(clang::Index *index,
                                args.size(),
                                files.data(),
                                files.size(),
-                               TranslationUnitOptions);
+                               flags);
 }
 
 int clang::TranslationUnit::
@@ -82,5 +80,5 @@ ReparseTranslationUnit(const std::string &file_path,
   return clang_reparseTranslationUnit(tu_,
                                       files.size(),
                                       files.data(),
-                                      TranslationUnitOptions);
+                                      flags);
 }
