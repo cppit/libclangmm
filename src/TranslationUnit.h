@@ -28,7 +28,6 @@ namespace clang {
     TranslationUnit(Index *index,
                     const std::string &filepath);
     ~TranslationUnit();
-    TranslationUnit() { }
     TranslationUnit& operator=(const TranslationUnit &tu);
     int ReparseTranslationUnit(const std::string &file_path,
                                const std::map<std::string, std::string>
