@@ -23,16 +23,17 @@ namespace clang {
     TranslationUnit(Index *index,
                     const std::string &filepath,
                     const std::vector<std::string> &command_line_args,
-                    const std::map<std::string, std::string> &buffers);
+                    const std::map<std::string, std::string> &buffers,
+                    unsigned flags=DefaultFlags());
     TranslationUnit(Index *index,
                     const std::string &filepath);
     ~TranslationUnit();
-    TranslationUnit() { }
     TranslationUnit& operator=(const TranslationUnit &tu);
     int ReparseTranslationUnit(const std::string &file_path,
                                const std::map<std::string, std::string>
-                               &buffers);
-
+                               &buffers,
+                               unsigned flags=DefaultFlags());
+    static unsigned DefaultFlags();
   private:
     friend Token;
     friend Tokens;

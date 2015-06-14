@@ -1,12 +1,9 @@
 #include "TranslationUnit.h"
 
-const int TranslationUnitOptions = CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete;
-
 clang::TranslationUnit::
 ~TranslationUnit() {
-  //  clang_disposeTranslationUnit(tu_);
+  clang_disposeTranslationUnit(tu_);
 }
-
 
 clang::TranslationUnit& clang::TranslationUnit::
 operator=(const clang::TranslationUnit &tu) {
@@ -45,7 +42,8 @@ clang::TranslationUnit::
 TranslationUnit(clang::Index *index,
                 const std::string &filepath,
                 const std::vector<std::string> &command_line_args,
-                const std::map<std::string, std::string> &buffers) {
+                const std::map<std::string, std::string> &buffers,
+                unsigned flags) {
   std::vector<CXUnsavedFile> files;
   for (auto &buffer : buffers) {
     CXUnsavedFile file;
@@ -65,12 +63,13 @@ TranslationUnit(clang::Index *index,
                                args.size(),
                                files.data(),
                                files.size(),
-                               TranslationUnitOptions);
+                               flags);
 }
 
 int clang::TranslationUnit::
 ReparseTranslationUnit(const std::string &file_path,
-                       const std::map<std::string, std::string>  &buffers) {
+                       const std::map<std::string, std::string>  &buffers,
+                       unsigned flags) {
   std::vector<CXUnsavedFile> files;
   for (auto &buffer : buffers) {
     CXUnsavedFile file;
@@ -82,5 +81,9 @@ ReparseTranslationUnit(const std::string &file_path,
   return clang_reparseTranslationUnit(tu_,
                                       files.size(),
                                       files.data(),
-                                      TranslationUnitOptions);
+                                      flags);
+}
+
+unsigned clang::TranslationUnit::DefaultFlags() {
+  return CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete;
 }
