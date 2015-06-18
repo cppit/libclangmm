@@ -30,6 +30,12 @@ BOOST_AUTO_TEST_CASE(code_complete_results) {
 
   clang::CodeCompleteResults results(&tu, path, buffers, 4, 5);
 
-  BOOST_CHECK(results.size() == 105);
-  BOOST_CHECK(results.get(0).get_num_chunks() == 5);
+  bool substr_found=false;
+  for(int c=0;c<results.size();c++) {
+    if(results.get(c).get_chunks()[1].chunk()=="substr") {
+      substr_found=true;
+      break;
+    }
+  }
+  BOOST_CHECK(substr_found);
 }

@@ -5,7 +5,6 @@ clang::TranslationUnit::
   clang_disposeTranslationUnit(tu_);
 }
 
-
 clang::TranslationUnit& clang::TranslationUnit::
 operator=(const clang::TranslationUnit &tu) {
   tu_ = tu.tu_;
@@ -15,11 +14,15 @@ operator=(const clang::TranslationUnit &tu) {
 clang::TranslationUnit::
 TranslationUnit(Index *index,
                 const std::string &filepath,
-                const std::vector<const char*> &command_line_args) {
+                const std::vector<std::string> &command_line_args) {
+  std::vector<const char*> args;
+  for(auto &a: command_line_args) {
+    args.push_back(a.c_str());
+  }
   tu_ = clang_createTranslationUnitFromSourceFile(index->index_,
                                                   filepath.c_str(),
-                                                  command_line_args.size(),
-                                                  command_line_args.data(),
+                                                  args.size(),
+                                                  args.data(),
                                                   0,
                                                   NULL);
 }
@@ -38,8 +41,9 @@ TranslationUnit(Index *index,
 clang::TranslationUnit::
 TranslationUnit(clang::Index *index,
                 const std::string &filepath,
-                const std::vector<const char*> &command_line_args,
-                const std::map<std::string, std::string> &buffers) {
+                const std::vector<std::string> &command_line_args,
+                const std::map<std::string, std::string> &buffers,
+                unsigned flags) {
   std::vector<CXUnsavedFile> files;
   for (auto &buffer : buffers) {
     CXUnsavedFile file;
@@ -48,19 +52,24 @@ TranslationUnit(clang::Index *index,
     file.Length = buffer.second.size();
     files.push_back(file);
   }
+  std::vector<const char*> args;
+  for(auto &a: command_line_args) {
+    args.push_back(a.c_str());
+  }
   tu_ =
     clang_parseTranslationUnit(index->index_,
                                filepath.c_str(),
-                               command_line_args.data(),
-                               command_line_args.size(),
+                               args.data(),
+                               args.size(),
                                files.data(),
                                files.size(),
-                               clang_defaultEditingTranslationUnitOptions());
+                               flags);
 }
 
 int clang::TranslationUnit::
 ReparseTranslationUnit(const std::string &file_path,
-                       const std::map<std::string, std::string>  &buffers) {
+                       const std::map<std::string, std::string>  &buffers,
+                       unsigned flags) {
   std::vector<CXUnsavedFile> files;
   for (auto &buffer : buffers) {
     CXUnsavedFile file;
@@ -72,5 +81,9 @@ ReparseTranslationUnit(const std::string &file_path,
   return clang_reparseTranslationUnit(tu_,
                                       files.size(),
                                       files.data(),
-                                      clang_defaultReparseOptions(tu_));
+                                      flags);
+}
+
+unsigned clang::TranslationUnit::DefaultFlags() {
+  return CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete;
 }

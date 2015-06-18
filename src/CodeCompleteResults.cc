@@ -1,5 +1,6 @@
 #include "CodeCompleteResults.h"
 #include "CompletionString.h"
+#include <exception>
 
 clang::CodeCompleteResults::
 CodeCompleteResults(clang::TranslationUnit *tu,
@@ -32,8 +33,8 @@ size() {
 
 clang::CompletionString clang::CodeCompleteResults::
 get(int i) {
-  if (i > size()) {
-    // TODO(zalox) return type
+  if (i >= size()) {
+    throw std::invalid_argument("clang::CodeCompleteResults::get(int i): i>=size()");
   }
   return CompletionString(results_->Results[i].CompletionString);
 }
