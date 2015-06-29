@@ -12,4 +12,5 @@
 #include "CompletionString.h"
 #include "Index.h"
 #include "Cursor.h"
+#include "Diagnostic.h"
 #endif  // CLANGMM_H_

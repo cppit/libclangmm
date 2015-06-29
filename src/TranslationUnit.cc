@@ -1,4 +1,6 @@
 #include "TranslationUnit.h"
+#include "SourceLocation.h"
+#include "Tokens.h"
 
 clang::TranslationUnit::
 ~TranslationUnit() {
@@ -86,4 +88,37 @@ ReparseTranslationUnit(const std::string &file_path,
 
 unsigned clang::TranslationUnit::DefaultFlags() {
   return CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete;
+}
+
+std::vector<clang::Diagnostic> clang::TranslationUnit::get_diagnostics() {
+  std::vector<clang::Diagnostic> diagnostics;
+  for(unsigned c=0;c<clang_getNumDiagnostics(tu_);c++) {
+    CXDiagnostic clang_diagnostic=clang_getDiagnostic(tu_, c);
+    diagnostics.emplace_back();
+    auto& diagnostic=diagnostics.back();
+
+    diagnostic.severity=clang_getDiagnosticSeverity(clang_diagnostic);
+    diagnostic.spelling=clang_getCString(clang_getDiagnosticSpelling(clang_diagnostic));
+    SourceLocation location(clang_getDiagnosticLocation(clang_diagnostic));
+    std::string path;
+    unsigned line, column, offset;
+    location.get_location_info(&path, &line, &column, &offset);
+    diagnostic.path=path;
+    diagnostic.start_location.line=line;
+    diagnostic.start_location.column=column;
+    diagnostic.start_location.offset=offset;
+    
+    clang::SourceRange range(&location, &location);
+    clang::Tokens tokens(this, &range);
+    if(tokens.tokens().size()==1) {
+      auto& token=tokens.tokens()[0];
+      clang::SourceRange range=token.get_source_range(this);
+      clang::SourceLocation end_location(&range, false);
+      end_location.get_location_info(NULL, &line, &column, &offset);
+      diagnostic.end_location.line=line;
+      diagnostic.end_location.column=column;
+      diagnostic.end_location.offset=offset;
+    }
+  }
+  return diagnostics;
 }

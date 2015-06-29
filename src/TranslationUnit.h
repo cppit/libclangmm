@@ -6,6 +6,7 @@
 #include <map>
 #include <memory>
 #include "Index.h"
+#include "Diagnostic.h"
 
 namespace clang {
   class Token;
@@ -34,6 +35,8 @@ namespace clang {
                                &buffers,
                                unsigned flags=DefaultFlags());
     static unsigned DefaultFlags();
+    std::vector<Diagnostic> get_diagnostics();
+    
   private:
     friend Token;
     friend Tokens;

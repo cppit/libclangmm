@@ -25,6 +25,7 @@ set(header_files
   Token.h               
   Tokens.h              
   TranslationUnit.h
+  Diagnostic.h
   )
 set(cc_files
   CodeCompleteResults.cc
