@@ -1,5 +1,5 @@
-#ifndef DIAGNOSTICS_H_
-#define DIAGNOSTICS_H_
+#ifndef DIAGNOSTIC_H_
+#define DIAGNOSTIC_H_
 #include "TranslationUnit.h"
 
 namespace clang {  
@@ -17,4 +17,4 @@ namespace clang {
   };
 }
 
-#endif  // DIAGNOSTICS_H_
+#endif  // DIAGNOSTIC_H_
