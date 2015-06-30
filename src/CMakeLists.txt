@@ -40,6 +40,7 @@ set(cc_files
   Token.cc              
   Tokens.cc             
   TranslationUnit.cc
+  Diagnostic.cc
   )
 
 add_library(${project_name} SHARED ${header_files} ${cc_files})

@@ -98,6 +98,7 @@ std::vector<clang::Diagnostic> clang::TranslationUnit::get_diagnostics() {
     auto& diagnostic=diagnostics.back();
 
     diagnostic.severity=clang_getDiagnosticSeverity(clang_diagnostic);
+    diagnostic.severity_spelling=clang::Diagnostic::get_severity_spelling(diagnostic.severity);
     diagnostic.spelling=clang_getCString(clang_getDiagnosticSpelling(clang_diagnostic));
     SourceLocation location(clang_getDiagnosticLocation(clang_diagnostic));
     std::string path;
