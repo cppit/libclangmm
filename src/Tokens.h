@@ -10,7 +10,7 @@ namespace clang {
     Tokens(TranslationUnit *tu, SourceRange *range);
     ~Tokens();
     std::vector<Token>& tokens();
-  protected:
+  private:
     std::vector<clang::Token> tks;
     CXToken *tokens_;
     unsigned num_tokens_;

@@ -15,6 +15,7 @@ namespace clang {
   class SourceRange;
   class Cursor;
   class CodeCompleteResults;
+  class Diagnostic;
 
   class TranslationUnit {
   public:
@@ -35,7 +36,7 @@ namespace clang {
                                &buffers,
                                unsigned flags=DefaultFlags());
     static unsigned DefaultFlags();
-    std::vector<Diagnostic> get_diagnostics();
+    std::vector<clang::Diagnostic> get_diagnostics();
     
   private:
     friend Token;

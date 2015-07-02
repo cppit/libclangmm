@@ -7,16 +7,17 @@
 namespace clang {
   class SourceRange {
   public:
+    SourceRange() {}
     SourceRange(TranslationUnit *tu, Token *token);
     SourceRange(SourceLocation *start,
                 SourceLocation *end);
     explicit SourceRange(Cursor *cursor);
-    ~SourceRange();
 
   private:
     CXSourceRange range_;
     friend Tokens;
     friend SourceLocation;
+    friend Diagnostic;
   };
 }  // namespace clang
 #endif  // SOURCERANGE_H_

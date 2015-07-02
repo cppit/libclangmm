@@ -10,8 +10,6 @@ SourceRange(clang::SourceLocation *start, clang::SourceLocation *end) {
   range_ = clang_getRange(start->location_, end->location_);
 }
 
-clang::SourceRange::~SourceRange() { }
-
 clang::SourceRange::SourceRange(Cursor *cursor) {
   range_ = clang_getCursorExtent(cursor->cursor_);
 }
