@@ -10,6 +10,7 @@ namespace clang {
     Tokens(TranslationUnit *tu, SourceRange *range);
     ~Tokens();
     std::vector<Token>& tokens();
+    std::vector<clang::Cursor> get_token_cursors(clang::TranslationUnit *tu);
   private:
     std::vector<clang::Token> tks;
     CXToken *tokens_;

@@ -174,12 +174,14 @@ namespace clang {
 
   class Cursor {
   public:
+    Cursor() {}
     Cursor(TranslationUnit *tu, SourceLocation *source_location);
     const CursorKind kind();
   private:
     CXCursor cursor_;
     friend SourceRange;
     friend SourceLocation;
+    friend Tokens;
   };
 }  // namespace clang
 #endif  // CURSOR_H_
