@@ -13,7 +13,7 @@ namespace clang {
       unsigned line, column, offset;
     };
     
-    Diagnostic(clang::TranslationUnit& tu, CXDiagnostic clang_diagnostic);
+    Diagnostic(clang::TranslationUnit& tu, CXDiagnostic& clang_diagnostic);
     
     static const std::string get_severity_spelling(unsigned severity);
 

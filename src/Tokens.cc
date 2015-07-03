@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-clang::Tokens::Tokens(clang::TranslationUnit *tu, clang::SourceRange *range) {
+clang::Tokens::Tokens(clang::TranslationUnit *tu, clang::SourceRange *range): tu(*tu) {
   clang_tokenize(tu->tu_,
                  range->range_,
                  &tokens_,
@@ -13,22 +13,16 @@ clang::Tokens::Tokens(clang::TranslationUnit *tu, clang::SourceRange *range) {
 }
 
 clang::Tokens::~Tokens() {
-  // instead of using clang_disposeTokens() the implementation
-  // of the latter method is just free(token_) the same as
-  // delete(tokens_) eliminating the need of tu*
-  delete tokens_;
+  clang_disposeTokens(tu.tu_, tokens_, tks.size());
 }
 
 std::vector<clang::Token>& clang::Tokens::tokens() {
   return tks;
 }
 
-std::vector<clang::Cursor> clang::Tokens::get_token_cursors(clang::TranslationUnit *tu) {
-  std::vector<CXToken> clang_tokens;
-  for(auto& token: tks)
-    clang_tokens.emplace_back(token.token_);
-  std::vector<CXCursor> clang_cursors(clang_tokens.size());
-  clang_annotateTokens(tu->tu_, clang_tokens.data(), clang_tokens.size(), &clang_cursors.data()[0]);
+void clang::Tokens::get_token_types(clang::TranslationUnit *tu) {
+  std::vector<CXCursor> clang_cursors(tks.size());
+  clang_annotateTokens(tu->tu_, tokens_, tks.size(), clang_cursors.data());
   
   std::vector<clang::Cursor> cursors;
   for(auto clang_cursor: clang_cursors) {
@@ -37,15 +31,19 @@ std::vector<clang::Cursor> clang::Tokens::get_token_cursors(clang::TranslationUn
   }
   
   for(int c=0;c<tks.size();c++) {
-    auto referenced=clang_getCursorReferenced(cursors[c].cursor_);
+    auto referenced=clang_getCursorReferenced(clang_cursors[c]);
     if(!clang_Cursor_isNull(referenced)) {
       auto type=clang_getCursorType(referenced);
-      std::string spelling=clang_getCString(clang_getTypeSpelling(type));
+      auto cxstr=clang_getTypeSpelling(type);
+      std::string spelling=clang_getCString(cxstr);
+      clang_disposeString(cxstr);
       std::string auto_end="";
       if(spelling.size()>=4 && spelling.substr(0, 4)=="auto") {
         auto_end=spelling.substr(4);
-        auto type=clang_getCanonicalType(clang_getCursorType(cursors[c].cursor_));
-        spelling=clang_getCString(clang_getTypeSpelling(type));
+        auto type=clang_getCanonicalType(clang_getCursorType(clang_cursors[c]));
+        auto cxstr=clang_getTypeSpelling(type);
+        spelling=clang_getCString(cxstr);
+        clang_disposeString(cxstr);
         if(spelling.find(" ")==std::string::npos)
           spelling+=auto_end;
       }
@@ -88,5 +86,4 @@ std::vector<clang::Cursor> clang::Tokens::get_token_cursors(clang::TranslationUn
       }
     }*/
   }
-  return cursors;
 }

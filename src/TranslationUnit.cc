@@ -95,6 +95,7 @@ std::vector<clang::Diagnostic> clang::TranslationUnit::get_diagnostics() {
   for(unsigned c=0;c<clang_getNumDiagnostics(tu_);c++) {
     CXDiagnostic clang_diagnostic=clang_getDiagnostic(tu_, c);
     diagnostics.emplace_back(clang::Diagnostic(*this, clang_diagnostic));
+    clang_disposeDiagnostic(clang_diagnostic);
   }
   return diagnostics;
 }

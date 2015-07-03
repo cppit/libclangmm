@@ -25,7 +25,7 @@ namespace clang {
     friend SourceRange;
     friend SourceLocation;
     friend Tokens;
-    CXToken token_;
+    const CXToken& token_;
   };
 }  // namespace clang
 #endif  // TOKEN_H_

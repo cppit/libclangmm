@@ -2,7 +2,7 @@
 #include "SourceLocation.h"
 #include "Tokens.h"
 
-clang::Diagnostic::Diagnostic(clang::TranslationUnit& tu, CXDiagnostic clang_diagnostic) {
+clang::Diagnostic::Diagnostic(clang::TranslationUnit& tu, CXDiagnostic& clang_diagnostic) {
   severity=clang_getDiagnosticSeverity(clang_diagnostic);
   severity_spelling=get_severity_spelling(severity);
   spelling=clang_getCString(clang_getDiagnosticSpelling(clang_diagnostic));
