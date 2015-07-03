@@ -46,7 +46,7 @@ std::vector<clang::Cursor> clang::Tokens::get_token_cursors(clang::TranslationUn
         auto_end=spelling.substr(4);
         auto type=clang_getCanonicalType(clang_getCursorType(cursors[c].cursor_));
         spelling=clang_getCString(clang_getTypeSpelling(type));
-        if(spelling.size()>=4 && spelling.substr(0, 4)!="auto" && spelling.substr(4)!=auto_end)
+        if(spelling.find(" ")==std::string::npos)
           spelling+=auto_end;
       }
       tks[c].type=spelling;
