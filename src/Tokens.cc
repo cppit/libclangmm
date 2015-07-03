@@ -39,12 +39,22 @@ std::vector<clang::Cursor> clang::Tokens::get_token_cursors(clang::TranslationUn
   for(int c=0;c<tks.size();c++) {
     auto referenced=clang_getCursorReferenced(cursors[c].cursor_);
     if(!clang_Cursor_isNull(referenced)) {
-      //auto type=clang_getCursorType(referenced);
-      auto type=clang_getCanonicalType(clang_getCursorType(cursors[c].cursor_));
-      //auto cursor=clang_getTypeDeclaration(type); 
-      //tks[c].type=clang_getCString(clang_getCursorSpelling(cursor));
-      //auto type=clang_getCursorType(referenced);
-      tks[c].type=clang_getCString(clang_getTypeSpelling(type));
+      auto type=clang_getCursorType(referenced);
+      std::string spelling=clang_getCString(clang_getTypeSpelling(type));
+      std::string auto_end="";
+      if(spelling.substr(0, 4)=="auto") {
+        auto_end=spelling.substr(4);
+        auto type=clang_getCanonicalType(clang_getCursorType(cursors[c].cursor_));
+        spelling=clang_getCString(clang_getTypeSpelling(type));
+        if(spelling.substr(0, 4)!="auto" && spelling.substr(4)!=auto_end)
+          spelling+=auto_end;
+      }
+      tks[c].type=spelling;
+      //std::cout << clang_getCString(clang_getTypeSpelling(type)) << ": " << type.kind << endl;
+      ////auto cursor=clang_getTypeDeclaration(type); 
+      ////tks[c].type=clang_getCString(clang_getCursorSpelling(cursor));
+      ////auto type=clang_getCursorType(referenced);
+      
     }
     //Testing:
     /*if(tks[c].get_token_spelling(tu)=="text_view") {
