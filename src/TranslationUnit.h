@@ -36,8 +36,9 @@ namespace clang {
                                &buffers,
                                unsigned flags=DefaultFlags());
     static unsigned DefaultFlags();
-    std::vector<clang::Diagnostic> get_diagnostics();
+    void update_diagnostics();
     
+    std::vector<clang::Diagnostic> diagnostics;
   private:
     friend Token;
     friend Tokens;

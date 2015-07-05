@@ -90,12 +90,11 @@ unsigned clang::TranslationUnit::DefaultFlags() {
   return CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete;
 }
 
-std::vector<clang::Diagnostic> clang::TranslationUnit::get_diagnostics() {
-  std::vector<clang::Diagnostic> diagnostics;
+void clang::TranslationUnit::update_diagnostics() {
+  diagnostics.clear();
   for(unsigned c=0;c<clang_getNumDiagnostics(tu_);c++) {
     CXDiagnostic clang_diagnostic=clang_getDiagnostic(tu_, c);
     diagnostics.emplace_back(clang::Diagnostic(*this, clang_diagnostic));
     clang_disposeDiagnostic(clang_diagnostic);
   }
-  return diagnostics;
 }

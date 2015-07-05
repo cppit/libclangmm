@@ -8,21 +8,17 @@ clang::Tokens::Tokens(clang::TranslationUnit *tu, clang::SourceRange *range): tu
                  &tokens_,
                  &num_tokens_);
   for (int i = 0; i < num_tokens_; i++) {
-    tks.push_back(clang::Token(tokens_[i]));
+    push_back(clang::Token(tokens_[i]));
   }
 }
 
 clang::Tokens::~Tokens() {
-  clang_disposeTokens(tu.tu_, tokens_, tks.size());
+  clang_disposeTokens(tu.tu_, tokens_, size());
 }
 
-std::vector<clang::Token>& clang::Tokens::tokens() {
-  return tks;
-}
-
-void clang::Tokens::get_token_types(clang::TranslationUnit *tu) {
-  std::vector<CXCursor> clang_cursors(tks.size());
-  clang_annotateTokens(tu->tu_, tokens_, tks.size(), clang_cursors.data());
+void clang::Tokens::update_types(clang::TranslationUnit *tu) {
+  std::vector<CXCursor> clang_cursors(size());
+  clang_annotateTokens(tu->tu_, tokens_, size(), clang_cursors.data());
   
   std::vector<clang::Cursor> cursors;
   for(auto clang_cursor: clang_cursors) {
@@ -30,7 +26,7 @@ void clang::Tokens::get_token_types(clang::TranslationUnit *tu) {
     cursors.back().cursor_=clang_cursor;
   }
   
-  for(int c=0;c<tks.size();c++) {
+  for(int c=0;c<size();c++) {
     auto referenced=clang_getCursorReferenced(clang_cursors[c]);
     if(!clang_Cursor_isNull(referenced)) {
       auto type=clang_getCursorType(referenced);
@@ -38,7 +34,8 @@ void clang::Tokens::get_token_types(clang::TranslationUnit *tu) {
       std::string spelling=clang_getCString(cxstr);
       clang_disposeString(cxstr);
       std::string auto_end="";
-      if(spelling.size()>=4 && spelling.substr(0, 4)=="auto") {
+      //TODO fix const auto
+      if((spelling.size()>=4 && spelling.substr(0, 4)=="auto")) {
         auto_end=spelling.substr(4);
         auto type=clang_getCanonicalType(clang_getCursorType(clang_cursors[c]));
         auto cxstr=clang_getTypeSpelling(type);
@@ -47,7 +44,7 @@ void clang::Tokens::get_token_types(clang::TranslationUnit *tu) {
         if(spelling.find(" ")==std::string::npos)
           spelling+=auto_end;
       }
-      tks[c].type=spelling;
+      (*this)[c].type=spelling;
       //std::cout << clang_getCString(clang_getTypeSpelling(type)) << ": " << type.kind << endl;
       ////auto cursor=clang_getTypeDeclaration(type); 
       ////tks[c].type=clang_getCString(clang_getCursorSpelling(cursor));

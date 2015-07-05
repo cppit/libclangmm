@@ -5,14 +5,12 @@
 #include "Token.h"
 
 namespace clang {
-  class Tokens {
+  class Tokens : public std::vector<clang::Token> {
   public:
     Tokens(TranslationUnit *tu, SourceRange *range);
     ~Tokens();
-    std::vector<Token>& tokens();
-    void get_token_types(clang::TranslationUnit *tu);
+    void update_types(clang::TranslationUnit *tu);
   private:
-    std::vector<clang::Token> tks;
     CXToken *tokens_;
     unsigned num_tokens_;
     TranslationUnit& tu;

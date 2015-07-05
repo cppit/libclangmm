@@ -17,8 +17,8 @@ clang::Diagnostic::Diagnostic(clang::TranslationUnit& tu, CXDiagnostic& clang_di
   
   clang::SourceRange range(&location, &location);
   clang::Tokens tokens(&tu, &range);
-  if(tokens.tokens().size()==1) {
-    auto& token=tokens.tokens()[0];
+  if(tokens.size()==1) {
+    auto& token=tokens[0];
     clang::SourceRange range=token.get_source_range(&tu);
     clang::SourceLocation location(&range, false);
     location.get_location_info(NULL, &line, &column, &offset);

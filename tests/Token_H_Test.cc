@@ -15,9 +15,9 @@ BOOST_AUTO_TEST_CASE(token) {
 
   clang::Tokens tokens(&tu, &range);
 
-  BOOST_CHECK(tokens.tokens().size() == 32);
-  BOOST_CHECK(tokens.tokens()[1].kind() == clang::TokenKind::Token_Identifier);
+  BOOST_CHECK(tokens.size() == 32);
+  BOOST_CHECK(tokens[1].kind() == clang::TokenKind::Token_Identifier);
 
-  std::string str = tokens.tokens()[28].get_token_spelling(&tu);
+  std::string str = tokens[28].get_token_spelling(&tu);
   BOOST_CHECK(str == "return");  
 }
