@@ -10,7 +10,7 @@ namespace clang {
     Tokens(TranslationUnit *tu, SourceRange *range);
     ~Tokens();
     void update_types(clang::TranslationUnit *tu);
-    std::string get_brief_comment(size_t cursor_id);
+    std::string get_brief_comments(size_t cursor_id);
   private:
     CXToken *tokens_;
     unsigned num_tokens_;

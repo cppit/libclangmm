@@ -40,6 +40,11 @@ namespace clang {
     
     std::vector<clang::Diagnostic> diagnostics;
   private:
+    void parse(Index *index,
+               const std::string &filepath,
+               const std::vector<std::string> &command_line_args,
+               const std::map<std::string, std::string> &buffers,
+               unsigned flags=DefaultFlags());
     friend Token;
     friend Tokens;
     friend SourceLocation;

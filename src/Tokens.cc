@@ -81,7 +81,7 @@ void clang::Tokens::update_types(clang::TranslationUnit *tu) {
   }
 }
 
-std::string clang::Tokens::get_brief_comment(size_t cursor_id) {
+std::string clang::Tokens::get_brief_comments(size_t cursor_id) {
   std::string comment_string;
   auto referenced=clang_getCursorReferenced(clang_cursors[cursor_id]);
   auto comment=clang_Cursor_getParsedComment(referenced);
