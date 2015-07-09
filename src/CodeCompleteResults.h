@@ -13,7 +13,8 @@ namespace clang {
                         const std::map<std::string, std::string>  &buffers,
                         int line_num,
                         int column);
-    ~CodeCompleteResults() {clang_disposeCodeCompleteResults(results_);}
+    //TODO: Fix this for older versions of libclang
+    //~CodeCompleteResults() {clang_disposeCodeCompleteResults(results_);}
     CompletionString get(int index);
     int size();
 
