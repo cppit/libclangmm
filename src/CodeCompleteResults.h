@@ -14,7 +14,7 @@ namespace clang {
                         int line_num,
                         int column);
     //TODO: Fix this for older versions of libclang
-    //~CodeCompleteResults() {clang_disposeCodeCompleteResults(results_);}
+    ~CodeCompleteResults();
     CompletionString get(int index);
     int size();
 

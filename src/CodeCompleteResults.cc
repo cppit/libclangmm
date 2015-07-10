@@ -26,6 +26,11 @@ CodeCompleteResults(clang::TranslationUnit *tu,
   clang_sortCodeCompletionResults(results_->Results, results_->NumResults);
 }
 
+clang::CodeCompleteResults::~CodeCompleteResults() {
+  delete[] results_->Results;
+  delete results_;
+}
+
 int clang::CodeCompleteResults::
 size() {
   return results_->NumResults;
