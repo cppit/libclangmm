@@ -5,8 +5,8 @@
 BOOST_AUTO_TEST_CASE(completion_chunk) {
   clang::CompletionChunk str("(", clang::CompletionChunk_LeftBrace);
 
-  BOOST_CHECK(str.chunk() == "(");
-  BOOST_CHECK(str.kind() == clang::CompletionChunk_LeftBrace);
+  BOOST_CHECK(str.chunk == "(");
+  BOOST_CHECK(str.kind == clang::CompletionChunk_LeftBrace);
 }
 
 BOOST_AUTO_TEST_CASE(completion_string) {

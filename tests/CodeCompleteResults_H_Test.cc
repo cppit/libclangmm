@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(code_complete_results) {
 
   bool substr_found=false;
   for(int c=0;c<results.size();c++) {
-    if(results.get(c).get_chunks()[1].chunk()=="substr") {
+    if(results.get(c).get_chunks()[1].chunk=="substr") {
       substr_found=true;
       break;
     }

@@ -38,4 +38,4 @@ std::string clang::CompletionString::get_brief_comments() {
 
 clang::CompletionChunk::
 CompletionChunk(std::string chunk, clang::CompletionChunkKind kind) :
-  chunk_(chunk), kind_(kind) { }
+  chunk(chunk), kind(kind) { }

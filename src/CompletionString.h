@@ -21,11 +21,8 @@ namespace clang {
   class CompletionChunk {
   public:
     CompletionChunk(std::string chunk, CompletionChunkKind kind);
-    const std::string& chunk() const { return chunk_; }
-    const CompletionChunkKind& kind() const { return kind_; }
-  private:
-    std::string chunk_;
-    CompletionChunkKind kind_;
+    std::string chunk;
+    CompletionChunkKind kind;
   };
 
   class CompletionString {
