@@ -22,8 +22,13 @@ CodeCompleteResults(clang::TranslationUnit *tu,
                                   column,
                                   files.data(),
                                   files.size(),
-                                  clang_defaultCodeCompleteOptions());
+                                  clang_defaultCodeCompleteOptions()|CXCodeComplete_IncludeBriefComments);
   clang_sortCodeCompletionResults(results_->Results, results_->NumResults);
+}
+
+clang::CodeCompleteResults::~CodeCompleteResults() {
+  delete[] results_->Results;
+  delete results_;
 }
 
 int clang::CodeCompleteResults::

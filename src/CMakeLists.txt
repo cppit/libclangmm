@@ -1,4 +1,4 @@
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3  -Wall -Wno-reorder")
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_HOME_DIRECTORY}/cmake/Modules/")
@@ -25,6 +25,7 @@ set(header_files
   Token.h               
   Tokens.h              
   TranslationUnit.h
+  Diagnostic.h
   )
 set(cc_files
   CodeCompleteResults.cc
@@ -39,6 +40,7 @@ set(cc_files
   Token.cc              
   Tokens.cc             
   TranslationUnit.cc
+  Diagnostic.cc
   )
 
 add_library(${project_name} SHARED ${header_files} ${cc_files})

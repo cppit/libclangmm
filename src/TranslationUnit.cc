@@ -1,4 +1,8 @@
 #include "TranslationUnit.h"
+#include "SourceLocation.h"
+#include "Tokens.h"
+#include <fstream>
+#include <sstream>
 
 clang::TranslationUnit::
 ~TranslationUnit() {
@@ -15,27 +19,24 @@ clang::TranslationUnit::
 TranslationUnit(Index *index,
                 const std::string &filepath,
                 const std::vector<std::string> &command_line_args) {
-  std::vector<const char*> args;
-  for(auto &a: command_line_args) {
-    args.push_back(a.c_str());
-  }
-  tu_ = clang_createTranslationUnitFromSourceFile(index->index_,
-                                                  filepath.c_str(),
-                                                  args.size(),
-                                                  args.data(),
-                                                  0,
-                                                  NULL);
+  std::map<std::string, std::string> buffers;
+  std::ifstream ifs(filepath, std::ifstream::in);
+  std::stringstream ss;
+  ss << ifs.rdbuf();
+  buffers[filepath]=ss.str();
+  parse(index, filepath, command_line_args, buffers);
 }
 
 clang::TranslationUnit::
 TranslationUnit(Index *index,
                 const std::string &filepath) {
-  tu_ = clang_createTranslationUnitFromSourceFile(index->index_,
-                                                  filepath.c_str(),
-                                                  0,
-                                                  NULL,
-                                                  0,
-                                                  NULL);
+  std::vector<std::string> command_line_args;
+  std::map<std::string, std::string> buffers;
+  std::ifstream ifs(filepath, std::ifstream::in);
+  std::stringstream ss;
+  ss << ifs.rdbuf();
+  buffers[filepath]=ss.str();
+  parse(index, filepath, command_line_args, buffers);
 }
 
 clang::TranslationUnit::
@@ -44,6 +45,14 @@ TranslationUnit(clang::Index *index,
                 const std::vector<std::string> &command_line_args,
                 const std::map<std::string, std::string> &buffers,
                 unsigned flags) {
+  parse(index, filepath, command_line_args, buffers, flags);
+}
+
+void clang::TranslationUnit::parse(Index *index,
+                                   const std::string &filepath,
+                                   const std::vector<std::string> &command_line_args,
+                                   const std::map<std::string, std::string>  &buffers,
+                                   unsigned flags) {
   std::vector<CXUnsavedFile> files;
   for (auto &buffer : buffers) {
     CXUnsavedFile file;
@@ -57,13 +66,13 @@ TranslationUnit(clang::Index *index,
     args.push_back(a.c_str());
   }
   tu_ =
-    clang_parseTranslationUnit(index->index_,
-                               filepath.c_str(),
-                               args.data(),
-                               args.size(),
-                               files.data(),
-                               files.size(),
-                               flags);
+   clang_parseTranslationUnit(index->index_,
+                              filepath.c_str(),
+                              args.data(),
+                              args.size(),
+                              files.data(),
+                              files.size(),
+                              flags);
 }
 
 int clang::TranslationUnit::
@@ -85,5 +94,14 @@ ReparseTranslationUnit(const std::string &file_path,
 }
 
 unsigned clang::TranslationUnit::DefaultFlags() {
-  return CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete;
+  return CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete | CXTranslationUnit_IncludeBriefCommentsInCodeCompletion;
+}
+
+void clang::TranslationUnit::update_diagnostics() {
+  diagnostics.clear();
+  for(unsigned c=0;c<clang_getNumDiagnostics(tu_);c++) {
+    CXDiagnostic clang_diagnostic=clang_getDiagnostic(tu_, c);
+    diagnostics.emplace_back(clang::Diagnostic(*this, clang_diagnostic));
+    clang_disposeDiagnostic(clang_diagnostic);
+  }
 }

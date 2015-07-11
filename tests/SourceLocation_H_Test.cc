@@ -13,7 +13,7 @@ BOOST_AUTO_TEST_CASE(source_location) {
   clang::SourceRange range(&start, &end);
   clang::Tokens tokens(&tu, &range);
 
-  clang::SourceRange token_range  = tokens.tokens()[28].get_source_range(&tu);
+  clang::SourceRange token_range  = tokens[28].get_source_range(&tu);
 
   unsigned token_start_line, token_start_column, token_start_offset,
     token_end_line, token_end_column, token_end_offset;

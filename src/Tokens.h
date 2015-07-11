@@ -5,15 +5,17 @@
 #include "Token.h"
 
 namespace clang {
-  class Tokens {
+  class Tokens : public std::vector<clang::Token> {
   public:
     Tokens(TranslationUnit *tu, SourceRange *range);
     ~Tokens();
-    std::vector<Token>& tokens();
-  protected:
-    std::vector<clang::Token> tks;
+    void update_types(clang::TranslationUnit *tu);
+    std::string get_brief_comments(size_t cursor_id);
+  private:
     CXToken *tokens_;
     unsigned num_tokens_;
+    std::vector<CXCursor> clang_cursors;
+    TranslationUnit& tu;
   };
 }  // namespace clang
 #endif  // TOKENS_H_

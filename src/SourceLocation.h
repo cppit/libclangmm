@@ -21,6 +21,8 @@ namespace clang {
                    const std::string &filepath,
                    int offset);
 
+    SourceLocation(CXSourceLocation location) {location_=location;}
+
     explicit SourceLocation(Cursor *cursor);
 
     void get_location_info(std::string* path,

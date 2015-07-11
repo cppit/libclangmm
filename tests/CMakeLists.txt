@@ -1,6 +1,6 @@
 set(project_tests ${project_name}_tests)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_HOME_DIRECTORY}/cmake/Modules/")
 
@@ -23,6 +23,7 @@ add_executable(${project_tests}
   Cursor_H_Test.cc
   Token_H_Test.cc
   SourceLocation_H_Test.cc
+  Diagnostics_Test.cc
   )
 
 include_directories(${LIBCLANG_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} "${CMAKE_SOURCE_DIR}/src")

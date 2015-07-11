@@ -19,13 +19,13 @@ namespace clang {
     std::string get_token_spelling(TranslationUnit *tu);
     SourceLocation get_source_location(TranslationUnit *tu);
     SourceRange get_source_range(TranslationUnit *tu);
-
+    std::string type;
   private:
     explicit Token(const CXToken &token);
     friend SourceRange;
     friend SourceLocation;
     friend Tokens;
-    CXToken token_;
+    const CXToken& token_;
   };
 }  // namespace clang
 #endif  // TOKEN_H_

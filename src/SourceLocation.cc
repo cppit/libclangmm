@@ -52,7 +52,7 @@ get_location_info(std::string* path,
                   unsigned *offset) {
    CXFile file;
    clang_getExpansionLocation(location_, &file, line, column, offset);
-   if (path != NULL) {
+   if (path != NULL && file!=NULL) {
      path->operator=(((clang_getCString((clang_getFileName(file))))));
    }
 }

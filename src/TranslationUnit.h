@@ -6,6 +6,7 @@
 #include <map>
 #include <memory>
 #include "Index.h"
+#include "Diagnostic.h"
 
 namespace clang {
   class Token;
@@ -14,6 +15,7 @@ namespace clang {
   class SourceRange;
   class Cursor;
   class CodeCompleteResults;
+  class Diagnostic;
 
   class TranslationUnit {
   public:
@@ -34,7 +36,15 @@ namespace clang {
                                &buffers,
                                unsigned flags=DefaultFlags());
     static unsigned DefaultFlags();
+    void update_diagnostics();
+    
+    std::vector<clang::Diagnostic> diagnostics;
   private:
+    void parse(Index *index,
+               const std::string &filepath,
+               const std::vector<std::string> &command_line_args,
+               const std::map<std::string, std::string> &buffers,
+               unsigned flags=DefaultFlags());
     friend Token;
     friend Tokens;
     friend SourceLocation;
