@@ -16,9 +16,9 @@ int clang::CompletionString::get_num_chunks() {
 std::vector<clang::CompletionChunk> clang::CompletionString::get_chunks() {
   std::vector<clang::CompletionChunk> res;
   for (size_t i = 0; i < get_num_chunks(); i++) {
-    res.emplace_back(clang_getCString(clang_getCompletionChunkText(str_, i)),
-	       static_cast<CompletionChunkKind>
-	       (clang_getCompletionChunkKind(str_, i)));
+    auto cxstr=clang_getCompletionChunkText(str_, i);
+    res.emplace_back(clang_getCString(cxstr), static_cast<CompletionChunkKind> (clang_getCompletionChunkKind(str_, i)));
+    clang_disposeString(cxstr);
   }
   return res;
 }
