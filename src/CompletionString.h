@@ -27,6 +27,7 @@ namespace clang {
 
   class CompletionString {
   public:
+    bool available();
     std::vector<CompletionChunk> get_chunks();
     std::string get_brief_comments();
     int get_num_chunks();

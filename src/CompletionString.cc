@@ -5,23 +5,20 @@ CompletionString(const CXCompletionString &str) {
   str_ = str;
 }
 
-int clang::CompletionString::
-get_num_chunks() {
-  if (clang_getCompletionAvailability(str_) == CXAvailability_Available)
-    return clang_getNumCompletionChunks(str_);
-  else
-    return 0;
+bool clang::CompletionString::available() {
+  return clang_getCompletionAvailability(str_) == CXAvailability_Available;
 }
 
-std::vector<clang::CompletionChunk> clang::CompletionString::
-get_chunks() {
+int clang::CompletionString::get_num_chunks() {
+    return clang_getNumCompletionChunks(str_);
+}
+
+std::vector<clang::CompletionChunk> clang::CompletionString::get_chunks() {
   std::vector<clang::CompletionChunk> res;
-  if (clang_getCompletionAvailability(str_) == CXAvailability_Available) {
-    for (size_t i = 0; i < get_num_chunks(); i++) {
-      res.emplace_back(clang_getCString(clang_getCompletionChunkText(str_, i)),
-		       static_cast<CompletionChunkKind>
-		       (clang_getCompletionChunkKind(str_, i)));
-    }
+  for (size_t i = 0; i < get_num_chunks(); i++) {
+    auto cxstr=clang_getCompletionChunkText(str_, i);
+    res.emplace_back(clang_getCString(cxstr), static_cast<CompletionChunkKind> (clang_getCompletionChunkKind(str_, i)));
+    clang_disposeString(cxstr);
   }
   return res;
 }
