@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE(code_complete_results) {
 
   // ]
 
-  clang::CodeCompleteResults results(&tu, path, buffers, 4, 5);
+  clang::CodeCompleteResults results(tu.tu_, path, buffers, 4, 5);
 
   bool substr_found=false;
   for(int c=0;c<results.size();c++) {

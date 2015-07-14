@@ -3,7 +3,7 @@
 #include <exception>
 
 clang::CodeCompleteResults::
-CodeCompleteResults(clang::TranslationUnit *tu,
+CodeCompleteResults(CXTranslationUnit &tu,
                     const std::string &file_name,
                     const std::map<std::string, std::string>  &buffers,
                     int line_num,
@@ -16,7 +16,7 @@ CodeCompleteResults(clang::TranslationUnit *tu,
     file.Length = buffer.second.size();
     files.push_back(file);
   }
-  results_ = clang_codeCompleteAt(tu->tu_,
+  results_ = clang_codeCompleteAt(tu,
                                   file_name.c_str(),
                                   line_num,
                                   column,

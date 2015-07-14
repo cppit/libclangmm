@@ -9,7 +9,7 @@ namespace clang {
     CompileCommand(int nth, CompileCommands *commands);
     std::string get_command();
     std::vector<std::string> get_command_as_args();
-  private:
+
     CXCompileCommand command_;
   };
 }

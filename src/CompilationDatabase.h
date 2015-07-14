@@ -11,9 +11,8 @@ namespace clang {
     explicit CompilationDatabase(const std::string &project_path);
     CompilationDatabase();
     ~CompilationDatabase();
-  private:
+
     CXCompilationDatabase db_;
-    friend CompileCommands;
   };
 }
 

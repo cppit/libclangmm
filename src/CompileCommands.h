@@ -12,9 +12,8 @@ namespace clang {
     CompileCommands(const std::string &filename, CompilationDatabase *db);
     std::vector<CompileCommand> get_commands();
     ~CompileCommands();
-  private:
+
     CXCompileCommands commands_;
-    friend class CompileCommand;
   };
 }
 #endif  // COMPILECOMMANDS_H_

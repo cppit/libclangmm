@@ -4,13 +4,13 @@
 //  SourceLocation   //
 // // // // // // // //
 clang::SourceLocation::
-SourceLocation(clang::TranslationUnit *tu,
+SourceLocation(CXTranslationUnit &tu,
                const std::string &filename,
                int line_number,
                int line_offset) {
-  CXFile file = clang_getFile(tu->tu_,
+  CXFile file = clang_getFile(tu,
                               filename.c_str());
-  location_ = clang_getLocation(tu->tu_,
+  location_ = clang_getLocation(tu,
                                 file,
                                 line_number,
                                 line_offset);
@@ -28,19 +28,19 @@ SourceLocation(clang::SourceRange *range, bool start) {
 }
 
 clang::SourceLocation::
-SourceLocation(TranslationUnit *tu,
+SourceLocation(CXTranslationUnit &tu,
                Token *token) {
-  location_ = clang_getTokenLocation(tu->tu_,
+  location_ = clang_getTokenLocation(tu,
                                      token->token_);
 }
 
 clang::SourceLocation::
-SourceLocation(clang::TranslationUnit *tu,
+SourceLocation(CXTranslationUnit &tu,
                const std::string &filepath,
                int offset) {
-  CXFile file = clang_getFile(tu->tu_,
+  CXFile file = clang_getFile(tu,
                               filepath.c_str());
-  location_ = clang_getLocationForOffset(tu->tu_,
+  location_ = clang_getLocationForOffset(tu,
                                          file,
                                          offset);
 }

@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(completion_string) {
 
   buffers[path] = file;
 
-  clang::CodeCompleteResults results(&tu, path, buffers, 4, 5);
+  clang::CodeCompleteResults results(tu.tu_, path, buffers, 4, 5);
 
   // ]
 

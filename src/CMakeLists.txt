@@ -12,7 +12,6 @@ message("Searcing for libclang")
 find_package(LibClang REQUIRED)
 
 set(header_files
-  clangmm.h             
   CodeCompleteResults.h 
   CompilationDatabase.h 
   CompileCommand.h      

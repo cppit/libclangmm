@@ -1,7 +1,8 @@
 #ifndef COMPLETIONSTRING_H_
 #define COMPLETIONSTRING_H_
 #include <clang-c/Index.h>
-#include "CodeCompleteResults.h"
+#include <string>
+#include <vector>
 
 namespace clang {
   enum CompletionChunkKind {
@@ -27,14 +28,13 @@ namespace clang {
 
   class CompletionString {
   public:
+    explicit CompletionString(const CXCompletionString &str);
     bool available();
     std::vector<CompletionChunk> get_chunks();
     std::string get_brief_comments();
     int get_num_chunks();
-  private:
-    explicit CompletionString(const CXCompletionString &str);
+    
     CXCompletionString str_;
-    friend CodeCompleteResults;
   };
 }  // namespace clang
 #endif  // COMPLETIONSTRING_H_

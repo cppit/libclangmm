@@ -1,10 +1,14 @@
 #ifndef TOKEN_H_
 #define TOKEN_H_
+#include <clang-c/Index.h>
 #include "SourceLocation.h"
 #include "SourceRange.h"
-#include "TranslationUnit.h"
+#include <string>
 
 namespace clang {
+  class SourceLocation;
+  class SourceRange;
+  
   enum TokenKind {
     Token_Punctuation,
     Token_Keyword,
@@ -15,17 +19,14 @@ namespace clang {
 
   class Token {
   public:
+    explicit Token(CXTranslationUnit &tu, const CXToken &token);
     const TokenKind kind();
-    std::string get_token_spelling(TranslationUnit *tu);
-    SourceLocation get_source_location(TranslationUnit *tu);
-    SourceRange get_source_range(TranslationUnit *tu);
+    std::string get_token_spelling();
+    SourceLocation get_source_location();
+    SourceRange get_source_range();
     std::string type;
-  private:
-    explicit Token(const CXToken &token);
-    friend SourceRange;
-    friend SourceLocation;
-    friend Tokens;
     const CXToken& token_;
+    CXTranslationUnit &tu;
   };
 }  // namespace clang
 #endif  // TOKEN_H_
