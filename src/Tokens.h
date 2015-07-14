@@ -22,8 +22,6 @@ namespace clang {
     unsigned num_tokens_;
     std::vector<CXCursor> clang_cursors;
     CXTranslationUnit& tu;
-    
-    static CXChildVisitResult clang_visitor(CXCursor cursor, CXCursor parent, CXClientData clientData);
   };
 }  // namespace clang
 #endif  // TOKENS_H_

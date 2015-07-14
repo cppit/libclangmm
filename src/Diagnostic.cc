@@ -14,7 +14,7 @@ clang::Diagnostic::Diagnostic(CXTranslationUnit& tu, CXDiagnostic& clang_diagnos
     auto& token=tokens[0];
     clang::SourceRange range=token.get_source_range();
     auto end_location=clang::SourceLocation(&range, false);
-    this->range=range.get_range_data(location, end_location);
+    this->range=SourceRange::get_range_data(location, end_location);
   }
 }
 
