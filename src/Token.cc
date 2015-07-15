@@ -25,7 +25,14 @@ const clang::TokenKind clang::Token::kind() {
 }
 
 bool clang::Token::has_type() {
-  return !clang_Cursor_isNull(clang_getCursorReferenced(cx_cursor));
+  auto referenced=clang_getCursorReferenced(cx_cursor);
+  if(clang_Cursor_isNull(referenced))
+    return false;
+  auto type=clang_getCursorType(referenced);
+  auto cxstr=clang_getTypeSpelling(type);
+  std::string spelling=clang_getCString(cxstr);
+  clang_disposeString(cxstr);
+  return spelling!="";
 }
 
 std::string clang::Token::get_type() {
