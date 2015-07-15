@@ -7,9 +7,6 @@
 #include <string>
 
 namespace clang {
-  class SourceLocation;
-  class SourceRange;
-  
   enum TokenKind {
     Token_Punctuation,
     Token_Keyword,
