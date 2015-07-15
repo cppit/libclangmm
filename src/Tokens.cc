@@ -17,87 +17,18 @@ clang::Tokens::~Tokens() {
   clang_disposeTokens(cx_tu, cx_tokens, size());
 }
 
-/*CXCursor clang::Tokens::find_referenced() {
-  cursors.clear();
-  cursors.reserve(size());
-  clang_annotateTokens(tu, tokens.data(), size(), cursors.data());
-
-  auto kind=clang_getCursorKind(cursors[0]);
-  cout << "  " << kind << endl;
-  cout << "  Decl: " << clang_isDeclaration(kind) << endl;
-  cout << "  Attr: " << clang_isAttribute(kind) << endl;
-  cout << "  Ref: " << clang_isReference(kind) << endl;
-  cout << "  Expr: " << clang_isExpression(kind) << endl;
-
-  auto referenced=clang_getCursorReferenced(cursors[0]);
-  
-  kind=clang_getCursorKind(referenced);
-  cout << "  " << kind << endl;
-  cout << "  Decl: " << clang_isDeclaration(kind) << endl;
-  cout << "  Attr: " << clang_isAttribute(kind) << endl;
-  cout << "  Ref: " << clang_isReference(kind) << endl;
-  cout << "  Expr: " << clang_isExpression(kind) << endl;
-
-  //TODO: To find similar function declarations, these must be equal (if cursor is declaration):
-  //TODO: How do we know it is a function? clang_getCursorKind(cursor)==CXCursor_CXXMethod?
-  cout << "    " << clang_getCString(clang_getTypeSpelling(clang_getCursorType(referenced))) << endl;
-  cout << "    " << clang_getCString(clang_getTypeSpelling(clang_getCursorType(clang_getCursorSemanticParent(referenced)))) << endl;
-  cout << "    " << clang_getCString(clang_getCursorSpelling(referenced)) << endl;
-  
-  return referenced;
-}*/
-
-void clang::Tokens::rename(CXCursor &referenced) {
-  for(size_t c=0;c<size();c++) {
-    auto a_referenced=clang_getCursorReferenced(cx_cursors[c]);
-    if(Cursor(a_referenced)==Cursor(referenced)) {
-      std::string path;
-      unsigned line, column, offset;
-      
-      clang::Cursor cursor(cx_cursors[c]);
-      auto range=cursor.get_source_range();
-      auto locations=range.get_source_locations();
-      locations.first.get_location_info(&path, &line, &column, &offset);
-      cout << "  start: " << path << ", " << line << ", " << column << endl;
-      locations.second.get_location_info(&path, &line, &column, &offset);
-      cout << "  end: " << path << ", " << line << ", " << column << endl;
-
-      
-      clang::Cursor referenced_cursor(a_referenced);
-      range=referenced_cursor.get_source_range();
-      locations=range.get_source_locations();
-      locations.first.get_location_info(&path, &line, &column, &offset);
-      cout << "    start: " << path << ", " << line << ", " << column << endl;
-
-      locations.second.get_location_info(&path, &line, &column, &offset);
-      cout << "    end: " << path << ", " << line << ", " << column << endl;
-
-      auto type=clang_getCursorType(a_referenced);
-      cout << "    " << clang_getCString(clang_getTypeSpelling(type)) << endl;
+//This works across TranslationUnits! However, to get rename refactoring to work, 
+//one have to open all the files that might include a similar token
+//Similar tokens defined as tokens with equal referenced cursors. 
+std::vector<std::pair<unsigned, unsigned> > clang::Tokens::get_similar_token_offsets(clang::Token& token) {
+  std::vector<std::pair<unsigned, unsigned> > offsets;
+  auto referenced=clang_getCursorReferenced(token.get_cursor().cx_cursor);
+  for(auto &a_token: *this) {
+    auto a_referenced=clang_getCursorReferenced(a_token.get_cursor().cx_cursor);
+    if(Cursor(referenced)==Cursor(a_referenced) && token.get_token_spelling()==a_token.get_token_spelling()) {
+      auto range_data=a_token.source_range.get_range_data();
+      offsets.emplace_back(range_data.start_offset, range_data.end_offset);
     }
   }
-  //clang_visitChildren(clang_getTranslationUnitCursor(tu.tu_), clang::Tokens::clang_visitor, &referenced);
+  return offsets;
 }
-
-/*CXChildVisitResult clang::Tokens::clang_visitor(CXCursor cursor, CXCursor parent, CXClientData clientData) {
-  CXCursor* referenced=(CXCursor*)clientData;
-  auto a_referenced=clang_getCursorReferenced(cursor);
-  if(clang_equalCursors(a_referenced, *referenced)) {
-    cout << "found" << endl;
-    clang::Cursor a_cursor;
-    a_cursor.cursor_=cursor;
-    auto range=clang::SourceRange(&a_cursor);
-
-    auto location=clang::SourceLocation(range, true);
-    std::string path;
-    unsigned line, column, offset;
-    location.get_location_info(&path, &line, &column, &offset);
-    cout << "  start: " << path << ", " << line << ", " << column << endl;
-
-    location=clang::SourceLocation(range, false);
-    location.get_location_info(&path, &line, &column, &offset);
-    cout << "  end: " << path << ", " << line << ", " << column << endl;
-  }
-  
-  return CXChildVisit_Recurse;
-}*/

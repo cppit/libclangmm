@@ -11,8 +11,7 @@ namespace clang {
   public:
     Tokens(CXTranslationUnit &cx_tu, SourceRange &range);
     ~Tokens();
-    void rename(CXCursor &referenced);
-    //std::unordered_map<std::string, std::unordered_multimap<unsigned, unsigned> >
+    std::vector<std::pair<unsigned, unsigned> > get_similar_token_offsets(clang::Token& token);
   private:
     CXToken *cx_tokens;
     unsigned num_tokens;
