@@ -12,8 +12,7 @@ clang::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnos
   clang::Tokens tokens(cx_tu, range);
   if(tokens.size()==1) {
     auto& token=tokens[0];
-    clang::SourceRange range=token.get_source_range();
-    auto locations=range.get_source_locations();
+    auto locations=token.source_range.get_source_locations();
     this->range=SourceRange::get_range_data(location, locations.second);
   }
 }
