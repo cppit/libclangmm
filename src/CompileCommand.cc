@@ -1,11 +1,6 @@
 #include "CompileCommand.h"
 #include "CompileCommands.h"
 
-clang::CompileCommand::
-CompileCommand(int nth, clang::CompileCommands &commands) {
-  cx_command = clang_CompileCommands_getCommand(commands.cx_commands, nth);
-}
-
 std::string clang::CompileCommand::
 get_command() {
   std::string res;

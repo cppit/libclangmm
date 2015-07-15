@@ -5,7 +5,6 @@
 #include <string>
 
 namespace clang {
-  class CompileCommands;
   class CompilationDatabase {
   public:
     explicit CompilationDatabase(const std::string &project_path);

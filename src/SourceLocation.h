@@ -7,7 +7,7 @@ namespace clang {
   
   class SourceLocation {
   public:
-    SourceLocation(CXSourceLocation cx_location) : cx_location(cx_location) {}
+    SourceLocation(const CXSourceLocation& cx_location) : cx_location(cx_location) {}
     
     SourceLocation(CXTranslationUnit &cx_tu,
                    const std::string &filename,

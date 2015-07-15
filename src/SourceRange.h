@@ -13,7 +13,7 @@ namespace clang {
   
   class SourceRange {
   public:
-    SourceRange(CXSourceRange cx_range) : cx_range(cx_range) {}
+    SourceRange(const CXSourceRange& cx_range) : cx_range(cx_range) {}
     SourceRange(SourceLocation &start, SourceLocation &end);
     std::pair<SourceLocation, SourceLocation> get_source_locations();
     static RangeData get_range_data(SourceLocation &start, SourceLocation &end);

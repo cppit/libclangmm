@@ -18,7 +18,7 @@ get_commands() {
   unsigned N = clang_CompileCommands_getSize(cx_commands);
   std::vector<clang::CompileCommand> res;
   for (unsigned i = 0; i < N; i++) {
-    res.emplace_back(clang::CompileCommand(i, *this));
+    res.emplace_back(clang_CompileCommands_getCommand(cx_commands, i));
   }
   return res;
 }
