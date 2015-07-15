@@ -7,17 +7,13 @@ BOOST_AUTO_TEST_CASE(token) {
 
   clang::Index index(0, 0);
 
-  clang::TranslationUnit tu(&index, path);
-  clang::SourceLocation start(tu.tu_, path, 0);
-  clang::SourceLocation end(tu.tu_, path, 7, 1);
+  clang::TranslationUnit tu(index, path);
+  
+  auto tokens=tu.get_tokens(0, 113);
 
-  clang::SourceRange range(&start, &end);
+  BOOST_CHECK(tokens->size() == 32);
+  BOOST_CHECK((*tokens)[1].kind() == clang::TokenKind::Token_Identifier);
 
-  clang::Tokens tokens(tu.tu_, &range);
-
-  BOOST_CHECK(tokens.size() == 32);
-  BOOST_CHECK(tokens[1].kind() == clang::TokenKind::Token_Identifier);
-
-  std::string str = tokens[28].get_token_spelling();
+  std::string str = (*tokens)[28].get_token_spelling();
   BOOST_CHECK(str == "return");  
 }

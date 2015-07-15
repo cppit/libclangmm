@@ -3,6 +3,7 @@
 #include <clang-c/Index.h>
 #include "SourceLocation.h"
 #include "SourceRange.h"
+#include "Cursor.h"
 #include <string>
 
 namespace clang {
@@ -19,14 +20,18 @@ namespace clang {
 
   class Token {
   public:
-    explicit Token(CXTranslationUnit &tu, const CXToken &token);
+    explicit Token(CXTranslationUnit &cx_tu, CXToken &cx_token, CXCursor &cx_cursor): cx_tu(cx_tu), cx_token(cx_token), cx_cursor(cx_cursor) {};
     const TokenKind kind();
     std::string get_token_spelling();
     SourceLocation get_source_location();
     SourceRange get_source_range();
-    std::string type;
-    const CXToken& token_;
-    CXTranslationUnit &tu;
+    clang::Cursor get_cursor() {return clang::Cursor(cx_cursor);}
+    bool has_type();
+    std::string get_type();
+    std::string get_brief_comments();
+    CXTranslationUnit &cx_tu;
+    CXToken& cx_token;
+    CXCursor& cx_cursor;
   };
 }  // namespace clang
 #endif  // TOKEN_H_

@@ -7,7 +7,7 @@
 namespace clang {
   class CodeCompleteResults {
   public:
-    CodeCompleteResults(CXTranslationUnit &tu,
+    CodeCompleteResults(CXTranslationUnit &cx_tu,
                         const std::string &file_name,
                         const std::map<std::string, std::string>  &buffers,
                         int line_num,
@@ -16,7 +16,7 @@ namespace clang {
     CompletionString get(int index);
     int size();
 
-    CXCodeCompleteResults *results_;
+    CXCodeCompleteResults *cx_results;
   };
 }  // namespace clang
 #endif  // CODECOMPLETERESULTS_H_

@@ -1,17 +1,12 @@
 #include "SourceRange.h"
 
 clang::SourceRange::
-SourceRange(clang::Token *token) {
-  range_ = clang_getTokenExtent(token->tu, token->token_);
+SourceRange(clang::SourceLocation &start, clang::SourceLocation &end) {
+  cx_range = clang_getRange(start.cx_location, end.cx_location);
 }
 
-clang::SourceRange::
-SourceRange(clang::SourceLocation *start, clang::SourceLocation *end) {
-  range_ = clang_getRange(start->location_, end->location_);
-}
-
-clang::SourceRange::SourceRange(Cursor *cursor) {
-  range_ = clang_getCursorExtent(cursor->cursor_);
+std::pair<clang::SourceLocation, clang::SourceLocation> clang::SourceRange::get_source_locations() {
+  return std::pair<SourceLocation, SourceLocation>(clang_getRangeStart(cx_range), clang_getRangeEnd(cx_range));
 }
 
 clang::RangeData clang::SourceRange::get_range_data(clang::SourceLocation &start, clang::SourceLocation &end) {
@@ -27,7 +22,6 @@ clang::RangeData clang::SourceRange::get_range_data(clang::SourceLocation &start
 }
 
 clang::RangeData clang::SourceRange::get_range_data() {
-  clang::SourceLocation start(this, true);
-  clang::SourceLocation end(this, false);
-  return get_range_data(start, end);
+  auto locations=get_source_locations();
+  return get_range_data(locations.first, locations.second);
 }

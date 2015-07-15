@@ -10,28 +10,10 @@ SourceLocation(CXTranslationUnit &tu,
                int line_offset) {
   CXFile file = clang_getFile(tu,
                               filename.c_str());
-  location_ = clang_getLocation(tu,
+  cx_location = clang_getLocation(tu,
                                 file,
                                 line_number,
                                 line_offset);
-  }
-
-clang::SourceLocation::
-SourceLocation(Cursor *cursor) {
-  location_ = clang_getCursorLocation(cursor->cursor_);
-}
-
-clang::SourceLocation::
-SourceLocation(clang::SourceRange *range, bool start) {
-  location_ = start ? clang_getRangeStart(range->range_) :
-    clang_getRangeEnd(range->range_);
-}
-
-clang::SourceLocation::
-SourceLocation(CXTranslationUnit &tu,
-               Token *token) {
-  location_ = clang_getTokenLocation(tu,
-                                     token->token_);
 }
 
 clang::SourceLocation::
@@ -40,7 +22,7 @@ SourceLocation(CXTranslationUnit &tu,
                int offset) {
   CXFile file = clang_getFile(tu,
                               filepath.c_str());
-  location_ = clang_getLocationForOffset(tu,
+  cx_location = clang_getLocationForOffset(tu,
                                          file,
                                          offset);
 }
@@ -51,7 +33,7 @@ get_location_info(std::string* path,
                   unsigned *column,
                   unsigned *offset) {
    CXFile file;
-   clang_getExpansionLocation(location_, &file, line, column, offset);
+   clang_getExpansionLocation(cx_location, &file, line, column, offset);
    if (path != NULL && file!=NULL) {
      path->operator=(((clang_getCString((clang_getFileName(file))))));
    }

@@ -28,13 +28,13 @@ namespace clang {
 
   class CompletionString {
   public:
-    explicit CompletionString(const CXCompletionString &str);
+    explicit CompletionString(const CXCompletionString &cx_str);
     bool available();
     std::vector<CompletionChunk> get_chunks();
     std::string get_brief_comments();
     int get_num_chunks();
     
-    CXCompletionString str_;
+    CXCompletionString cx_str;
   };
 }  // namespace clang
 #endif  // COMPLETIONSTRING_H_

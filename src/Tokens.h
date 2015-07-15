@@ -9,19 +9,15 @@
 namespace clang {
   class Tokens : public std::vector<clang::Token> {
   public:
-    Tokens(CXTranslationUnit &tu, SourceRange *range);
+    Tokens(CXTranslationUnit &cx_tu, SourceRange &range);
     ~Tokens();
-    void update_types();
-    std::string get_brief_comments(size_t cursor_id);
-    CXCursor find_referenced();
-    bool equalCursors(CXCursor a, CXCursor b);
-    void rename(CXCursor &referenced, std::unordered_map<std::string, std::unordered_multimap<unsigned, unsigned> > &ranges);
-    
+    void rename(CXCursor &referenced);
+    //std::unordered_map<std::string, std::unordered_multimap<unsigned, unsigned> >
   private:
-    CXToken *tokens_;
-    unsigned num_tokens_;
-    std::vector<CXCursor> clang_cursors;
-    CXTranslationUnit& tu;
+    CXToken *cx_tokens;
+    unsigned num_tokens;
+    std::vector<CXCursor> cx_cursors;
+    CXTranslationUnit& cx_tu;
   };
 }  // namespace clang
 #endif  // TOKENS_H_

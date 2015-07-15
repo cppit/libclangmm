@@ -2,19 +2,19 @@
 #include "SourceLocation.h"
 #include "Tokens.h"
 
-clang::Diagnostic::Diagnostic(CXTranslationUnit& tu, CXDiagnostic& clang_diagnostic) {
-  severity=clang_getDiagnosticSeverity(clang_diagnostic);
+clang::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnostic) {
+  severity=clang_getDiagnosticSeverity(cx_diagnostic);
   severity_spelling=get_severity_spelling(severity);
-  spelling=clang_getCString(clang_getDiagnosticSpelling(clang_diagnostic));
-  clang::SourceLocation location(clang_getDiagnosticLocation(clang_diagnostic));
+  spelling=clang_getCString(clang_getDiagnosticSpelling(cx_diagnostic));
+  clang::SourceLocation location(clang_getDiagnosticLocation(cx_diagnostic));
   
-  clang::SourceRange range(&location, &location);
-  clang::Tokens tokens(tu, &range);
+  clang::SourceRange range(location, location);
+  clang::Tokens tokens(cx_tu, range);
   if(tokens.size()==1) {
     auto& token=tokens[0];
     clang::SourceRange range=token.get_source_range();
-    auto end_location=clang::SourceLocation(&range, false);
-    this->range=SourceRange::get_range_data(location, end_location);
+    auto locations=range.get_source_locations();
+    this->range=SourceRange::get_range_data(location, locations.second);
   }
 }
 

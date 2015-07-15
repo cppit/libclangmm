@@ -8,7 +8,7 @@
 namespace clang {
   class Diagnostic {
   public:
-    Diagnostic(CXTranslationUnit& tu, CXDiagnostic& clang_diagnostic);
+    Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnostic);
     
     static const std::string get_severity_spelling(unsigned severity);
 

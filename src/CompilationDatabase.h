@@ -12,7 +12,7 @@ namespace clang {
     CompilationDatabase();
     ~CompilationDatabase();
 
-    CXCompilationDatabase db_;
+    CXCompilationDatabase cx_db;
   };
 }
 

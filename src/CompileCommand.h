@@ -6,11 +6,11 @@
 namespace clang {
   class CompileCommand {
   public:
-    CompileCommand(int nth, CompileCommands *commands);
+    CompileCommand(int nth, CompileCommands &commands);
     std::string get_command();
     std::vector<std::string> get_command_as_args();
 
-    CXCompileCommand command_;
+    CXCompileCommand cx_command;
   };
 }
 #endif  // COMPILECOMMAND_H_

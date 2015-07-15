@@ -9,11 +9,11 @@
 namespace clang {
   class CompileCommands {
   public:
-    CompileCommands(const std::string &filename, CompilationDatabase *db);
+    CompileCommands(const std::string &filename, CompilationDatabase &db);
     std::vector<CompileCommand> get_commands();
     ~CompileCommands();
 
-    CXCompileCommands commands_;
+    CXCompileCommands cx_commands;
   };
 }
 #endif  // COMPILECOMMANDS_H_

@@ -6,7 +6,7 @@ namespace clang {
   class Index {
   public:
     Index(int excludeDeclarationsFromPCH, int displayDiagnostics);
-    CXIndex index_;
+    CXIndex cx_index;
   };
 }  // namespace clang
 #endif  // INDEX_H_

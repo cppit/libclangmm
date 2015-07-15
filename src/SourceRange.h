@@ -1,16 +1,10 @@
 #ifndef SOURCERANGE_H_
 #define SOURCERANGE_H_
 #include <clang-c/Index.h>
-#include "Token.h"
-#include "Cursor.h"
 #include "SourceLocation.h"
 #include <string>
 
-namespace clang {
-  class Token;
-  class SourceLocation;
-  class Cursor;
-  
+namespace clang {  
   class RangeData {
   public:
     std::string path;
@@ -19,14 +13,12 @@ namespace clang {
   
   class SourceRange {
   public:
-    SourceRange() {}
-    SourceRange(Token *token);
-    SourceRange(SourceLocation *start,
-                SourceLocation *end);
-    explicit SourceRange(Cursor *cursor);
+    SourceRange(CXSourceRange cx_range) : cx_range(cx_range) {}
+    SourceRange(SourceLocation &start, SourceLocation &end);
+    std::pair<SourceLocation, SourceLocation> get_source_locations();
     static RangeData get_range_data(SourceLocation &start, SourceLocation &end);
     RangeData get_range_data();
-    CXSourceRange range_;
+    CXSourceRange cx_range;
   };
 }  // namespace clang
 #endif  // SOURCERANGE_H_

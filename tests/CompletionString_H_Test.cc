@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_CASE(completion_string) {
   std::string path("./case/main.cpp");
 
   clang::Index index(0, 0);
-  clang::TranslationUnit tu(&index, path);
+  clang::TranslationUnit tu(index, path);
 
   // ReparseTranslationUnit takes a map with filepath as key
   // and buffer as value
@@ -33,8 +33,7 @@ BOOST_AUTO_TEST_CASE(completion_string) {
 
   buffers[path] = file;
 
-  clang::CodeCompleteResults results(tu.tu_, path, buffers, 4, 5);
-
+  auto results=tu.get_code_completions(buffers, 4, 5);
   // ]
 
   clang::CompletionString str = results.get(0);
