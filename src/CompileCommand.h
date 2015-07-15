@@ -2,6 +2,7 @@
 #define COMPILECOMMAND_H_
 #include <clang-c/CXCompilationDatabase.h>
 #include <vector>
+#include <string>
 
 namespace clang {
   class CompileCommand {
