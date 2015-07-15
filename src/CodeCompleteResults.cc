@@ -3,7 +3,7 @@
 #include <exception>
 
 clang::CodeCompleteResults::
-CodeCompleteResults(clang::TranslationUnit *tu,
+CodeCompleteResults(CXTranslationUnit &cx_tu,
                     const std::string &file_name,
                     const std::map<std::string, std::string>  &buffers,
                     int line_num,
@@ -16,24 +16,24 @@ CodeCompleteResults(clang::TranslationUnit *tu,
     file.Length = buffer.second.size();
     files.push_back(file);
   }
-  results_ = clang_codeCompleteAt(tu->tu_,
+  cx_results = clang_codeCompleteAt(cx_tu,
                                   file_name.c_str(),
                                   line_num,
                                   column,
                                   files.data(),
                                   files.size(),
                                   clang_defaultCodeCompleteOptions()|CXCodeComplete_IncludeBriefComments);
-  clang_sortCodeCompletionResults(results_->Results, results_->NumResults);
+  clang_sortCodeCompletionResults(cx_results->Results, cx_results->NumResults);
 }
 
 clang::CodeCompleteResults::~CodeCompleteResults() {
-  delete[] results_->Results;
-  delete results_;
+  delete[] cx_results->Results;
+  delete cx_results;
 }
 
 int clang::CodeCompleteResults::
 size() {
-  return results_->NumResults;
+  return cx_results->NumResults;
 }
 
 clang::CompletionString clang::CodeCompleteResults::
@@ -41,5 +41,5 @@ get(int i) {
   if (i >= size()) {
     throw std::invalid_argument("clang::CodeCompleteResults::get(int i): i>=size()");
   }
-  return CompletionString(results_->Results[i].CompletionString);
+  return CompletionString(cx_results->Results[i].CompletionString);
 }

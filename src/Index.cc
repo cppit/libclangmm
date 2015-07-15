@@ -2,6 +2,6 @@
 
 clang::Index::
 Index(int excludeDeclarationsFromPCH, int displayDiagnostics) {
-  index_ = clang_createIndex(excludeDeclarationsFromPCH,
+  cx_index = clang_createIndex(excludeDeclarationsFromPCH,
                              displayDiagnostics);
 }

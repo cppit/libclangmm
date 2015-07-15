@@ -1,39 +1,29 @@
 #ifndef SOURCELOCATION_H_
 #define SOURCELOCATION_H_
-#include "TranslationUnit.h"
-#include "Token.h"
-#include "Cursor.h"
+#include <clang-c/Index.h>
+#include <string>
 
 namespace clang {
+  
   class SourceLocation {
   public:
-    SourceLocation(TranslationUnit* tu,
+    SourceLocation(const CXSourceLocation& cx_location) : cx_location(cx_location) {}
+    
+    SourceLocation(CXTranslationUnit &cx_tu,
                    const std::string &filename,
                    int line_number,
                    int column);
 
-    SourceLocation(TranslationUnit *tu,
-                   Token *token);
-
-    SourceLocation(SourceRange *range, bool start);
-
-    SourceLocation(TranslationUnit *tu,
+    SourceLocation(CXTranslationUnit &tu,
                    const std::string &filepath,
                    int offset);
 
-    SourceLocation(CXSourceLocation location) {location_=location;}
-
-    explicit SourceLocation(Cursor *cursor);
-
-    void get_location_info(std::string* path,
+    void get_location_info(std::string *path,
                            unsigned *line,
                            unsigned *column,
                            unsigned *offset);
 
-  private:
-    CXSourceLocation location_;
-    friend SourceRange;
-    friend Cursor;
+    CXSourceLocation cx_location;
   };
 
 }  // namespace clang

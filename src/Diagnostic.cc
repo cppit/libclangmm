@@ -2,29 +2,18 @@
 #include "SourceLocation.h"
 #include "Tokens.h"
 
-clang::Diagnostic::Diagnostic(clang::TranslationUnit& tu, CXDiagnostic& clang_diagnostic) {
-  severity=clang_getDiagnosticSeverity(clang_diagnostic);
+clang::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnostic) {
+  severity=clang_getDiagnosticSeverity(cx_diagnostic);
   severity_spelling=get_severity_spelling(severity);
-  spelling=clang_getCString(clang_getDiagnosticSpelling(clang_diagnostic));
-  clang::SourceLocation location(clang_getDiagnosticLocation(clang_diagnostic));
-  std::string tmp_path;
-  unsigned line, column, offset;
-  location.get_location_info(&tmp_path, &line, &column, &offset);
-  path=tmp_path;
-  start_location.line=line;
-  start_location.column=column;
-  start_location.offset=offset;
+  spelling=clang_getCString(clang_getDiagnosticSpelling(cx_diagnostic));
+  clang::SourceLocation location(clang_getDiagnosticLocation(cx_diagnostic));
   
-  clang::SourceRange range(&location, &location);
-  clang::Tokens tokens(&tu, &range);
+  clang::SourceRange range(location, location);
+  clang::Tokens tokens(cx_tu, range);
   if(tokens.size()==1) {
     auto& token=tokens[0];
-    clang::SourceRange range=token.get_source_range(&tu);
-    clang::SourceLocation location(&range, false);
-    location.get_location_info(NULL, &line, &column, &offset);
-    end_location.line=line;
-    end_location.column=column;
-    end_location.offset=offset;
+    auto locations=token.source_range.get_source_locations();
+    this->range=SourceRange::get_range_data(location, locations.second);
   }
 }
 
