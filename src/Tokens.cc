@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-clang::Tokens::Tokens(CXTranslationUnit &cx_tu, SourceRange &range): cx_tu(cx_tu) {
+clang::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_tu(cx_tu) {
   
   clang_tokenize(cx_tu, range.cx_range, &cx_tokens, &num_tokens);
   cx_cursors.clear();
@@ -26,8 +26,7 @@ std::vector<std::pair<unsigned, unsigned> > clang::Tokens::get_similar_token_off
   if(referenced_usr!="") {
     for(auto &a_token: *this) {
       if(referenced_usr==a_token.get_cursor().get_referenced_usr() && token.get_token_spelling()==a_token.get_token_spelling()) {
-        auto range_data=a_token.source_range.get_range_data();
-        offsets.emplace_back(range_data.start_offset, range_data.end_offset);
+        offsets.emplace_back(a_token.offsets);
       }
     }
   }

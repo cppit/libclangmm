@@ -18,20 +18,20 @@ namespace clang {
   class Token {
   public:
     Token(CXTranslationUnit &cx_tu, CXToken &cx_token, CXCursor &cx_cursor): 
-      cx_tu(cx_tu), cx_token(cx_token), cx_cursor(cx_cursor), source_range(get_source_range()) {};
+      cx_tu(cx_tu), cx_token(cx_token), cx_cursor(cx_cursor), offsets(get_source_range().get_offsets()) {};
     const TokenKind kind();
     std::string get_token_spelling();
     SourceLocation get_source_location();
     clang::Cursor get_cursor() {return clang::Cursor(cx_cursor);}
     bool has_type();
     std::string get_type();
+    SourceRange get_source_range();
     std::string get_brief_comments();
     CXTranslationUnit &cx_tu;
     CXToken& cx_token;
     CXCursor& cx_cursor;
-    SourceRange source_range;
+    std::pair<unsigned, unsigned> offsets;
   private:
-    SourceRange get_source_range();
   };
 }  // namespace clang
 #endif  // TOKEN_H_

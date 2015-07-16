@@ -9,7 +9,7 @@
 namespace clang {
   class Tokens : public std::vector<clang::Token> {
   public:
-    Tokens(CXTranslationUnit &cx_tu, SourceRange &range);
+    Tokens(CXTranslationUnit &cx_tu, const SourceRange &range);
     ~Tokens();
     std::vector<std::pair<unsigned, unsigned> > get_similar_token_offsets(clang::Token& token);
   private:

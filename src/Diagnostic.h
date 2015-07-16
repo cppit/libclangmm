@@ -15,7 +15,8 @@ namespace clang {
     unsigned severity;
     std::string severity_spelling;
     std::string spelling;
-    RangeData range;
+    std::string path;
+    std::pair<unsigned, unsigned> offsets;
   };
 }
 

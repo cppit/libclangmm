@@ -14,14 +14,9 @@ namespace clang {
                    int line_number,
                    int column);
 
-    SourceLocation(CXTranslationUnit &tu,
-                   const std::string &filepath,
-                   int offset);
+    SourceLocation(CXTranslationUnit &tu, const std::string &filepath, int offset);
 
-    void get_location_info(std::string *path,
-                           unsigned *line,
-                           unsigned *column,
-                           unsigned *offset);
+    void get_data(std::string *path, unsigned *line, unsigned *column, unsigned *offset);
 
     CXSourceLocation cx_location;
   };
