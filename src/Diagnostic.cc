@@ -5,7 +5,9 @@
 clang::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnostic) {
   severity=clang_getDiagnosticSeverity(cx_diagnostic);
   severity_spelling=get_severity_spelling(severity);
-  spelling=clang_getCString(clang_getDiagnosticSpelling(cx_diagnostic));
+  auto cxstr=clang_getDiagnosticSpelling(cx_diagnostic);
+  spelling=clang_getCString(cxstr);
+  clang_disposeString(cxstr);
   clang::SourceLocation location(clang_getDiagnosticLocation(cx_diagnostic));
   
   clang::SourceRange range(location, location);

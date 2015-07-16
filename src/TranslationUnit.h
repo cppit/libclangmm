@@ -9,6 +9,7 @@
 #include "Diagnostic.h"
 #include "Tokens.h"
 #include "CodeCompleteResults.h"
+#include "Cursor.h"
 
 namespace clang {
   class TranslationUnit {
@@ -37,6 +38,7 @@ namespace clang {
    clang::CodeCompleteResults get_code_completions(const std::map<std::string, std::string> &buffers, int line_number, int column);
    std::vector<clang::Diagnostic> get_diagnostics();
    std::unique_ptr<Tokens> get_tokens(unsigned start_offset, unsigned end_offset);
+   clang::Cursor get_cursor(std::string path, unsigned offset);
 
    CXTranslationUnit cx_tu;
   };
