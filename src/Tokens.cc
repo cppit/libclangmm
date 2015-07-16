@@ -22,12 +22,13 @@ clang::Tokens::~Tokens() {
 //Similar tokens defined as tokens with equal referenced cursors. 
 std::vector<std::pair<unsigned, unsigned> > clang::Tokens::get_similar_token_offsets(clang::Token& token) {
   std::vector<std::pair<unsigned, unsigned> > offsets;
-  auto referenced=clang_getCursorReferenced(token.get_cursor().cx_cursor);
-  for(auto &a_token: *this) {
-    auto a_referenced=clang_getCursorReferenced(a_token.get_cursor().cx_cursor);
-    if(Cursor(referenced)==Cursor(a_referenced) && token.get_token_spelling()==a_token.get_token_spelling()) {
-      auto range_data=a_token.source_range.get_range_data();
-      offsets.emplace_back(range_data.start_offset, range_data.end_offset);
+  auto referenced_usr=token.get_cursor().get_referenced_usr();
+  if(referenced_usr!="") {
+    for(auto &a_token: *this) {
+      if(referenced_usr==a_token.get_cursor().get_referenced_usr() && token.get_token_spelling()==a_token.get_token_spelling()) {
+        auto range_data=a_token.source_range.get_range_data();
+        offsets.emplace_back(range_data.start_offset, range_data.end_offset);
+      }
     }
   }
   return offsets;
