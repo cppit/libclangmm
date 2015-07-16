@@ -12,8 +12,7 @@ BOOST_AUTO_TEST_CASE(cursor) {
 
   // ]
 
-  clang::SourceLocation location(tu.cx_tu, path, 6, 4);
-  clang::Cursor cursor(tu.cx_tu, location);
+  auto cursor=tu.get_cursor(path, 103);
 
   BOOST_CHECK(cursor.get_kind() == clang::CursorKind::ReturnStmt);
 }

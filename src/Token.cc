@@ -24,6 +24,7 @@ const clang::TokenKind clang::Token::kind() {
   return (TokenKind) clang_getTokenKind(cx_token);
 }
 
+//TODO: Is there a way to optimise this?
 bool clang::Token::has_type() {
   auto referenced=clang_getCursorReferenced(cx_cursor);
   if(clang_Cursor_isNull(referenced))
