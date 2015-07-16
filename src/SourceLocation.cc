@@ -3,19 +3,20 @@
 // // // // // // // //
 //  SourceLocation   //
 // // // // // // // //
-clang::SourceLocation::
-SourceLocation(CXTranslationUnit &tu,
-               const std::string &filename,
-               int line_number,
-               int line_offset) {
-  CXFile file = clang_getFile(tu, filename.c_str());
-  cx_location = clang_getLocation(tu, file, line_number, line_offset);
-}
-
-clang::SourceLocation::
-SourceLocation(CXTranslationUnit &tu, const std::string &filepath, int offset) {
+clang::SourceLocation::SourceLocation(CXTranslationUnit &tu, const std::string &filepath, unsigned offset) {
   CXFile file = clang_getFile(tu, filepath.c_str());
   cx_location = clang_getLocationForOffset(tu, file, offset);
+}
+
+std::string clang::SourceLocation::get_path() {
+  std::string path;
+  get_data(&path, NULL, NULL, NULL);
+  return path;
+}
+unsigned clang::SourceLocation::get_offset() {
+  unsigned offset;
+  get_data(NULL, NULL, NULL, &offset);
+  return offset;
 }
 
 void clang::SourceLocation::get_data(std::string* path, unsigned *line, unsigned *column, unsigned *offset) {

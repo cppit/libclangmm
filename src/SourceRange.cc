@@ -8,7 +8,7 @@ SourceRange(clang::SourceLocation &start, clang::SourceLocation &end) {
 std::pair<unsigned, unsigned> clang::SourceRange::get_offsets() {
   SourceLocation start(clang_getRangeStart(cx_range)), end(clang_getRangeEnd(cx_range));
   std::pair<unsigned, unsigned> offsets;
-  start.get_data(NULL, NULL, NULL, &offsets.first);
-  end.get_data(NULL, NULL, NULL, &offsets.second);
+  offsets.first=start.get_offset();
+  offsets.second=end.get_offset();
   return offsets;
 }

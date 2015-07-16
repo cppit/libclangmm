@@ -6,19 +6,19 @@
 namespace clang {
   
   class SourceLocation {
+    friend class TranslationUnit;
+    SourceLocation(CXTranslationUnit &tu, const std::string &filepath, unsigned offset);
   public:
     SourceLocation(const CXSourceLocation& cx_location) : cx_location(cx_location) {}
-    
-    SourceLocation(CXTranslationUnit &cx_tu,
-                   const std::string &filename,
-                   int line_number,
-                   int column);
 
-    SourceLocation(CXTranslationUnit &tu, const std::string &filepath, int offset);
-
-    void get_data(std::string *path, unsigned *line, unsigned *column, unsigned *offset);
+  public:
+    std::string get_path();
+    unsigned get_offset();
 
     CXSourceLocation cx_location;
+    
+  private:
+    void get_data(std::string *path, unsigned *line, unsigned *column, unsigned *offset);
   };
 
 }  // namespace clang

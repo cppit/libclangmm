@@ -7,9 +7,9 @@
 
 namespace clang {
   class Diagnostic {
-  public:
+    friend class TranslationUnit;
     Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnostic);
-    
+  public:
     static const std::string get_severity_spelling(unsigned severity);
 
     unsigned severity;

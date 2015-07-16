@@ -10,8 +10,8 @@ clang::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnos
   clang_disposeString(cxstr);
   clang::SourceLocation start_location(clang_getDiagnosticLocation(cx_diagnostic));
   
-  unsigned start_offset;
-  start_location.get_data(&path, NULL, NULL, &start_offset);
+  path=start_location.get_path();
+  unsigned start_offset=start_location.get_offset();
   clang::Tokens tokens(cx_tu, SourceRange(start_location, start_location));
   if(tokens.size()==1) {
     offsets=std::pair<unsigned, unsigned>(start_offset, tokens[0].offsets.second);
