@@ -12,12 +12,22 @@ clang::SourceRange clang::Cursor::get_source_range() const {
   return SourceRange(clang_getCursorExtent(cx_cursor));
 }
 
-bool clang::Cursor::operator==(const Cursor& rhs) const {
+std::string clang::Cursor::get_usr() const {
   auto cxstr=clang_getCursorUSR(cx_cursor);
-  std::string lhs_str=clang_getCString(cxstr);
+  std::string USR=clang_getCString(cxstr);
   clang_disposeString(cxstr);
-  cxstr=clang_getCursorUSR(rhs.cx_cursor);
-  std::string rhs_str=clang_getCString(cxstr);
-  clang_disposeString(cxstr);
-  return lhs_str==rhs_str;
+  return USR;
+}
+
+std::string clang::Cursor::get_referenced_usr() const {
+  auto referenced=clang_getCursorReferenced(cx_cursor);
+  if(!clang_Cursor_isNull(referenced)) {
+    return Cursor(referenced).get_usr();
+  }
+  else
+    return "";
+}
+
+bool clang::Cursor::operator==(const Cursor& rhs) const {
+  return get_usr()==rhs.get_usr();
 }

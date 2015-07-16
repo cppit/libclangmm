@@ -3,6 +3,7 @@
 #include <clang-c/Index.h>
 #include "SourceLocation.h"
 #include "SourceRange.h"
+#include <string>
 
 namespace clang {  
   enum class CursorKind {
@@ -179,6 +180,8 @@ namespace clang {
     const CursorKind get_kind();
     SourceLocation get_source_location() const;
     SourceRange get_source_range() const;
+    std::string get_usr() const;
+    std::string get_referenced_usr() const;
     bool operator==(const Cursor& rhs) const;
     CXCursor cx_cursor;
   };
