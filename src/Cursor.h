@@ -181,7 +181,8 @@ namespace clang {
     SourceLocation get_source_location() const;
     SourceRange get_source_range() const;
     std::string get_usr() const;
-    std::string get_referenced_usr() const;
+    Cursor get_referenced() const;
+    operator bool() const;
     bool operator==(const Cursor& rhs) const;
     CXCursor cx_cursor;
   };
