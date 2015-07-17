@@ -16,9 +16,10 @@ namespace clang {
   };
 
   class Token {
-  public:
+    friend class Tokens;
     Token(CXTranslationUnit &cx_tu, CXToken &cx_token, CXCursor &cx_cursor): 
       cx_tu(cx_tu), cx_token(cx_token), cx_cursor(cx_cursor), offsets(get_source_range().get_offsets()) {};
+  public:
     const TokenKind get_kind();
     std::string get_spelling();
     SourceLocation get_source_location();

@@ -8,7 +8,7 @@ clang::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_tu
   cx_cursors.reserve(num_tokens);
   clang_annotateTokens(cx_tu, cx_tokens, num_tokens, cx_cursors.data());
   for (unsigned i = 0; i < num_tokens; i++) {
-    emplace_back(cx_tu, cx_tokens[i], cx_cursors[i]);
+    emplace_back(Token(cx_tu, cx_tokens[i], cx_cursors[i]));
   }
 }
 
