@@ -59,6 +59,7 @@ std::string clang::Token::get_type() {
   return spelling;
 }
 
+//TODO: use clang_Cursor_getBriefCommentText
 std::string clang::Token::get_brief_comments() {
   std::string comment_string;
   auto referenced=clang_getCursorReferenced(cx_cursor);

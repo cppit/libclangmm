@@ -14,6 +14,7 @@ namespace clang {
   public:
     ~Tokens();
     std::vector<std::pair<unsigned, unsigned> > get_similar_token_offsets(clang::Token& token);
+    std::vector<std::pair<std::string, unsigned> > get_cxx_methods();
   private:
     CXToken *cx_tokens;
     unsigned num_tokens;

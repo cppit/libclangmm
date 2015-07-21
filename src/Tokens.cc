@@ -33,3 +33,45 @@ std::vector<std::pair<unsigned, unsigned> > clang::Tokens::get_similar_token_off
   }
   return offsets;
 }
+
+std::vector<std::pair<std::string, unsigned> > clang::Tokens::get_cxx_methods() {
+  std::vector<std::pair<std::string, unsigned> > methods;
+  long last_offset=-1;
+  for(auto &token: *this) {
+    if(token.get_kind()==clang::Token_Identifier) {
+      auto cursor=token.get_cursor();
+      auto kind=cursor.get_kind();
+      if(kind==clang::CursorKind::CXXMethod || kind==clang::CursorKind::Constructor || kind==clang::CursorKind::Destructor) {
+        auto offset=cursor.get_source_location().get_offset();
+        if(offset!=last_offset) {
+          std::string method;
+          CXString cxstr;
+          if(kind==clang::CursorKind::CXXMethod) {
+            auto type=clang_getResultType(clang_getCursorType(cursor.cx_cursor));
+            auto cxstr=clang_getTypeSpelling(type);
+            method+=clang_getCString(cxstr);
+            clang_disposeString(cxstr);
+            auto pos=method.find(" ");
+            if(pos!=std::string::npos)
+              method.erase(pos, 1);
+            method+=" ";
+          }
+          
+          clang::Cursor parent(clang_getCursorSemanticParent(cursor.cx_cursor));
+          cxstr=clang_getCursorDisplayName(parent.cx_cursor);
+          method+=clang_getCString(cxstr);
+          clang_disposeString(cxstr);
+          
+          method+="::";
+          
+          cxstr=clang_getCursorDisplayName(cursor.cx_cursor);
+          method+=clang_getCString(cxstr);
+          clang_disposeString(cxstr);
+          methods.emplace_back(method, offset);
+        }
+        last_offset=offset;
+      }
+    }
+  }
+  return methods;
+}
