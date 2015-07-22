@@ -29,10 +29,8 @@ $ git clone https://github.com/cppit/libclangmm.git
 
 ## Installation ##
 
-```sh
-$ cmake .
-$ make install
-```
+See [installation guide](https://github.com/cppit/libclangmm/blob/master/docs/install.md)
+
 **Notice:** *make install* needs root privileges
 
 # Usage #
