@@ -15,12 +15,12 @@ clang::SourceRange clang::Token::get_source_range() {
   return SourceRange(clang_getTokenExtent(cx_tu, cx_token));
 }
 // returns a string description of this tokens kind
-std::string clang::Token::get_token_spelling() {
+std::string clang::Token::get_spelling() {
   CXString s = clang_getTokenSpelling(cx_tu, cx_token);
   return std::string(clang_getCString(s));
 }
 
-const clang::TokenKind clang::Token::kind() {
+const clang::TokenKind clang::Token::get_kind() {
   return (TokenKind) clang_getTokenKind(cx_token);
 }
 
@@ -59,6 +59,7 @@ std::string clang::Token::get_type() {
   return spelling;
 }
 
+//TODO: use clang_Cursor_getBriefCommentText
 std::string clang::Token::get_brief_comments() {
   std::string comment_string;
   auto referenced=clang_getCursorReferenced(cx_cursor);

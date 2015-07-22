@@ -23,6 +23,5 @@ BOOST_AUTO_TEST_CASE(diagnostics_test) {
   auto diagnostics=tu.get_diagnostics();
   BOOST_CHECK(diagnostics.size()==1);
   BOOST_CHECK(diagnostics[0].spelling=="use of undeclared identifier 'undeclared_variable'");
-  BOOST_CHECK(diagnostics[0].range.path=="./case/main_error.cpp");
   BOOST_CHECK(diagnostics[0].severity==3);
 }
