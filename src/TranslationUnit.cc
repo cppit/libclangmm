@@ -90,7 +90,7 @@ unsigned clang::TranslationUnit::DefaultFlags() {
   return CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete | CXTranslationUnit_IncludeBriefCommentsInCodeCompletion;
 }
 
-clang::CodeCompleteResults clang::TranslationUnit::get_code_completions(const std::map<std::string, std::string> &buffers, int line_number, int column) {
+clang::CodeCompleteResults clang::TranslationUnit::get_code_completions(const std::map<std::string, std::string> &buffers, unsigned line_number, unsigned column) {
   auto cxstr=clang_getTranslationUnitSpelling(cx_tu);
   std::string path=clang_getCString(cxstr);
   clang_disposeString(cxstr);

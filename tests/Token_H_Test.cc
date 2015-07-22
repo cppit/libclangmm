@@ -12,8 +12,8 @@ BOOST_AUTO_TEST_CASE(token) {
   auto tokens=tu.get_tokens(0, 113);
 
   BOOST_CHECK(tokens->size() == 32);
-  BOOST_CHECK((*tokens)[1].kind() == clang::TokenKind::Token_Identifier);
+  BOOST_CHECK((*tokens)[1].get_kind() == clang::TokenKind::Token_Identifier);
 
-  std::string str = (*tokens)[28].get_token_spelling();
+  std::string str = (*tokens)[28].get_spelling();
   BOOST_CHECK(str == "return");  
 }

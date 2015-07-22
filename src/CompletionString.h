@@ -32,7 +32,7 @@ namespace clang {
     bool available();
     std::vector<CompletionChunk> get_chunks();
     std::string get_brief_comments();
-    int get_num_chunks();
+    unsigned get_num_chunks();
     
     CXCompletionString cx_str;
   };

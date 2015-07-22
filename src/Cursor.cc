@@ -19,13 +19,12 @@ std::string clang::Cursor::get_usr() const {
   return USR;
 }
 
-std::string clang::Cursor::get_referenced_usr() const {
-  auto referenced=clang_getCursorReferenced(cx_cursor);
-  if(!clang_Cursor_isNull(referenced)) {
-    return Cursor(referenced).get_usr();
-  }
-  else
-    return "";
+clang::Cursor clang::Cursor::get_referenced() const {
+  return Cursor(clang_getCursorReferenced(cx_cursor));
+}
+
+clang::Cursor::operator bool() const {
+  return !clang_Cursor_isNull(cx_cursor);
 }
 
 bool clang::Cursor::operator==(const Cursor& rhs) const {
