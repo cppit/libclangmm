@@ -1,13 +1,12 @@
 #include "Diagnostic.h"
 #include "SourceLocation.h"
 #include "Tokens.h"
+#include "Utility.h"
 
 clang::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnostic) {
   severity=clang_getDiagnosticSeverity(cx_diagnostic);
   severity_spelling=get_severity_spelling(severity);
-  auto cxstr=clang_getDiagnosticSpelling(cx_diagnostic);
-  spelling=clang_getCString(cxstr);
-  clang_disposeString(cxstr);
+  spelling=clang::to_string(clang_getDiagnosticSpelling(cx_diagnostic));
   clang::SourceLocation start_location(clang_getDiagnosticLocation(cx_diagnostic));
   
   path=start_location.get_path();

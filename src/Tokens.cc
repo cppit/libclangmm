@@ -1,4 +1,5 @@
 #include "Tokens.h"
+#include "Utility.h"
 #include <iostream>
 using namespace std;
 
@@ -45,12 +46,9 @@ std::vector<std::pair<std::string, unsigned> > clang::Tokens::get_cxx_methods() 
         auto offset=cursor.get_source_location().get_offset();
         if(offset!=last_offset) {
           std::string method;
-          CXString cxstr;
           if(kind==clang::CursorKind::CXXMethod) {
             auto type=clang_getResultType(clang_getCursorType(cursor.cx_cursor));
-            auto cxstr=clang_getTypeSpelling(type);
-            method+=clang_getCString(cxstr);
-            clang_disposeString(cxstr);
+            method+=clang::to_string(clang_getTypeSpelling(type));
             auto pos=method.find(" ");
             if(pos!=std::string::npos)
               method.erase(pos, 1);
@@ -58,15 +56,11 @@ std::vector<std::pair<std::string, unsigned> > clang::Tokens::get_cxx_methods() 
           }
           
           clang::Cursor parent(clang_getCursorSemanticParent(cursor.cx_cursor));
-          cxstr=clang_getCursorDisplayName(parent.cx_cursor);
-          method+=clang_getCString(cxstr);
-          clang_disposeString(cxstr);
+          method+=clang::to_string(clang_getCursorDisplayName(parent.cx_cursor));
           
           method+="::";
           
-          cxstr=clang_getCursorDisplayName(cursor.cx_cursor);
-          method+=clang_getCString(cxstr);
-          clang_disposeString(cxstr);
+          method+=clang::to_string(clang_getCursorDisplayName(cursor.cx_cursor));
           methods.emplace_back(method, offset);
         }
         last_offset=offset;

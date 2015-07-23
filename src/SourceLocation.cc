@@ -1,4 +1,5 @@
 #include "SourceLocation.h"
+#include "Utility.h"
 
 // // // // // // // //
 //  SourceLocation   //
@@ -26,9 +27,7 @@ void clang::SourceLocation::get_data(std::string* path, unsigned *line, unsigned
     CXFile file;
     clang_getExpansionLocation(cx_location, &file, line, column, offset);
     if (file!=NULL) {
-      auto cxstr=clang_getFileName(file);
-      *path=clang_getCString(cxstr);
-      clang_disposeString(cxstr);
+      *path=clang::to_string(clang_getFileName(file));
     }
   }
 }
