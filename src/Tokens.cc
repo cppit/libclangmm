@@ -6,7 +6,7 @@ using namespace std;
 clang::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_tu(cx_tu) {
   clang_tokenize(cx_tu, range.cx_range, &cx_tokens, &num_tokens);
   cx_cursors.clear();
-  cx_cursors.reserve(num_tokens);
+  cx_cursors.resize(num_tokens);
   clang_annotateTokens(cx_tu, cx_tokens, num_tokens, cx_cursors.data());
   for (unsigned i = 0; i < num_tokens; i++) {
     emplace_back(Token(cx_tu, cx_tokens[i], cx_cursors[i]));
