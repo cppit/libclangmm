@@ -13,7 +13,7 @@ namespace clang {
     Tokens(CXTranslationUnit &cx_tu, const SourceRange &range);
   public:
     ~Tokens();
-    std::vector<std::pair<unsigned, unsigned> > get_similar_token_offsets(clang::Token& token);
+    std::vector<std::pair<unsigned, unsigned> > get_similar_token_offsets(const std::string &usr);
     std::vector<std::pair<std::string, unsigned> > get_cxx_methods();
   private:
     CXToken *cx_tokens;
