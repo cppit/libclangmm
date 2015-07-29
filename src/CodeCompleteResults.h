@@ -6,15 +6,14 @@
 
 namespace clang {
   class CodeCompleteResults {
-  public:
-    CodeCompleteResults(CXTranslationUnit &cx_tu,
-                        const std::string &file_name,
+    friend class TranslationUnit;
+    CodeCompleteResults(CXTranslationUnit &cx_tu, const std::string &file_name,
                         const std::map<std::string, std::string>  &buffers,
-                        int line_num,
-                        int column);
+                        unsigned line_num, unsigned column);
+  public:
     ~CodeCompleteResults();
-    CompletionString get(int index);
-    int size();
+    CompletionString get(unsigned index);
+    unsigned size();
 
     CXCodeCompleteResults *cx_results;
   };

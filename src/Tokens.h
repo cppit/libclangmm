@@ -8,10 +8,13 @@
 
 namespace clang {
   class Tokens : public std::vector<clang::Token> {
+    friend class TranslationUnit;
+    friend class Diagnostic;
+    Tokens(CXTranslationUnit &cx_tu, const SourceRange &range);
   public:
-    Tokens(CXTranslationUnit &cx_tu, SourceRange &range);
     ~Tokens();
-    std::vector<std::pair<unsigned, unsigned> > get_similar_token_offsets(clang::Token& token);
+    std::vector<std::pair<unsigned, unsigned> > get_similar_token_offsets(const std::string &usr);
+    std::vector<std::pair<std::string, unsigned> > get_cxx_methods();
   private:
     CXToken *cx_tokens;
     unsigned num_tokens;

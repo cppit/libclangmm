@@ -1,4 +1,5 @@
 #include "Cursor.h"
+#include "Utility.h"
 
 const clang::CursorKind clang::Cursor::get_kind() {
   return (CursorKind) clang_getCursorKind(this->cx_cursor);
@@ -13,19 +14,15 @@ clang::SourceRange clang::Cursor::get_source_range() const {
 }
 
 std::string clang::Cursor::get_usr() const {
-  auto cxstr=clang_getCursorUSR(cx_cursor);
-  std::string USR=clang_getCString(cxstr);
-  clang_disposeString(cxstr);
-  return USR;
+  return clang::to_string(clang_getCursorUSR(cx_cursor));
 }
 
-std::string clang::Cursor::get_referenced_usr() const {
-  auto referenced=clang_getCursorReferenced(cx_cursor);
-  if(!clang_Cursor_isNull(referenced)) {
-    return Cursor(referenced).get_usr();
-  }
-  else
-    return "";
+clang::Cursor clang::Cursor::get_referenced() const {
+  return Cursor(clang_getCursorReferenced(cx_cursor));
+}
+
+clang::Cursor::operator bool() const {
+  return !clang_Cursor_isNull(cx_cursor);
 }
 
 bool clang::Cursor::operator==(const Cursor& rhs) const {

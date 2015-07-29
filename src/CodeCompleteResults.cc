@@ -3,11 +3,9 @@
 #include <exception>
 
 clang::CodeCompleteResults::
-CodeCompleteResults(CXTranslationUnit &cx_tu,
-                    const std::string &file_name,
+CodeCompleteResults(CXTranslationUnit &cx_tu, const std::string &file_name,
                     const std::map<std::string, std::string>  &buffers,
-                    int line_num,
-                    int column) {
+                    unsigned line_num, unsigned column) {
   std::vector<CXUnsavedFile> files;
   for (auto &buffer : buffers) {
     CXUnsavedFile file;
@@ -31,15 +29,15 @@ clang::CodeCompleteResults::~CodeCompleteResults() {
   delete cx_results;
 }
 
-int clang::CodeCompleteResults::
+unsigned clang::CodeCompleteResults::
 size() {
   return cx_results->NumResults;
 }
 
 clang::CompletionString clang::CodeCompleteResults::
-get(int i) {
+get(unsigned i) {
   if (i >= size()) {
-    throw std::invalid_argument("clang::CodeCompleteResults::get(int i): i>=size()");
+    throw std::invalid_argument("clang::CodeCompleteResults::get(unsigned i): i>=size()");
   }
   return CompletionString(cx_results->Results[i].CompletionString);
 }
