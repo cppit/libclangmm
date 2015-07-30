@@ -1,9 +1,11 @@
 #ifndef CURSOR_H_
 #define CURSOR_H_
-#include "TranslationUnit.h"
+#include <clang-c/Index.h>
 #include "SourceLocation.h"
+#include "SourceRange.h"
+#include <string>
 
-namespace clang {
+namespace clang {  
   enum class CursorKind {
     UnexposedDecl = 1,
     StructDecl = 2,
@@ -174,14 +176,15 @@ namespace clang {
 
   class Cursor {
   public:
-    Cursor() {}
-    Cursor(TranslationUnit *tu, SourceLocation *source_location);
-    const CursorKind kind();
-  private:
-    CXCursor cursor_;
-    friend SourceRange;
-    friend SourceLocation;
-    friend Tokens;
+    Cursor(const CXCursor &cx_cursor) : cx_cursor(cx_cursor) {}
+    const CursorKind get_kind();
+    SourceLocation get_source_location() const;
+    SourceRange get_source_range() const;
+    std::string get_usr() const;
+    Cursor get_referenced() const;
+    operator bool() const;
+    bool operator==(const Cursor& rhs) const;
+    CXCursor cx_cursor;
   };
 }  // namespace clang
 #endif  // CURSOR_H_

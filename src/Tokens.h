@@ -1,21 +1,25 @@
 #ifndef TOKENS_H_
 #define TOKENS_H_
-#include "TranslationUnit.h"
+#include <clang-c/Index.h>
 #include "SourceRange.h"
 #include "Token.h"
+#include <unordered_map>
+#include <vector>
 
 namespace clang {
   class Tokens : public std::vector<clang::Token> {
+    friend class TranslationUnit;
+    friend class Diagnostic;
+    Tokens(CXTranslationUnit &cx_tu, const SourceRange &range);
   public:
-    Tokens(TranslationUnit *tu, SourceRange *range);
     ~Tokens();
-    void update_types(clang::TranslationUnit *tu);
-    std::string get_brief_comments(size_t cursor_id);
+    std::vector<std::pair<unsigned, unsigned> > get_similar_token_offsets(const std::string &usr);
+    std::vector<std::pair<std::string, unsigned> > get_cxx_methods();
   private:
-    CXToken *tokens_;
-    unsigned num_tokens_;
-    std::vector<CXCursor> clang_cursors;
-    TranslationUnit& tu;
+    CXToken *cx_tokens;
+    unsigned num_tokens;
+    std::vector<CXCursor> cx_cursors;
+    CXTranslationUnit& cx_tu;
   };
 }  // namespace clang
 #endif  // TOKENS_H_

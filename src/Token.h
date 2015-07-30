@@ -1,8 +1,10 @@
 #ifndef TOKEN_H_
 #define TOKEN_H_
+#include <clang-c/Index.h>
 #include "SourceLocation.h"
 #include "SourceRange.h"
-#include "TranslationUnit.h"
+#include "Cursor.h"
+#include <string>
 
 namespace clang {
   enum TokenKind {
@@ -14,18 +16,22 @@ namespace clang {
   };
 
   class Token {
+    friend class Tokens;
+    Token(CXTranslationUnit &cx_tu, CXToken &cx_token, CXCursor &cx_cursor): 
+      cx_tu(cx_tu), cx_token(cx_token), cx_cursor(cx_cursor), offsets(get_source_range().get_offsets()) {};
   public:
-    const TokenKind kind();
-    std::string get_token_spelling(TranslationUnit *tu);
-    SourceLocation get_source_location(TranslationUnit *tu);
-    SourceRange get_source_range(TranslationUnit *tu);
-    std::string type;
-  private:
-    explicit Token(const CXToken &token);
-    friend SourceRange;
-    friend SourceLocation;
-    friend Tokens;
-    const CXToken& token_;
+    const TokenKind get_kind();
+    std::string get_spelling();
+    SourceLocation get_source_location();
+    SourceRange get_source_range();
+    clang::Cursor get_cursor() {return clang::Cursor(cx_cursor);}
+    bool has_type();
+    std::string get_type();
+    std::string get_brief_comments();
+    CXTranslationUnit &cx_tu;
+    CXToken& cx_token;
+    CXCursor& cx_cursor;
+    std::pair<unsigned, unsigned> offsets;
   };
 }  // namespace clang
 #endif  // TOKEN_H_

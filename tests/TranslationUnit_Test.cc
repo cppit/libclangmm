@@ -7,7 +7,7 @@ BOOST_AUTO_TEST_CASE(translation_unit) {
   std::string path("./case/main.cpp");
 
   clang::Index index(0, 0);
-  clang::TranslationUnit tu(&index, path);
+  clang::TranslationUnit tu(index, path);
 
   // ReparseTranslationUnit takes a map with filepath as key
   // and buffer as value
@@ -20,5 +20,5 @@ BOOST_AUTO_TEST_CASE(translation_unit) {
   file.append("}");
 
   buffers[path] = file;
-  BOOST_CHECK(tu.ReparseTranslationUnit(path, buffers) == 0);
+  BOOST_CHECK(tu.ReparseTranslationUnit(buffers) == 0);
 }

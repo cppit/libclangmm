@@ -1,136 +1,69 @@
 #include "Tokens.h"
+#include "Utility.h"
 #include <iostream>
 using namespace std;
 
-clang::Tokens::Tokens(clang::TranslationUnit *tu, clang::SourceRange *range): tu(*tu) {
-  clang_tokenize(tu->tu_,
-                 range->range_,
-                 &tokens_,
-                 &num_tokens_);
-  for (int i = 0; i < num_tokens_; i++) {
-    push_back(clang::Token(tokens_[i]));
+clang::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_tu(cx_tu) {
+  clang_tokenize(cx_tu, range.cx_range, &cx_tokens, &num_tokens);
+  cx_cursors.clear();
+  cx_cursors.resize(num_tokens);
+  clang_annotateTokens(cx_tu, cx_tokens, num_tokens, cx_cursors.data());
+  for (unsigned i = 0; i < num_tokens; i++) {
+    emplace_back(Token(cx_tu, cx_tokens[i], cx_cursors[i]));
   }
 }
 
 clang::Tokens::~Tokens() {
-  clang_disposeTokens(tu.tu_, tokens_, size());
+  clang_disposeTokens(cx_tu, cx_tokens, size());
 }
 
-void clang::Tokens::update_types(clang::TranslationUnit *tu) {
-  clang_cursors.clear();
-  clang_cursors.reserve(size());
-  clang_annotateTokens(tu->tu_, tokens_, size(), clang_cursors.data());
-  
-  for(size_t c=0;c<size();c++) {
-    auto referenced=clang_getCursorReferenced(clang_cursors[c]);
-    if(!clang_Cursor_isNull(referenced)) {
-      auto type=clang_getCursorType(referenced);
-      auto cxstr=clang_getTypeSpelling(type);
-      std::string spelling=clang_getCString(cxstr);
-      clang_disposeString(cxstr);
-      std::string auto_end="";
-      //TODO fix const auto
-      if((spelling.size()>=4 && spelling.substr(0, 4)=="auto")) {
-        auto_end=spelling.substr(4);
-        auto type=clang_getCanonicalType(clang_getCursorType(clang_cursors[c]));
-        auto cxstr=clang_getTypeSpelling(type);
-        spelling=clang_getCString(cxstr);
-        clang_disposeString(cxstr);
-        if(spelling.find(" ")==std::string::npos)
-          spelling+=auto_end;
+//This works across TranslationUnits! However, to get rename refactoring to work, 
+//one have to open all the files that might include a similar token
+//Similar tokens defined as tokens with equal referenced cursors. 
+std::vector<std::pair<unsigned, unsigned> > clang::Tokens::get_similar_token_offsets(const std::string &usr) {
+  std::vector<std::pair<unsigned, unsigned> > offsets;
+  for(auto &token: *this) {
+    if(token.get_kind()==clang::Token_Identifier) {
+      auto referenced=token.get_cursor().get_referenced();
+      if(referenced && usr==referenced.get_usr()) {
+        offsets.emplace_back(token.offsets);
       }
-      
-      (*this)[c].type=spelling;
-      //std::cout << clang_getCString(clang_getTypeSpelling(type)) << ": " << type.kind << endl;
-      ////auto cursor=clang_getTypeDeclaration(type); 
-      ////tks[c].type=clang_getCString(clang_getCursorSpelling(cursor));
-      ////auto type=clang_getCursorType(referenced);
-      
     }
-    //Testing:
-    /*if(tks[c].get_token_spelling(tu)=="text_view") {
-      cout << tks[c].get_token_spelling(tu) << endl;
-      auto kind=clang_getCursorKind(cursors[c].cursor_);
-      cout << "  " << kind << endl;
-      cout << "  Decl: " << clang_isDeclaration(kind) << endl;
-      cout << "  Attr: " << clang_isAttribute(kind) << endl;
-      cout << "  Ref: " << clang_isReference(kind) << endl;
-      cout << "  Expr: " << clang_isExpression(kind) << endl;
-      auto referenced=clang_getCursorReferenced(cursors[c].cursor_);
-      if(!clang_Cursor_isNull(referenced)) {
-        cout << "  " << clang_getCursorKind(referenced) << endl;
-
-        clang::Cursor referenced_cursor;
-        referenced_cursor.cursor_=referenced;
-        auto range=clang::SourceRange(&referenced_cursor);
-
-        auto location=clang::SourceLocation(&range, true);
-        std::string path;
-        unsigned line, column, offset;
-        location.get_location_info(&path, &line, &column, &offset);
-        cout << "    start: " << path << ", " << line << ", " << column << endl;
-
-        location=clang::SourceLocation(&range, false);
-        location.get_location_info(&path, &line, &column, &offset);
-        cout << "    start: " << path << ", " << line << ", " << column << endl;
-
-        auto type=clang_getCursorType(referenced);
-        cout << "    " << clang_getCString(clang_getTypeSpelling(type)) << endl;
-      }
-    }*/
   }
+  return offsets;
 }
 
-std::string clang::Tokens::get_brief_comments(size_t cursor_id) {
-  std::string comment_string;
-  auto referenced=clang_getCursorReferenced(clang_cursors[cursor_id]);
-  auto comment=clang_Cursor_getParsedComment(referenced);
-  if(clang_Comment_getKind(comment)==CXComment_FullComment) {
-    size_t para_c=0;
-    for(unsigned c=0;c<clang_Comment_getNumChildren(comment);c++) {
-      auto child_comment=clang_Comment_getChild(comment, c);
-      if(clang_Comment_getKind(child_comment)==CXComment_Paragraph) {
-        para_c++;
-        if(para_c>=2)
-          break;
-        for(unsigned c=0;c<clang_Comment_getNumChildren(child_comment);c++) {
-          auto grandchild_comment=clang_Comment_getChild(child_comment, c);
-          if(clang_Comment_getKind(grandchild_comment)==CXComment_Text) {
-            auto cxstr=clang_TextComment_getText(grandchild_comment);
-            comment_string+=clang_getCString(cxstr);
-            comment_string+="\n";
-            clang_disposeString(cxstr);
-            size_t dot_position=comment_string.find(".");
-            if(dot_position!=std::string::npos)
-              return comment_string.substr(0, dot_position);
+std::vector<std::pair<std::string, unsigned> > clang::Tokens::get_cxx_methods() {
+  std::vector<std::pair<std::string, unsigned> > methods;
+  long last_offset=-1;
+  for(auto &token: *this) {
+    if(token.get_kind()==clang::Token_Identifier) {
+      auto cursor=token.get_cursor();
+      auto kind=cursor.get_kind();
+      if(kind==clang::CursorKind::CXXMethod || kind==clang::CursorKind::Constructor || kind==clang::CursorKind::Destructor) {
+        auto offset=cursor.get_source_location().get_offset();
+        if(offset!=last_offset) {
+          std::string method;
+          if(kind==clang::CursorKind::CXXMethod) {
+            auto type=clang_getResultType(clang_getCursorType(cursor.cx_cursor));
+            method+=clang::to_string(clang_getTypeSpelling(type));
+            auto pos=method.find(" ");
+            if(pos!=std::string::npos)
+              method.erase(pos, 1);
+            method+=" ";
           }
-          if(clang_Comment_getKind(grandchild_comment)==CXComment_InlineCommand) {
-            auto cxstr=clang_InlineCommandComment_getCommandName(grandchild_comment);
-            if(comment_string.size()>0)
-              comment_string.pop_back();
-            if(clang_InlineCommandComment_getNumArgs(grandchild_comment)==0)
-              comment_string+=clang_getCString(cxstr);
-            clang_disposeString(cxstr);
-            for(unsigned arg_c=0;arg_c<clang_InlineCommandComment_getNumArgs(grandchild_comment);arg_c++) {
-              auto cxstr=clang_InlineCommandComment_getArgText(grandchild_comment, arg_c);
-              if(cxstr.data!=NULL) {
-                if(arg_c>0)
-                  comment_string+=" ";
-                comment_string+=clang_getCString(cxstr);
-                clang_disposeString(cxstr);
-              }
-            }
-          }
+          
+          clang::Cursor parent(clang_getCursorSemanticParent(cursor.cx_cursor));
+          method+=clang::to_string(clang_getCursorDisplayName(parent.cx_cursor));
+          
+          method+="::";
+          
+          method+=clang::to_string(clang_getCursorDisplayName(cursor.cx_cursor));
+          methods.emplace_back(method, offset);
         }
+        last_offset=offset;
       }
-      /*cout << "  " << clang_Comment_getKind(child_comment) << ", children: " << clang_Comment_getNumChildren(child_comment) << endl;
-      auto cxstr=clang_FullComment_getAsHTML(child_comment);
-      cout << "  " << clang_getCString(cxstr) << endl;
-      clang_disposeString(cxstr);*/
     }
-    while(comment_string.size()>0 && (comment_string.back()=='\n' || comment_string.back()==' '))
-      comment_string.pop_back();
   }
-  
-  return comment_string;
+  return methods;
 }

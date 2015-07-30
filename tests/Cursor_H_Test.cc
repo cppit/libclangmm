@@ -8,12 +8,11 @@ BOOST_AUTO_TEST_CASE(cursor) {
   std::string path("./case/main.cpp");
 
   clang::Index index(0, 0);
-  clang::TranslationUnit tu(&index, path);
+  clang::TranslationUnit tu(index, path);
 
   // ]
 
-  clang::SourceLocation location(&tu, path, 6, 4);
-  clang::Cursor cursor(&tu, &location);
+  auto cursor=tu.get_cursor(path, 103);
 
-  BOOST_CHECK(cursor.kind() == clang::CursorKind::ReturnStmt);
+  BOOST_CHECK(cursor.get_kind() == clang::CursorKind::ReturnStmt);
 }

@@ -12,7 +12,7 @@ message("Searcing for libclang")
 find_package(LibClang REQUIRED)
 
 set(header_files
-  clangmm.h             
+  clangmm.h
   CodeCompleteResults.h 
   CompilationDatabase.h 
   CompileCommand.h      
@@ -26,6 +26,7 @@ set(header_files
   Tokens.h              
   TranslationUnit.h
   Diagnostic.h
+  Utility.h
   )
 set(cc_files
   CodeCompleteResults.cc
@@ -41,6 +42,7 @@ set(cc_files
   Tokens.cc             
   TranslationUnit.cc
   Diagnostic.cc
+  Utility.cc
   )
 
 add_library(${project_name} SHARED ${header_files} ${cc_files})

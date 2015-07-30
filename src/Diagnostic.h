@@ -3,25 +3,20 @@
 #include <string>
 #include <vector>
 #include <clang-c/Index.h>
-#include "TranslationUnit.h"
+#include "SourceRange.h"
 
-namespace clang {  
+namespace clang {
   class Diagnostic {
+    friend class TranslationUnit;
+    Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnostic);
   public:
-    class LocationData {
-    public:
-      unsigned line, column, offset;
-    };
-    
-    Diagnostic(clang::TranslationUnit& tu, CXDiagnostic& clang_diagnostic);
-    
     static const std::string get_severity_spelling(unsigned severity);
 
     unsigned severity;
     std::string severity_spelling;
     std::string spelling;
     std::string path;
-    LocationData start_location, end_location;
+    std::pair<unsigned, unsigned> offsets;
   };
 }
 

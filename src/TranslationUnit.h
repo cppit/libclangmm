@@ -7,51 +7,40 @@
 #include <memory>
 #include "Index.h"
 #include "Diagnostic.h"
+#include "Tokens.h"
+#include "CodeCompleteResults.h"
+#include "Cursor.h"
 
 namespace clang {
-  class Token;
-  class Tokens;
-  class SourceLocation;
-  class SourceRange;
-  class Cursor;
-  class CodeCompleteResults;
-  class Diagnostic;
-
   class TranslationUnit {
   public:
-    TranslationUnit(Index *index,
+    TranslationUnit(Index &index,
                     const std::string &filepath,
                     const std::vector<std::string> &command_line_args);
-    TranslationUnit(Index *index,
+    TranslationUnit(Index &index,
                     const std::string &filepath,
                     const std::vector<std::string> &command_line_args,
                     const std::map<std::string, std::string> &buffers,
                     unsigned flags=DefaultFlags());
-    TranslationUnit(Index *index,
+    TranslationUnit(Index &index,
                     const std::string &filepath);
     ~TranslationUnit();
-    TranslationUnit& operator=(const TranslationUnit &tu);
-    int ReparseTranslationUnit(const std::string &file_path,
-                               const std::map<std::string, std::string>
-                               &buffers,
+    int ReparseTranslationUnit(const std::map<std::string, std::string> &buffers,
                                unsigned flags=DefaultFlags());
     static unsigned DefaultFlags();
-    void update_diagnostics();
     
-    std::vector<clang::Diagnostic> diagnostics;
-  private:
-    void parse(Index *index,
+    void parse(Index &index,
                const std::string &filepath,
                const std::vector<std::string> &command_line_args,
                const std::map<std::string, std::string> &buffers,
                unsigned flags=DefaultFlags());
-    friend Token;
-    friend Tokens;
-    friend SourceLocation;
-    friend SourceRange;
-    friend Cursor;
-    friend CodeCompleteResults;
-    CXTranslationUnit tu_;
+               
+   clang::CodeCompleteResults get_code_completions(const std::map<std::string, std::string> &buffers, unsigned line_number, unsigned column);
+   std::vector<clang::Diagnostic> get_diagnostics();
+   std::unique_ptr<Tokens> get_tokens(unsigned start_offset, unsigned end_offset);
+   clang::Cursor get_cursor(std::string path, unsigned offset);
+
+   CXTranslationUnit cx_tu;
   };
 }  // namespace clang
 #endif  // TRANSLATIONUNIT_H_

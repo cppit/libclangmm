@@ -1,23 +1,17 @@
 #ifndef SOURCERANGE_H_
 #define SOURCERANGE_H_
-#include "TranslationUnit.h"
-#include "Token.h"
-#include "Cursor.h"
+#include <clang-c/Index.h>
+#include "SourceLocation.h"
+#include <string>
+#include <utility>
 
-namespace clang {
+namespace clang {  
   class SourceRange {
   public:
-    SourceRange() {}
-    SourceRange(TranslationUnit *tu, Token *token);
-    SourceRange(SourceLocation *start,
-                SourceLocation *end);
-    explicit SourceRange(Cursor *cursor);
-
-  private:
-    CXSourceRange range_;
-    friend Tokens;
-    friend SourceLocation;
-    friend Diagnostic;
+    SourceRange(const CXSourceRange& cx_range) : cx_range(cx_range) {}
+    SourceRange(SourceLocation &start, SourceLocation &end);
+    std::pair<unsigned, unsigned> get_offsets();
+    CXSourceRange cx_range;
   };
 }  // namespace clang
 #endif  // SOURCERANGE_H_
