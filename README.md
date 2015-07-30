@@ -1,7 +1,7 @@
 # libclangmm - An easy to use C++-wrapper for libclang #
 
 ## About ##
-This is a highlevel wrapper for [libclang](http://www.llvm.com). It
+This is a highlevel wrapper for [libclang](http://www.llvm.org). It
 provides highlevel C++11 access to complicated C code.
 
 ## Dependencies ##
