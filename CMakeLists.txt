@@ -1,7 +1,8 @@
 cmake_minimum_required (VERSION 2.8.4)
 set(project_name clangmm)
 project(${project_name})
-set(library_installation_path "/usr/local/lib/libclangmm/")
+set(library_path "/usr/local/lib/")
+set(include_path "/usr/local/include/")
 
 if(APPLE)
   set(Boost_USE_STATIC_LIBS "YES")
