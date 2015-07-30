@@ -1,25 +1,13 @@
-# juCi++
-## Installation guide ##
-## Linux
-```sh
-# Libraries 
-$ sudo apt-get install libboost-log-dev libclang-dev
-# Programs
-$sudo apt-get install make cmake gcc
+# Installation guide #
 
-```
-Compile
+## Debian/Ubuntu
 ```sh
-# When git clone
-$ cd path-to-cloned-from-folder/jucipp/juci
-# When download zipped file, extraxt it to a folder of your choice
-$ cd path-to-folder-extraxted-into/jucipp-master/juci
-# In both cases above you can choose remove the jucipp folder, but remeber to apply changes to cd command as well.
-$ cmake .
+$ sudo apt-get install libclang-dev make cmake gcc
+```
+
+```sh
+$ git clone https://github.com/cppit/libclangmm.git clangmm
+$ cd clangmm
 $ make
-```
-
-## Run
-```sh
-$ ./bin/juci
+$ sudo make install
 ```

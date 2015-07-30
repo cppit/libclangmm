@@ -9,6 +9,7 @@ if(APPLE)
   set(CMAKE_MACOSX_RPATH 1)
 endif()
 
-enable_testing()
 add_subdirectory(src)
-add_subdirectory(tests)
+
+# enable_testing()
+# add_subdirectory(tests)
