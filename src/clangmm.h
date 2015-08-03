@@ -13,4 +13,5 @@
 #include "Index.h"
 #include "Cursor.h"
 #include "Diagnostic.h"
+#include "Utility.h"
 #endif  // CLANGMM_H_

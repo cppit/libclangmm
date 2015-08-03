@@ -26,6 +26,7 @@ set(header_files
   Tokens.h              
   TranslationUnit.h
   Diagnostic.h
+  Utility.h
   )
 set(cc_files
   CodeCompleteResults.cc
@@ -41,6 +42,7 @@ set(cc_files
   Tokens.cc             
   TranslationUnit.cc
   Diagnostic.cc
+  Utility.cc
   )
 
 add_library(${project_name} SHARED ${header_files} ${cc_files})
@@ -48,7 +50,5 @@ add_library(${project_name} SHARED ${header_files} ${cc_files})
 include_directories(${LIBCLANG_INCLUDE_DIRS})
 target_link_libraries(${project_name} ${LIBCLANG_LIBRARIES})
 
-install(TARGETS ${project_name}
-  LIBRARY DESTINATION ${library_installation_path})
-install(FILES ${header_files}
-  DESTINATION ${library_installation_path}/include)
+install(TARGETS ${project_name} LIBRARY DESTINATION ${library_path})
+install(FILES ${header_files} DESTINATION ${include_path}/libclangmm)

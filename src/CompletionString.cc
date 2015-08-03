@@ -1,34 +1,27 @@
 #include "CompletionString.h"
+#include "Utility.h"
 
 clang::CompletionString::
-CompletionString(const CXCompletionString &cx_str) : cx_str(cx_str) {}
+CompletionString(const CXCompletionString &cx_completion_sting) : cx_completion_sting(cx_completion_sting) {}
 
 bool clang::CompletionString::available() {
-  return clang_getCompletionAvailability(cx_str) == CXAvailability_Available;
+  return clang_getCompletionAvailability(cx_completion_sting) == CXAvailability_Available;
 }
 
 unsigned clang::CompletionString::get_num_chunks() {
-    return clang_getNumCompletionChunks(cx_str);
+    return clang_getNumCompletionChunks(cx_completion_sting);
 }
 
 std::vector<clang::CompletionChunk> clang::CompletionString::get_chunks() {
   std::vector<clang::CompletionChunk> res;
   for (unsigned i = 0; i < get_num_chunks(); i++) {
-    auto cxstr=clang_getCompletionChunkText(cx_str, i);
-    res.emplace_back(clang_getCString(cxstr), static_cast<CompletionChunkKind> (clang_getCompletionChunkKind(cx_str, i)));
-    clang_disposeString(cxstr);
+    res.emplace_back(clang::to_string(clang_getCompletionChunkText(cx_completion_sting, i)), static_cast<CompletionChunkKind> (clang_getCompletionChunkKind(cx_completion_sting, i)));
   }
   return res;
 }
 
 std::string clang::CompletionString::get_brief_comments() {
-  std::string brief_comments;
-  auto cxstr=clang_getCompletionBriefComment(cx_str);
-  if(cxstr.data!=NULL) {
-    brief_comments=clang_getCString(cxstr);
-    clang_disposeString(cxstr);
-  }
-  return brief_comments;
+  return clang::to_string(clang_getCompletionBriefComment(cx_completion_sting));
 }
 
 clang::CompletionChunk::
