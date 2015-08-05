@@ -2,7 +2,7 @@
 
 ## Debian/Ubuntu
 ```sh
-$ sudo apt-get install libclang-dev make cmake gcc
+$ sudo apt-get install libclang-dev make cmake gcc g++ git
 ```
 
 ```sh
