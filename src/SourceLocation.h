@@ -4,6 +4,15 @@
 #include <string>
 
 namespace clang {
+  class Offset {
+  public:
+    Offset() {}
+    Offset(unsigned line, unsigned index): line(line), index(index) {}
+    bool operator==(const clang::Offset &o) {return (line==o.line && index==o.index);}
+    bool operator!=(const clang::Offset &o) {return !(*this==o);}
+    unsigned line;
+    unsigned index; //byte index in line (not char number)
+  };
   
   class SourceLocation {
     friend class TranslationUnit;
@@ -13,7 +22,7 @@ namespace clang {
 
   public:
     std::string get_path();
-    unsigned get_offset();
+    clang::Offset get_offset();
 
     CXSourceLocation cx_location;
     

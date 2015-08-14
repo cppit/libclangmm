@@ -14,10 +14,10 @@ std::string clang::SourceLocation::get_path() {
   get_data(&path, NULL, NULL, NULL);
   return path;
 }
-unsigned clang::SourceLocation::get_offset() {
-  unsigned offset;
-  get_data(NULL, NULL, NULL, &offset);
-  return offset;
+clang::Offset clang::SourceLocation::get_offset() {
+  unsigned line, index;
+  get_data(NULL, &line, &index, NULL);
+  return {line, index};
 }
 
 void clang::SourceLocation::get_data(std::string* path, unsigned *line, unsigned *column, unsigned *offset) {

@@ -14,7 +14,7 @@ namespace clang {
     Token_Literal,
     Token_Comment
   };
-
+  
   class Token {
     friend class Tokens;
     Token(CXTranslationUnit &cx_tu, CXToken &cx_token, CXCursor &cx_cursor): 
@@ -31,7 +31,7 @@ namespace clang {
     CXTranslationUnit &cx_tu;
     CXToken& cx_token;
     CXCursor& cx_cursor;
-    std::pair<unsigned, unsigned> offsets;
+    std::pair<clang::Offset, clang::Offset> offsets;
   };
 }  // namespace clang
 #endif  // TOKEN_H_

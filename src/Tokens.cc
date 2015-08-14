@@ -20,8 +20,8 @@ clang::Tokens::~Tokens() {
 //This works across TranslationUnits! However, to get rename refactoring to work, 
 //one have to open all the files that might include a similar token
 //Similar tokens defined as tokens with equal referenced cursors. 
-std::vector<std::pair<unsigned, unsigned> > clang::Tokens::get_similar_token_offsets(const std::string &usr) {
-  std::vector<std::pair<unsigned, unsigned> > offsets;
+std::vector<std::pair<clang::Offset, clang::Offset> > clang::Tokens::get_similar_token_offsets(const std::string &usr) {
+  std::vector<std::pair<clang::Offset, clang::Offset> > offsets;
   for(auto &token: *this) {
     if(token.get_kind()==clang::Token_Identifier) {
       auto referenced=token.get_cursor().get_referenced();
@@ -33,9 +33,9 @@ std::vector<std::pair<unsigned, unsigned> > clang::Tokens::get_similar_token_off
   return offsets;
 }
 
-std::vector<std::pair<std::string, unsigned> > clang::Tokens::get_cxx_methods() {
-  std::vector<std::pair<std::string, unsigned> > methods;
-  long last_offset=-1;
+std::vector<std::pair<std::string, clang::Offset> > clang::Tokens::get_cxx_methods() {
+  std::vector<std::pair<std::string, clang::Offset> > methods;
+  clang::Offset last_offset={(unsigned)-1,(unsigned) -1};
   for(auto &token: *this) {
     if(token.get_kind()==clang::Token_Identifier) {
       auto cursor=token.get_cursor();
