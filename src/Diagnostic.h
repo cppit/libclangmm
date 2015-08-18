@@ -16,7 +16,7 @@ namespace clang {
     std::string severity_spelling;
     std::string spelling;
     std::string path;
-    std::pair<unsigned, unsigned> offsets;
+    std::pair<clang::Offset, clang::Offset> offsets;
   };
 }
 

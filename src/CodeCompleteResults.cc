@@ -25,8 +25,7 @@ CodeCompleteResults(CXTranslationUnit &cx_tu, const std::string &file_name,
 }
 
 clang::CodeCompleteResults::~CodeCompleteResults() {
-  delete[] cx_results->Results;
-  delete cx_results;
+  clang_disposeCodeCompleteResults(cx_results);
 }
 
 unsigned clang::CodeCompleteResults::

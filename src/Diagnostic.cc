@@ -7,14 +7,13 @@ clang::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnos
   severity=clang_getDiagnosticSeverity(cx_diagnostic);
   severity_spelling=get_severity_spelling(severity);
   spelling=clang::to_string(clang_getDiagnosticSpelling(cx_diagnostic));
-  clang::SourceLocation start_location(clang_getDiagnosticLocation(cx_diagnostic));
   
+  clang::SourceLocation start_location(clang_getDiagnosticLocation(cx_diagnostic));
   path=start_location.get_path();
-  unsigned start_offset=start_location.get_offset();
+  auto start_offset=start_location.get_offset();
   clang::Tokens tokens(cx_tu, SourceRange(start_location, start_location));
-  if(tokens.size()==1) {
-    offsets=std::pair<unsigned, unsigned>(start_offset, tokens.begin()->offsets.second);
-  }
+  if(tokens.size()==1)
+    offsets={start_offset, tokens.begin()->offsets.second};
 }
 
 const std::string clang::Diagnostic::get_severity_spelling(unsigned severity) {
