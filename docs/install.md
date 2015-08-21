@@ -31,7 +31,7 @@ Select and install the following packages from the Cygwin-installer:
 ```
 git cmake make gcc-g++ libclang-devel
 ```
-Then run:
+Then run the following in the Cygwin Terminal:
 ```sh
 git clone https://github.com/cppit/libclangmm.git
 cd libclangmm
