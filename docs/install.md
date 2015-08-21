@@ -1,13 +1,27 @@
 # Installation guide #
 
 ## Debian/Ubuntu
-```sh
-$ sudo apt-get install libclang-dev make cmake gcc g++ git
+```
+sudo apt-get install libclang-dev make cmake g++ git
 ```
 
-```sh
-$ git clone https://github.com/cppit/libclangmm.git clangmm
-$ cd clangmm
-$ make
-$ sudo make install
+```
+git clone https://github.com/cppit/libclangmm.git
+cd libclangmm
+cmake .
+make
+sudo make install
+```
+
+## OS X with Homebrew (http://brew.sh/)
+```
+brew install cmake --with-clang llvm
+```
+
+```
+git clone https://github.com/cppit/libclangmm.git
+cd libclangmm
+cmake .
+make
+make install
 ```
