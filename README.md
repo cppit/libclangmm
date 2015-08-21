@@ -10,13 +10,6 @@ provides highlevel C++11 access to complicated C code.
 ## Installation ##
 See [installation guide](https://github.com/cppit/libclangmm/blob/master/docs/install.md)
 
-### Quickstart ###
-```sh
-$ git clone https://github.com/cppit/libclangmm.git clangmm
-$ cd clangmm
-$ make
-$ sudo make install
-```
 # Tests #
 The compilation of the tests are disabled due to ease of installation. Simply enter CMakeList.txt and uncomment the last two lines in the file to enable testing.
 
