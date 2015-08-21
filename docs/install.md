@@ -27,14 +27,9 @@ make install
 ```
 
 ## Windows with Cygwin (https://www.cygwin.com/)
-Install https://github.com/transcode-open/apt-cyg:
-```sh
-lynx -source rawgit.com/transcode-open/apt-cyg/master/apt-cyg > apt-cyg
-install apt-cyg /bin
+Select and install the following packages from the Cygwin-installer:
 ```
-
-```sh
-apt-cyg install git cmake make gcc-g++ libclang
+git cmake make gcc-g++ libclang-devel
 ```
 
 ```sh
