@@ -1,7 +1,11 @@
 cmake_minimum_required (VERSION 2.8.4)
 set(project_name clangmm)
 project(${project_name})
-set(library_path "/usr/local/lib/")
+if(CYGWIN)
+  set(library_path "/usr/bin/")
+else()
+  set(library_path "/usr/local/lib/")
+endif()
 set(include_path "/usr/local/include/")
 
 if(APPLE)

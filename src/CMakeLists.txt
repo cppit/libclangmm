@@ -49,6 +49,9 @@ add_library(${project_name} SHARED ${header_files} ${cc_files})
 
 include_directories(${LIBCLANG_INCLUDE_DIRS})
 target_link_libraries(${project_name} ${LIBCLANG_LIBRARIES})
-
-install(TARGETS ${project_name} LIBRARY DESTINATION ${library_path})
+if(CYGWIN)
+  install(TARGETS ${project_name} RUNTIME DESTINATION ${library_path})
+else()
+  install(TARGETS ${project_name} LIBRARY DESTINATION ${library_path})
+endif()
 install(FILES ${header_files} DESTINATION ${include_path}/libclangmm)
