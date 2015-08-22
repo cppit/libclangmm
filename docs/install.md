@@ -27,6 +27,8 @@ make install
 ```
 
 ## Windows with Cygwin (https://www.cygwin.com/)
+**Make sure the PATH environment variable does not include paths to non-Cygwin cmake, make and g++.**
+
 Select and install the following packages from the Cygwin-installer:
 ```
 git cmake make gcc-g++ libclang-devel
