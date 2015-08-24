@@ -37,7 +37,7 @@ cmake -G"MSYS Makefiles" .
 make
 make install
 ```
-
+**You might have to install the files manually.**
 <!--
 ## Windows with Cygwin (https://www.cygwin.com/)
 **Make sure the PATH environment variable does not include paths to non-Cygwin cmake, make and g++.**
