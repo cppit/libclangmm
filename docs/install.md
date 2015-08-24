@@ -26,7 +26,7 @@ make
 make install
 ```
 
-##Windows with MSYS2 https://msys2.github.io/
+##Windows with MSYS2 (https://msys2.github.io/)
 Install dependencies(replace [arch] with i686 or x86_64 depending on your MSYS2 install):
 ```sh
 pacman -S mingw-w64-[arch]-cmake mingw-w64-[arch]-toolchain mingw-w64-[arch]-clang
