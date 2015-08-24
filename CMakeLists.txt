@@ -1,12 +1,15 @@
 cmake_minimum_required (VERSION 2.8.4)
 set(project_name clangmm)
 project(${project_name})
-if(CYGWIN)
-  set(library_path "/usr/local/bin/")
+
+if(MSYS)
+  string(TOLOWER "/$ENV{MSYSTEM}" CMAKE_INSTALL_PREFIX)
+  set(library_path "${CMAKE_INSTALL_PREFIX}/bin/")
+  set(include_path "${CMAKE_INSTALL_PREFIX}/include/")
 else()
   set(library_path "/usr/local/lib/")
+  set(include_path "/usr/local/include/")
 endif()
-set(include_path "/usr/local/include/")
 
 if(APPLE)
   set(Boost_USE_STATIC_LIBS "YES")

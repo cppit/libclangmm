@@ -48,8 +48,13 @@ set(cc_files
 add_library(${project_name} SHARED ${header_files} ${cc_files})
 
 include_directories(${LIBCLANG_INCLUDE_DIRS})
+
+if(MSYS)
+  set(LIBCLANG_LIBRARIES "${library_path}/clang.dll")
+endif()
 target_link_libraries(${project_name} ${LIBCLANG_LIBRARIES})
-if(CYGWIN)
+
+if(MSYS)
   install(TARGETS ${project_name} RUNTIME DESTINATION ${library_path})
 else()
   install(TARGETS ${project_name} LIBRARY DESTINATION ${library_path})
