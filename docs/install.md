@@ -29,10 +29,12 @@ make install
 ##Windows with MSYS2 (https://msys2.github.io/)
 Install dependencies(replace [arch] with i686 or x86_64 depending on your MSYS2 install):
 ```sh
-pacman -S mingw-w64-[arch]-cmake mingw-w64-[arch]-toolchain mingw-w64-[arch]-clang
+pacman -S git mingw-w64-[arch]-cmake make mingw-w64-[arch]-toolchain mingw-w64-[arch]-clang
 ```
 
 ```sh
+git clone https://github.com/cppit/libclangmm.git
+cd libclangmm
 cmake -G"MSYS Makefiles" .
 make
 make install
