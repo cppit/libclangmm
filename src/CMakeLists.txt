@@ -48,7 +48,12 @@ set(cc_files
 add_library(${project_name} SHARED ${header_files} ${cc_files})
 
 include_directories(${LIBCLANG_INCLUDE_DIRS})
+
+#TODO: till clang is fixed on MSYS2 ((lib)clang.dll.a is missing):
+if(MSYS)
+  set(LIBCLANG_LIBRARIES "${CMAKE_INSTALL_PREFIX}/bin/clang.dll")
+endif()
 target_link_libraries(${project_name} ${LIBCLANG_LIBRARIES})
 
-install(TARGETS ${project_name} LIBRARY DESTINATION ${library_path})
-install(FILES ${header_files} DESTINATION ${include_path}/libclangmm)
+install(TARGETS ${project_name} RUNTIME DESTINATION bin LIBRARY DESTINATION lib)
+install(FILES ${header_files} DESTINATION include/libclangmm)
