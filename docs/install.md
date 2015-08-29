@@ -35,11 +35,11 @@ pacman -S git mingw-w64-[arch]-cmake make mingw-w64-[arch]-toolchain mingw-w64-[
 ```sh
 git clone https://github.com/cppit/libclangmm.git
 cd libclangmm
-cmake -G"MSYS Makefiles" .
+cmake -G"MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=/mingw[32 or 64] .
 make
 make install
 ```
-**You might have to install the files manually.**
+
 <!--
 ## Windows with Cygwin (https://www.cygwin.com/)
 **Make sure the PATH environment variable does not include paths to non-Cygwin cmake, make and g++.**
