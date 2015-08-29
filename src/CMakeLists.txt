@@ -56,4 +56,4 @@ endif()
 target_link_libraries(${project_name} ${LIBCLANG_LIBRARIES})
 
 install(TARGETS ${project_name} RUNTIME DESTINATION bin LIBRARY DESTINATION lib)
-install(FILES ${header_files} DESTINATION include)
+install(FILES ${header_files} DESTINATION include/libclangmm)
