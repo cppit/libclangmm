@@ -21,7 +21,8 @@ CodeCompleteResults(CXTranslationUnit &cx_tu, const std::string &file_name,
                                   files.data(),
                                   files.size(),
                                   clang_defaultCodeCompleteOptions()|CXCodeComplete_IncludeBriefComments);
-  clang_sortCodeCompletionResults(cx_results->Results, cx_results->NumResults);
+  if(cx_results!=NULL)
+    clang_sortCodeCompletionResults(cx_results->Results, cx_results->NumResults);
 }
 
 clang::CodeCompleteResults::~CodeCompleteResults() {
@@ -30,6 +31,8 @@ clang::CodeCompleteResults::~CodeCompleteResults() {
 
 unsigned clang::CodeCompleteResults::
 size() {
+  if(cx_results==NULL)
+    return 0;
   return cx_results->NumResults;
 }
 
