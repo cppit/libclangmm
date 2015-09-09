@@ -1,7 +1,7 @@
 #include "Tokens.h"
 #include "Utility.h"
-#include <iostream>
-using namespace std;
+#include <iostream> //TODO: remove
+using namespace std; //TODO: remove
 
 clang::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_tu(cx_tu) {
   clang_tokenize(cx_tu, range.cx_range, &cx_tokens, &num_tokens);
@@ -9,6 +9,10 @@ clang::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_tu
   cx_cursors.resize(num_tokens);
   clang_annotateTokens(cx_tu, cx_tokens, num_tokens, cx_cursors.data());
   for (unsigned i = 0; i < num_tokens; i++) {
+    if(cx_cursors[i].kind==CXCursor_DeclRefExpr) { //Temporary fix to a libclang bug
+      auto real_cursor=clang_getCursor(cx_tu, clang_getTokenLocation(cx_tu, cx_tokens[i]));
+      cx_cursors[i]=real_cursor;
+    }
     emplace_back(Token(cx_tu, cx_tokens[i], cx_cursors[i]));
   }
 }

@@ -28,6 +28,7 @@ namespace clang {
     bool has_type();
     std::string get_type();
     std::string get_brief_comments();
+
     CXTranslationUnit &cx_tu;
     CXToken& cx_token;
     CXCursor& cx_cursor;
