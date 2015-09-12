@@ -33,12 +33,14 @@ clang::TranslationUnit::TranslationUnit(Index &index, const std::string &file_pa
   parse(index, file_path, command_line_args, buffers);
 }
 
-clang::TranslationUnit::TranslationUnit(clang::Index &index, const std::string &file_path, const std::vector<std::string> &command_line_args, 
+clang::TranslationUnit::TranslationUnit(clang::Index &index, const std::string &file_path, 
+                                        const std::vector<std::string> &command_line_args, 
                                         const std::map<std::string, std::string> &buffers, unsigned flags) {
   parse(index, file_path, command_line_args, buffers, flags);
 }
 
-void clang::TranslationUnit::parse(Index &index, const std::string &file_path, const std::vector<std::string> &command_line_args,
+void clang::TranslationUnit::parse(Index &index, const std::string &file_path, 
+                                   const std::vector<std::string> &command_line_args,
                                    const std::map<std::string, std::string>  &buffers, unsigned flags) {
   std::vector<CXUnsavedFile> files;
   for (auto &buffer : buffers) {
@@ -52,10 +54,11 @@ void clang::TranslationUnit::parse(Index &index, const std::string &file_path, c
   for(auto &a: command_line_args) {
     args.push_back(a.c_str());
   }
-  cx_tu = clang_parseTranslationUnit(index.cx_index, file_path.c_str(), args.data(), args.size(), files.data(), files.size(), flags);
+  cx_tu = clang_parseTranslationUnit(index.cx_index, file_path.c_str(), args.data(), 
+                                     args.size(), files.data(), files.size(), flags);
 }
 
-int clang::TranslationUnit::ReparseTranslationUnit(const std::map<std::string, std::string>  &buffers, unsigned flags) {
+int clang::TranslationUnit::ReparseTranslationUnit(const std::map<std::string, std::string> &buffers, unsigned flags) {
   std::vector<CXUnsavedFile> files;
   for (auto &buffer : buffers) {
     CXUnsavedFile file;
