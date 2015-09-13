@@ -184,6 +184,7 @@ namespace clang {
     Cursor get_referenced() const;
     operator bool() const;
     bool operator==(const Cursor& rhs) const;
+
     CXCursor cx_cursor;
   };
 }  // namespace clang
