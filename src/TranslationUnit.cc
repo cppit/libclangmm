@@ -100,7 +100,21 @@ std::unique_ptr<clang::Tokens> clang::TranslationUnit::get_tokens(unsigned start
   return std::unique_ptr<Tokens>(new Tokens(cx_tu, range));
 }
 
+std::unique_ptr<clang::Tokens> clang::TranslationUnit::get_tokens(unsigned start_line, unsigned start_column,
+                                                                  unsigned end_line, unsigned end_column) {
+  auto path=clang::to_string(clang_getTranslationUnitSpelling(cx_tu));
+  clang::SourceLocation start_location(cx_tu, path, start_line, start_column);
+  clang::SourceLocation end_location(cx_tu, path, end_line, end_column);
+  clang::SourceRange range(start_location, end_location);
+  return std::unique_ptr<Tokens>(new Tokens(cx_tu, range));
+}
+
 clang::Cursor clang::TranslationUnit::get_cursor(std::string path, unsigned offset) {
   clang::SourceLocation location(cx_tu, path, offset);
+  return Cursor(clang_getCursor(cx_tu, location.cx_location));
+}
+
+clang::Cursor clang::TranslationUnit::get_cursor(std::string path, unsigned line, unsigned column) {
+  clang::SourceLocation location(cx_tu, path, line, column);
   return Cursor(clang_getCursor(cx_tu, location.cx_location));
 }

@@ -17,6 +17,7 @@ namespace clang {
   class SourceLocation {
     friend class TranslationUnit;
     SourceLocation(CXTranslationUnit &tu, const std::string &filepath, unsigned offset);
+    SourceLocation(CXTranslationUnit &tu, const std::string &filepath, unsigned line, unsigned column);
   public:
     SourceLocation(const CXSourceLocation& cx_location) : cx_location(cx_location) {}
 
