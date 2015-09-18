@@ -2,6 +2,7 @@
 #define CODECOMPLETERESULTS_H_
 #include <clang-c/Index.h>
 #include <map>
+#include <string>
 #include "CompletionString.h"
 
 namespace clang {
@@ -12,8 +13,9 @@ namespace clang {
                         unsigned line_num, unsigned column);
   public:
     ~CodeCompleteResults();
-    CompletionString get(unsigned index);
-    unsigned size();
+    CompletionString get(unsigned index) const;
+    unsigned size() const;
+    std::string get_usr() const;
 
     CXCodeCompleteResults *cx_results;
   };

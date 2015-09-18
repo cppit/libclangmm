@@ -13,6 +13,10 @@ clang::SourceRange clang::Cursor::get_source_range() const {
   return SourceRange(clang_getCursorExtent(cx_cursor));
 }
 
+std::string clang::Cursor::get_spelling() const {
+  return clang::to_string(clang_getCursorSpelling(cx_cursor));
+}
+
 std::string clang::Cursor::get_usr() const {
   return clang::to_string(clang_getCursorUSR(cx_cursor));
 }

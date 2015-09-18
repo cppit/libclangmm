@@ -180,11 +180,12 @@ namespace clang {
     const CursorKind get_kind();
     SourceLocation get_source_location() const;
     SourceRange get_source_range() const;
+    std::string get_spelling() const;
     std::string get_usr() const;
     Cursor get_referenced() const;
     operator bool() const;
     bool operator==(const Cursor& rhs) const;
-
+    
     CXCursor cx_cursor;
   };
 }  // namespace clang

@@ -34,6 +34,7 @@ bool clang::Token::has_type() {
   return spelling!="";
 }
 
+//TODO: Move to clang::Cursor
 std::string clang::Token::get_type() {
   std::string spelling;
   auto referenced=clang_getCursorReferenced(cx_cursor);

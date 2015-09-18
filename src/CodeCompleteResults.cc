@@ -1,11 +1,12 @@
 #include "CodeCompleteResults.h"
 #include "CompletionString.h"
 #include <exception>
+#include "Utility.h"
 
-clang::CodeCompleteResults::
-CodeCompleteResults(CXTranslationUnit &cx_tu, const std::string &file_name,
-                    const std::map<std::string, std::string>  &buffers,
-                    unsigned line_num, unsigned column) {
+clang::CodeCompleteResults::CodeCompleteResults(CXTranslationUnit &cx_tu, 
+                                                const std::string &file_name,
+                                                const std::map<std::string, std::string> &buffers,
+                                                unsigned line_num, unsigned column) {
   std::vector<CXUnsavedFile> files;
   for (auto &buffer : buffers) {
     CXUnsavedFile file;
@@ -29,17 +30,19 @@ clang::CodeCompleteResults::~CodeCompleteResults() {
   clang_disposeCodeCompleteResults(cx_results);
 }
 
-unsigned clang::CodeCompleteResults::
-size() {
+unsigned clang::CodeCompleteResults::size() const {
   if(cx_results==NULL)
     return 0;
   return cx_results->NumResults;
 }
 
-clang::CompletionString clang::CodeCompleteResults::
-get(unsigned i) {
+clang::CompletionString clang::CodeCompleteResults::get(unsigned i) const {
   if (i >= size()) {
     throw std::invalid_argument("clang::CodeCompleteResults::get(unsigned i): i>=size()");
   }
   return CompletionString(cx_results->Results[i].CompletionString);
+}
+
+std::string clang::CodeCompleteResults::get_usr() const {
+  return clang::to_string(clang_codeCompleteGetContainerUSR(cx_results));
 }
