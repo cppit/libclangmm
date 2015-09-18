@@ -28,6 +28,8 @@ std::vector<std::pair<clang::Offset, clang::Offset> > clang::Tokens::get_similar
   std::vector<std::pair<clang::Offset, clang::Offset> > offsets;
   for(auto &token: *this) {
     if(token.get_kind()==clang::Token_Identifier) {
+      if(static_cast<unsigned>(token.get_cursor().get_kind())==103) //These cursors are buggy
+        continue;
       auto referenced=token.get_cursor().get_referenced();
       if(referenced && kind==referenced.get_kind() && usr==referenced.get_usr())
         offsets.emplace_back(token.offsets);
