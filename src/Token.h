@@ -25,9 +25,6 @@ namespace clang {
     SourceLocation get_source_location();
     SourceRange get_source_range();
     clang::Cursor get_cursor() {return clang::Cursor(cx_cursor);}
-    bool has_type();
-    std::string get_type();
-    std::string get_brief_comments();
 
     CXTranslationUnit &cx_tu;
     CXToken& cx_token;

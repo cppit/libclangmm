@@ -32,3 +32,41 @@ clang::Cursor::operator bool() const {
 bool clang::Cursor::operator==(const Cursor& rhs) const {
   return get_usr()==rhs.get_usr();
 }
+
+//TODO: Is there a way to optimise this?
+bool clang::Cursor::has_type() {
+  auto referenced=clang_getCursorReferenced(cx_cursor);
+  if(clang_Cursor_isNull(referenced))
+    return false;
+  auto type=clang_getCursorType(referenced);
+  auto spelling=clang::to_string(clang_getTypeSpelling(type));
+  return spelling!="";
+}
+
+std::string clang::Cursor::get_type() {
+  std::string spelling;
+  auto referenced=clang_getCursorReferenced(cx_cursor);
+  if(!clang_Cursor_isNull(referenced)) {
+    auto type=clang_getCursorType(referenced);
+    spelling=clang::to_string(clang_getTypeSpelling(type));
+    std::string auto_end="";
+    //TODO fix const auto
+    if((spelling.size()>=4 && spelling.substr(0, 4)=="auto")) {
+      auto_end=spelling.substr(4);
+      auto type=clang_getCanonicalType(clang_getCursorType(cx_cursor));
+      spelling=clang::to_string(clang_getTypeSpelling(type));
+      if(spelling.find(" ")==std::string::npos)
+        spelling+=auto_end;
+    }
+  }
+  return spelling;
+}
+
+std::string clang::Cursor::get_brief_comments() {
+  std::string comment_string;
+  auto referenced=get_referenced();
+  if(referenced) {
+    comment_string=clang::to_string(clang_Cursor_getBriefCommentText(referenced.cx_cursor));
+  }
+  return comment_string;
+}

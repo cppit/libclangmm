@@ -186,6 +186,10 @@ namespace clang {
     operator bool() const;
     bool operator==(const Cursor& rhs) const;
     
+    bool has_type();
+    std::string get_type();
+    std::string get_brief_comments();
+    
     CXCursor cx_cursor;
   };
 }  // namespace clang
