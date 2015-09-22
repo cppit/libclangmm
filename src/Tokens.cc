@@ -24,14 +24,14 @@ clang::Tokens::~Tokens() {
 //This works across TranslationUnits! However, to get rename refactoring to work, 
 //one have to open all the files that might include a similar token
 //Similar tokens defined as tokens with equal referenced cursors. 
-std::vector<std::pair<clang::Offset, clang::Offset> > clang::Tokens::get_similar_token_offsets(const std::string &usr, CursorKind kind) {
+std::vector<std::pair<clang::Offset, clang::Offset> > clang::Tokens::get_similar_token_offsets(CursorKind kind,
+                                                                                               const std::string &spelling,
+                                                                                               const std::string &usr) {
   std::vector<std::pair<clang::Offset, clang::Offset> > offsets;
   for(auto &token: *this) {
     if(token.get_kind()==clang::Token_Identifier) {
-      if(static_cast<unsigned>(token.get_cursor().get_kind())==103) //These cursors are buggy
-        continue;
       auto referenced=token.get_cursor().get_referenced();
-      if(referenced && kind==referenced.get_kind() && usr==referenced.get_usr())
+      if(referenced && kind==referenced.get_kind() && spelling==token.get_spelling() && usr==referenced.get_usr())
         offsets.emplace_back(token.offsets);
     }
   }
