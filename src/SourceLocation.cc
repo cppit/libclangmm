@@ -9,6 +9,11 @@ clang::SourceLocation::SourceLocation(CXTranslationUnit &tu, const std::string &
   cx_location = clang_getLocationForOffset(tu, file, offset);
 }
 
+clang::SourceLocation::SourceLocation(CXTranslationUnit &tu, const std::string &filepath, unsigned line, unsigned column) {
+  CXFile file = clang_getFile(tu, filepath.c_str());
+  cx_location = clang_getLocation(tu, file, line, column);
+}
+
 std::string clang::SourceLocation::get_path() {
   std::string path;
   get_data(&path, NULL, NULL, NULL);
