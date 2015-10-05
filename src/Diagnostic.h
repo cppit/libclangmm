@@ -12,6 +12,8 @@ namespace clang {
   public:
     class FixIt {
     public:
+      FixIt(const std::string &source, const std::pair<clang::Offset, clang::Offset> &offsets):
+        source(source), offsets(offsets) {}
       std::string source;
       std::pair<clang::Offset, clang::Offset> offsets;
     };
