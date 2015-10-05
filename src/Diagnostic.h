@@ -12,7 +12,7 @@ namespace clang {
   public:
     class FixIt {
     public:
-      std::string string;
+      std::string source;
       std::pair<clang::Offset, clang::Offset> offsets;
     };
     
