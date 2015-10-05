@@ -18,8 +18,8 @@ clang::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnos
   unsigned num_fix_its=clang_getDiagnosticNumFixIts(cx_diagnostic);
   for(unsigned c=0;c<num_fix_its;c++) {
     CXSourceRange fix_it_range;
-    fix_its.emplace_back(clang::to_string(clang_getDiagnosticFixIt(cx_diagnostic, c, &fix_it_range)),
-                         clang::SourceRange(fix_it_range).get_offsets());
+    auto source=clang::to_string(clang_getDiagnosticFixIt(cx_diagnostic, c, &fix_it_range));
+    fix_its.emplace_back(source, clang::SourceRange(fix_it_range).get_offsets());
   }
 }
 
