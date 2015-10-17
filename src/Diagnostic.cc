@@ -14,6 +14,13 @@ clang::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnos
   clang::Tokens tokens(cx_tu, SourceRange(start_location, start_location));
   if(tokens.size()==1)
     offsets={start_offset, tokens.begin()->offsets.second};
+  
+  unsigned num_fix_its=clang_getDiagnosticNumFixIts(cx_diagnostic);
+  for(unsigned c=0;c<num_fix_its;c++) {
+    CXSourceRange fix_it_range;
+    auto source=clang::to_string(clang_getDiagnosticFixIt(cx_diagnostic, c, &fix_it_range));
+    fix_its.emplace_back(source, clang::SourceRange(fix_it_range).get_offsets());
+  }
 }
 
 const std::string clang::Diagnostic::get_severity_spelling(unsigned severity) {

@@ -1,7 +1,9 @@
-# libclangmm - An easy to use C++-wrapper for libclang #
+# libclangmm - an easy to use C++-wrapper for libclang #
 
 ## About ##
 Provides C++ bindings and class structure to the [libclang](http://www.llvm.org) C library.
+
+Developed for [juCi++](https://github.com/cppit/jucipp) - a lightweight platform independent C++-IDE.
 
 ## Dependencies ##
 * libclang
