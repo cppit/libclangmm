@@ -8,7 +8,11 @@
 namespace clang {
   class CodeCompleteResults {
     friend class TranslationUnit;
-    CodeCompleteResults(CXTranslationUnit &cx_tu, const std::string &file_name,
+    
+    CodeCompleteResults(CXTranslationUnit &cx_tu, const std::string &buffer,
+                        unsigned line_num, unsigned column);
+    //TODO: remove
+    CodeCompleteResults(CXTranslationUnit &cx_tu, const std::string &file_path,
                         const std::map<std::string, std::string>  &buffers,
                         unsigned line_num, unsigned column);
   public:

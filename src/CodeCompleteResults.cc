@@ -4,6 +4,26 @@
 #include "Utility.h"
 
 clang::CodeCompleteResults::CodeCompleteResults(CXTranslationUnit &cx_tu, 
+                                                const std::string &buffer,
+                                                unsigned line_num, unsigned column) {
+  CXUnsavedFile files[1];
+  auto file_path=clang::to_string(clang_getTranslationUnitSpelling(cx_tu));
+  files[0].Filename = file_path.c_str();
+  files[0].Contents = buffer.c_str();
+  files[0].Length = buffer.size();
+
+  cx_results = clang_codeCompleteAt(cx_tu,
+                                  file_path.c_str(),
+                                  line_num,
+                                  column,
+                                  files,
+                                  1,
+                                  clang_defaultCodeCompleteOptions()|CXCodeComplete_IncludeBriefComments);
+  if(cx_results!=NULL)
+    clang_sortCodeCompletionResults(cx_results->Results, cx_results->NumResults);
+}
+
+clang::CodeCompleteResults::CodeCompleteResults(CXTranslationUnit &cx_tu,
                                                 const std::string &file_name,
                                                 const std::map<std::string, std::string> &buffers,
                                                 unsigned line_num, unsigned column) {
