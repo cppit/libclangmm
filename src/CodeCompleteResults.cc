@@ -23,29 +23,6 @@ clang::CodeCompleteResults::CodeCompleteResults(CXTranslationUnit &cx_tu,
     clang_sortCodeCompletionResults(cx_results->Results, cx_results->NumResults);
 }
 
-clang::CodeCompleteResults::CodeCompleteResults(CXTranslationUnit &cx_tu,
-                                                const std::string &file_name,
-                                                const std::map<std::string, std::string> &buffers,
-                                                unsigned line_num, unsigned column) {
-  std::vector<CXUnsavedFile> files;
-  for (auto &buffer : buffers) {
-    CXUnsavedFile file;
-    file.Filename = buffer.first.c_str();
-    file.Contents = buffer.second.c_str();
-    file.Length = buffer.second.size();
-    files.push_back(file);
-  }
-  cx_results = clang_codeCompleteAt(cx_tu,
-                                  file_name.c_str(),
-                                  line_num,
-                                  column,
-                                  files.data(),
-                                  files.size(),
-                                  clang_defaultCodeCompleteOptions()|CXCodeComplete_IncludeBriefComments);
-  if(cx_results!=NULL)
-    clang_sortCodeCompletionResults(cx_results->Results, cx_results->NumResults);
-}
-
 clang::CodeCompleteResults::~CodeCompleteResults() {
   clang_disposeCodeCompleteResults(cx_results);
 }

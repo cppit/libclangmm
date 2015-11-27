@@ -10,15 +10,7 @@ BOOST_AUTO_TEST_CASE(diagnostics_test) {
 
   clang::Index index(0, 0);
 
-  std::map<std::string, std::string> map_buffers;
-  ifstream ifs(path, ifstream::in);
-  stringstream ss;
-  ss << ifs.rdbuf();
-
-  map_buffers["./case/main_error.cpp"]=ss.str();
-
-  std::vector<std::string> args;  
-  clang::TranslationUnit tu(index, path, args, map_buffers);
+  clang::TranslationUnit tu(index, path, {});
   
   auto diagnostics=tu.get_diagnostics();
   BOOST_CHECK(diagnostics.size()==1);

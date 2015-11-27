@@ -8,7 +8,7 @@ BOOST_AUTO_TEST_CASE(cursor) {
   std::string path("./case/main.cpp");
 
   clang::Index index(0, 0);
-  clang::TranslationUnit tu(index, path);
+  clang::TranslationUnit tu(index, path, {});
 
   // ]
 
