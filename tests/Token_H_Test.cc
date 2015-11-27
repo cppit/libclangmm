@@ -7,7 +7,7 @@ BOOST_AUTO_TEST_CASE(token) {
 
   clang::Index index(0, 0);
 
-  clang::TranslationUnit tu(index, path);
+  clang::TranslationUnit tu(index, path, {});
   
   auto tokens=tu.get_tokens(0, 113);
 

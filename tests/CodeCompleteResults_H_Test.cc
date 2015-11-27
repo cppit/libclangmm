@@ -9,26 +9,18 @@ BOOST_AUTO_TEST_CASE(code_complete_results) {
   std::string path("./case/main.cpp");
 
   clang::Index index(0, 0);
-  clang::TranslationUnit tu(index, path);
+  clang::TranslationUnit tu(index, path, {});
 
-  // ReparseTranslationUnit takes a map with filepath as key
-  // and buffer as value
-  std::map<std::string, std::string> buffers;
-
-  // create buffer
-  std::string file;
-  file.append("#include <string>\n");
-  file.append("int main(int argc, char *argv[]) {\n");
-  file.append("std::string str;\n");
-  file.append("str.\n");
-  file.append("return 0\n");
-  file.append("}");
-
-  buffers[path] = file;
+  std::string buffer="#include <string>\n"
+                     "int main(int argc, char *argv[]) {\n"
+                     "std::string str;\n"
+                     "str.\n"
+                     "return 0\n"
+                     "}";
 
   // ]
 
-  auto results=tu.get_code_completions(buffers, 4, 5);
+  auto results=tu.get_code_completions(buffer, 4, 5);
 
   bool substr_found=false;
   for(unsigned c=0;c<results.size();c++) {

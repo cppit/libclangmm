@@ -8,31 +8,6 @@
 #include <iostream> //TODO: remove
 using namespace std; //TODO: remove
 
-clang::TranslationUnit::
-~TranslationUnit() {
-  clang_disposeTranslationUnit(cx_tu);
-}
-
-clang::TranslationUnit::
-TranslationUnit(Index &index, const std::string &file_path, const std::vector<std::string> &command_line_args) {
-  std::map<std::string, std::string> buffers;
-  std::ifstream ifs(file_path, std::ifstream::in);
-  std::stringstream ss;
-  ss << ifs.rdbuf();
-  buffers[file_path]=ss.str();
-  parse(index, file_path, command_line_args, buffers);
-}
-
-clang::TranslationUnit::TranslationUnit(Index &index, const std::string &file_path) {
-  std::vector<std::string> command_line_args;
-  std::map<std::string, std::string> buffers;
-  std::ifstream ifs(file_path, std::ifstream::in);
-  std::stringstream ss;
-  ss << ifs.rdbuf();
-  buffers[file_path]=ss.str();
-  parse(index, file_path, command_line_args, buffers);
-}
-
 clang::TranslationUnit::TranslationUnit(Index &index, const std::string &file_path,
                                         const std::vector<std::string> &command_line_args,
                                         const std::string &buffer, unsigned flags) {
@@ -50,10 +25,20 @@ clang::TranslationUnit::TranslationUnit(Index &index, const std::string &file_pa
                                      args.size(), files, 1, flags);
 }
 
-clang::TranslationUnit::TranslationUnit(clang::Index &index, const std::string &file_path, 
-                                        const std::vector<std::string> &command_line_args, 
-                                        const std::map<std::string, std::string> &buffers, unsigned flags) {
-  parse(index, file_path, command_line_args, buffers, flags);
+clang::TranslationUnit::TranslationUnit(Index &index, const std::string &file_path,
+                                        const std::vector<std::string> &command_line_args,
+                                        unsigned flags) {
+  std::vector<const char*> args;
+  for(auto &a: command_line_args) {
+    args.push_back(a.c_str());
+  }
+  
+  cx_tu = clang_parseTranslationUnit(index.cx_index, file_path.c_str(), args.data(),
+                                     args.size(), NULL, 0, flags);
+}
+
+clang::TranslationUnit::~TranslationUnit() {
+  clang_disposeTranslationUnit(cx_tu);
 }
 
 void clang::TranslationUnit::parse(Index &index, const std::string &file_path, 
@@ -87,18 +72,6 @@ int clang::TranslationUnit::ReparseTranslationUnit(const std::string &buffer, un
   return clang_reparseTranslationUnit(cx_tu, 1, files, flags);
 }
 
-int clang::TranslationUnit::ReparseTranslationUnit(const std::map<std::string, std::string> &buffers, unsigned flags) {
-  std::vector<CXUnsavedFile> files;
-  for (auto &buffer : buffers) {
-    CXUnsavedFile file;
-    file.Filename = buffer.first.c_str();
-    file.Contents = buffer.second.c_str();
-    file.Length = buffer.second.size();
-    files.push_back(file);
-  }
-  return clang_reparseTranslationUnit(cx_tu, files.size(), files.data(), flags);
-}
-
 unsigned clang::TranslationUnit::DefaultFlags() {
   return CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete | CXTranslationUnit_IncludeBriefCommentsInCodeCompletion;
 }
@@ -106,14 +79,6 @@ unsigned clang::TranslationUnit::DefaultFlags() {
 clang::CodeCompleteResults clang::TranslationUnit::get_code_completions(const std::string &buffer,
                                                                         unsigned line_number, unsigned column) {
   clang::CodeCompleteResults results(cx_tu, buffer, line_number, column);
-  return results;
-}
-
-clang::CodeCompleteResults clang::TranslationUnit::get_code_completions(const std::map<std::string, std::string> &buffers, 
-                                                                        unsigned line_number, unsigned column) {
-  auto path=clang::to_string(clang_getTranslationUnitSpelling(cx_tu));
-
-  clang::CodeCompleteResults results(cx_tu, path, buffers, line_number, column);
   return results;
 }
 
