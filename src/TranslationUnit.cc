@@ -33,6 +33,23 @@ clang::TranslationUnit::TranslationUnit(Index &index, const std::string &file_pa
   parse(index, file_path, command_line_args, buffers);
 }
 
+clang::TranslationUnit::TranslationUnit(Index &index, const std::string &file_path,
+                                        const std::vector<std::string> &command_line_args,
+                                        const std::string &buffer, unsigned flags) {
+  std::vector<const char*> args;
+  for(auto &a: command_line_args) {
+    args.push_back(a.c_str());
+  }
+  
+  CXUnsavedFile files[1];
+  files[0].Filename=file_path.c_str();
+  files[0].Contents=buffer.c_str();
+  files[0].Length=buffer.size();
+  
+  cx_tu = clang_parseTranslationUnit(index.cx_index, file_path.c_str(), args.data(),
+                                     args.size(), files, 1, flags);
+}
+
 clang::TranslationUnit::TranslationUnit(clang::Index &index, const std::string &file_path, 
                                         const std::vector<std::string> &command_line_args, 
                                         const std::map<std::string, std::string> &buffers, unsigned flags) {
@@ -58,6 +75,18 @@ void clang::TranslationUnit::parse(Index &index, const std::string &file_path,
                                      args.size(), files.data(), files.size(), flags);
 }
 
+int clang::TranslationUnit::ReparseTranslationUnit(const std::string &buffer, unsigned flags) {
+  CXUnsavedFile files[1];
+  
+  auto file_path=clang::to_string(clang_getTranslationUnitSpelling(cx_tu));
+  
+  files[0].Filename=file_path.c_str();
+  files[0].Contents=buffer.c_str();
+  files[0].Length=buffer.size();
+  
+  return clang_reparseTranslationUnit(cx_tu, 1, files, flags);
+}
+
 int clang::TranslationUnit::ReparseTranslationUnit(const std::map<std::string, std::string> &buffers, unsigned flags) {
   std::vector<CXUnsavedFile> files;
   for (auto &buffer : buffers) {
@@ -72,6 +101,12 @@ int clang::TranslationUnit::ReparseTranslationUnit(const std::map<std::string, s
 
 unsigned clang::TranslationUnit::DefaultFlags() {
   return CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete | CXTranslationUnit_IncludeBriefCommentsInCodeCompletion;
+}
+
+clang::CodeCompleteResults clang::TranslationUnit::get_code_completions(const std::string &buffer,
+                                                                        unsigned line_number, unsigned column) {
+  clang::CodeCompleteResults results(cx_tu, buffer, line_number, column);
+  return results;
 }
 
 clang::CodeCompleteResults clang::TranslationUnit::get_code_completions(const std::map<std::string, std::string> &buffers, 
