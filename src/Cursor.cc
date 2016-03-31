@@ -1,5 +1,6 @@
 #include "Cursor.h"
 #include "Utility.h"
+#include <algorithm>
 
 const clang::CursorKind clang::Cursor::get_kind() {
   return (CursorKind) clang_getCursorKind(this->cx_cursor);
@@ -49,14 +50,27 @@ std::string clang::Cursor::get_type() {
   if(!clang_Cursor_isNull(referenced)) {
     auto type=clang_getCursorType(referenced);
     spelling=clang::to_string(clang_getTypeSpelling(type));
-    std::string auto_end="";
-    //TODO fix const auto
-    if((spelling.size()>=4 && spelling.substr(0, 4)=="auto")) {
-      auto_end=spelling.substr(4);
-      auto type=clang_getCanonicalType(clang_getCursorType(cx_cursor));
-      spelling=clang::to_string(clang_getTypeSpelling(type));
-      if(spelling.find(" ")==std::string::npos)
-        spelling+=auto_end;
+    
+    const std::string auto_str="auto";
+    if(spelling.size()>=4 && std::equal(auto_str.begin(), auto_str.end(), spelling.begin())) {
+      auto canonical_type=clang_getCanonicalType(clang_getCursorType(cx_cursor));
+      auto canonical_spelling=clang::to_string(clang_getTypeSpelling(canonical_type));
+      if(spelling.size()>4 && spelling[4]==' ' &&
+         !std::equal(auto_str.begin(), auto_str.end(), canonical_spelling.begin()))
+        return canonical_spelling+spelling.substr(4);
+      else
+        return canonical_spelling;
+    }
+    
+    const std::string const_auto_str="const auto";
+    if(spelling.size()>=10 && std::equal(const_auto_str.begin(), const_auto_str.end(), spelling.begin())) {
+      auto canonical_type=clang_getCanonicalType(clang_getCursorType(cx_cursor));
+      auto canonical_spelling=clang::to_string(clang_getTypeSpelling(canonical_type));
+      if(spelling.size()>10 && spelling[10]==' ' &&
+         !std::equal(const_auto_str.begin(), const_auto_str.end(), canonical_spelling.begin()))
+        return canonical_spelling+spelling.substr(10);
+      else
+        return canonical_spelling;
     }
   }
   return spelling;
