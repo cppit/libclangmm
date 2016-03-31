@@ -55,9 +55,8 @@ std::string clang::Cursor::get_type() {
     if(spelling.size()>=4 && std::equal(auto_str.begin(), auto_str.end(), spelling.begin())) {
       auto canonical_type=clang_getCanonicalType(clang_getCursorType(cx_cursor));
       auto canonical_spelling=clang::to_string(clang_getTypeSpelling(canonical_type));
-      if(spelling.size()>4 && spelling[4]==' ' &&
-         !std::equal(auto_str.begin(), auto_str.end(), canonical_spelling.begin()))
-        return canonical_spelling+spelling.substr(4);
+      if(spelling.size()>5 && spelling[4]==' ' && spelling[5]=='&' && spelling!=canonical_spelling)
+        return canonical_spelling+" &";
       else
         return canonical_spelling;
     }
@@ -66,9 +65,8 @@ std::string clang::Cursor::get_type() {
     if(spelling.size()>=10 && std::equal(const_auto_str.begin(), const_auto_str.end(), spelling.begin())) {
       auto canonical_type=clang_getCanonicalType(clang_getCursorType(cx_cursor));
       auto canonical_spelling=clang::to_string(clang_getTypeSpelling(canonical_type));
-      if(spelling.size()>10 && spelling[10]==' ' &&
-         !std::equal(const_auto_str.begin(), const_auto_str.end(), canonical_spelling.begin()))
-        return canonical_spelling+spelling.substr(10);
+      if(spelling.size()>11 && spelling[10]==' ' && spelling[11]=='&' && spelling!=canonical_spelling)
+        return canonical_spelling+" &";
       else
         return canonical_spelling;
     }
