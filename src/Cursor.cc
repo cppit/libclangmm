@@ -71,8 +71,8 @@ std::string clang::Cursor::get_type() {
       else
         return canonical_spelling;
     }
-  }
 #endif
+  }
   
   return spelling;
 }
