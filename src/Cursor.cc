@@ -51,6 +51,7 @@ std::string clang::Cursor::get_type() {
     auto type=clang_getCursorType(referenced);
     spelling=clang::to_string(clang_getTypeSpelling(type));
     
+#if CINDEX_VERSION_MAJOR==0 && CINDEX_VERSION_MINOR<32
     const std::string auto_str="auto";
     if(spelling.size()>=4 && std::equal(auto_str.begin(), auto_str.end(), spelling.begin())) {
       auto canonical_type=clang_getCanonicalType(clang_getCursorType(cx_cursor));
@@ -71,6 +72,8 @@ std::string clang::Cursor::get_type() {
         return canonical_spelling;
     }
   }
+#endif
+  
   return spelling;
 }
 
