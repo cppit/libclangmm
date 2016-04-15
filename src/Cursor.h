@@ -177,7 +177,7 @@ namespace clang {
   class Cursor {
   public:
     Cursor(const CXCursor &cx_cursor) : cx_cursor(cx_cursor) {}
-    const CursorKind get_kind();
+    CursorKind get_kind();
     SourceLocation get_source_location() const;
     SourceRange get_source_range() const;
     std::string get_spelling() const;

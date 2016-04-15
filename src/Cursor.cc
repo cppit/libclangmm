@@ -2,8 +2,8 @@
 #include "Utility.h"
 #include <algorithm>
 
-const clang::CursorKind clang::Cursor::get_kind() {
-  return (CursorKind) clang_getCursorKind(this->cx_cursor);
+clang::CursorKind clang::Cursor::get_kind() {
+  return static_cast<CursorKind>(clang_getCursorKind(this->cx_cursor));
 }
 
 clang::SourceLocation clang::Cursor::get_source_location() const {
