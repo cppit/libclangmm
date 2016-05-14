@@ -34,14 +34,12 @@ bool clang::Cursor::operator==(const Cursor& rhs) const {
   return get_usr()==rhs.get_usr();
 }
 
-//TODO: Is there a way to optimise this?
 bool clang::Cursor::has_type() {
   auto referenced=clang_getCursorReferenced(cx_cursor);
   if(clang_Cursor_isNull(referenced))
     return false;
   auto type=clang_getCursorType(referenced);
-  auto spelling=clang::to_string(clang_getTypeSpelling(type));
-  return spelling!="";
+  return type.kind!=0;
 }
 
 std::string clang::Cursor::get_type() {
