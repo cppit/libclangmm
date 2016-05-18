@@ -5,7 +5,6 @@ using namespace std; //TODO: remove
 
 clang::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_tu(cx_tu) {
   clang_tokenize(cx_tu, range.cx_range, &cx_tokens, &num_tokens);
-  cx_cursors.clear();
   cx_cursors.resize(num_tokens);
   clang_annotateTokens(cx_tu, cx_tokens, num_tokens, cx_cursors.data());
   for (unsigned i = 0; i < num_tokens; i++) {
@@ -58,12 +57,14 @@ std::vector<std::pair<std::string, clang::Offset> > clang::Tokens::get_cxx_metho
             method+=" ";
           }
           
-          clang::Cursor parent(clang_getCursorSemanticParent(cursor.cx_cursor));
-          method+=clang::to_string(clang_getCursorDisplayName(parent.cx_cursor));
+          std::string parent_str;
+          auto parent=cursor.get_semantic_parent();
+          while(parent && parent.get_kind()!=clang::CursorKind::TranslationUnit) {
+            parent_str.insert(0, clang::to_string(clang_getCursorDisplayName(parent.cx_cursor))+"::");
+            parent=parent.get_semantic_parent();
+          }
           
-          method+="::";
-          
-          method+=clang::to_string(clang_getCursorDisplayName(cursor.cx_cursor));
+          method+=parent_str+clang::to_string(clang_getCursorDisplayName(cursor.cx_cursor));
           methods.emplace_back(method, offset);
         }
         last_offset=offset;

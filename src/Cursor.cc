@@ -26,12 +26,16 @@ clang::Cursor clang::Cursor::get_referenced() const {
   return Cursor(clang_getCursorReferenced(cx_cursor));
 }
 
+clang::Cursor clang::Cursor::get_semantic_parent() const {
+  return clang::Cursor(clang_getCursorSemanticParent(cx_cursor));
+}
+
 clang::Cursor::operator bool() const {
   return !clang_Cursor_isNull(cx_cursor);
 }
 
 bool clang::Cursor::operator==(const Cursor& rhs) const {
-  return get_usr()==rhs.get_usr();
+  return clang_equalCursors(cx_cursor, rhs.cx_cursor);
 }
 
 bool clang::Cursor::has_type() {
