@@ -9,7 +9,7 @@ Developed for [juCi++](https://github.com/cppit/jucipp), a lightweight, platform
 * libclang
 
 ## Installation ##
-See the [installation guide](https://github.com/cppit/libclangmm/blob/master/docs/install.md).
+See the [installation guide](docs/install.md).
 
 # Tests #
 The compilation of the tests are disabled due to ease of installation. Simply enter CMakeList.txt and uncomment the last two lines in the file to enable testing.
