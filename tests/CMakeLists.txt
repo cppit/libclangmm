@@ -4,9 +4,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_HOME_DIRECTORY}/cmake/Modules/")
 
-ADD_DEFINITIONS(-DBOOST_TEST_STATIC_LINK) 
+add_definitions(-DBOOST_TEST_STATIC_LINK)
 
-message("Searcing for libclang")
+message("Searching for libclang")
 #LIBCLANG_FOUND System has libclang.
 #LIBCLANG_INCLUDE_DIRS The libclang include directories.
 #LIBCLANG_LIBRARIES  The libraries needed to use libclang.
