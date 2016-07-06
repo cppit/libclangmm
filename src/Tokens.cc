@@ -23,12 +23,12 @@ clang::Tokens::~Tokens() {
 //This works across TranslationUnits! However, to get rename refactoring to work, 
 //one have to open all the files that might include a similar token
 //Similar tokens defined as tokens with equal referenced cursors. 
-std::vector<std::pair<clang::Offset, clang::Offset> > clang::Tokens::get_similar_token_offsets(CursorKind kind,
+std::vector<std::pair<clang::Offset, clang::Offset> > clang::Tokens::get_similar_token_offsets(Cursor::Kind kind,
                                                                                                const std::string &spelling,
                                                                                                const std::string &usr) {
-  std::vector<std::pair<clang::Offset, clang::Offset> > offsets;
+  std::vector<std::pair<Offset, Offset> > offsets;
   for(auto &token: *this) {
-    if(token.get_kind()==clang::Token_Identifier) {
+    if(token.get_kind()==Token::Kind::Identifier) {
       auto referenced=token.get_cursor().get_referenced();
       if(referenced && kind==referenced.get_kind() && spelling==token.get_spelling() && usr==referenced.get_usr())
         offsets.emplace_back(token.offsets);
@@ -38,19 +38,19 @@ std::vector<std::pair<clang::Offset, clang::Offset> > clang::Tokens::get_similar
 }
 
 std::vector<std::pair<std::string, clang::Offset> > clang::Tokens::get_cxx_methods() {
-  std::vector<std::pair<std::string, clang::Offset> > methods;
-  clang::Offset last_offset={(unsigned)-1,(unsigned) -1};
+  std::vector<std::pair<std::string, Offset> > methods;
+  Offset last_offset={(unsigned)-1,(unsigned) -1};
   for(auto &token: *this) {
-    if(token.get_kind()==clang::Token_Identifier) {
+    if(token.get_kind()==Token::Kind::Identifier) {
       auto cursor=token.get_cursor();
       auto kind=cursor.get_kind();
-      if(kind==clang::CursorKind::CXXMethod || kind==clang::CursorKind::Constructor || kind==clang::CursorKind::Destructor) {
+      if(kind==Cursor::Kind::CXXMethod || kind==Cursor::Kind::Constructor || kind==Cursor::Kind::Destructor) {
         auto offset=cursor.get_source_location().get_offset();
         if(offset!=last_offset) {
           std::string method;
-          if(kind==clang::CursorKind::CXXMethod) {
+          if(kind==Cursor::Kind::CXXMethod) {
             auto type=clang_getResultType(clang_getCursorType(cursor.cx_cursor));
-            method+=clang::to_string(clang_getTypeSpelling(type));
+            method+=to_string(clang_getTypeSpelling(type));
             auto pos=method.find(" ");
             if(pos!=std::string::npos)
               method.erase(pos, 1);
@@ -59,12 +59,12 @@ std::vector<std::pair<std::string, clang::Offset> > clang::Tokens::get_cxx_metho
           
           std::string parent_str;
           auto parent=cursor.get_semantic_parent();
-          while(parent && parent.get_kind()!=clang::CursorKind::TranslationUnit) {
-            parent_str.insert(0, clang::to_string(clang_getCursorDisplayName(parent.cx_cursor))+"::");
+          while(parent && parent.get_kind()!=Cursor::Kind::TranslationUnit) {
+            parent_str.insert(0, to_string(clang_getCursorDisplayName(parent.cx_cursor))+"::");
             parent=parent.get_semantic_parent();
           }
           
-          method+=parent_str+clang::to_string(clang_getCursorDisplayName(cursor.cx_cursor));
+          method+=parent_str+to_string(clang_getCursorDisplayName(cursor.cx_cursor));
           methods.emplace_back(method, offset);
         }
         last_offset=offset;

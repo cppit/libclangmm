@@ -7,20 +7,21 @@
 #include <string>
 
 namespace clang {
-  enum TokenKind {
-    Token_Punctuation,
-    Token_Keyword,
-    Token_Identifier,
-    Token_Literal,
-    Token_Comment
-  };
-  
   class Token {
     friend class Tokens;
+  public:
+    enum Kind {
+      Punctuation,
+      Keyword,
+      Identifier,
+      Literal,
+      Comment
+    };
+  private:
     Token(CXTranslationUnit &cx_tu, CXToken &cx_token, CXCursor &cx_cursor): 
       cx_tu(cx_tu), cx_token(cx_token), cx_cursor(cx_cursor), offsets(get_source_range().get_offsets()) {};
   public:
-    TokenKind get_kind();
+    Kind get_kind();
     std::string get_spelling();
     SourceLocation get_source_location();
     SourceRange get_source_range();

@@ -18,7 +18,7 @@ set(header_files
   CompileCommand.h      
   CompileCommands.h     
   CompletionString.h    
-  Cursor.h              
+  Cursor.h
   Index.h               
   SourceLocation.h      
   SourceRange.h         
@@ -34,7 +34,7 @@ set(cc_files
   CompileCommand.cc     
   CompileCommands.cc    
   CompletionString.cc   
-  Cursor.cc             
+  Cursor.cc
   Index.cc              
   SourceLocation.cc     
   SourceRange.cc        

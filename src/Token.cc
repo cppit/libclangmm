@@ -17,9 +17,9 @@ clang::SourceRange clang::Token::get_source_range() {
 }
 // returns a string description of this tokens kind
 std::string clang::Token::get_spelling() {
-  return clang::to_string(clang_getTokenSpelling(cx_tu, cx_token));
+  return to_string(clang_getTokenSpelling(cx_tu, cx_token));
 }
 
-clang::TokenKind clang::Token::get_kind() {
-  return static_cast<TokenKind>(clang_getTokenKind(cx_token));
+clang::Token::Kind clang::Token::get_kind() {
+  return static_cast<Kind>(clang_getTokenKind(cx_token));
 }

@@ -32,7 +32,7 @@ void clang::SourceLocation::get_data(std::string* path, unsigned *line, unsigned
     CXFile file;
     clang_getExpansionLocation(cx_location, &file, line, column, offset);
     if (file!=NULL) {
-      *path=clang::to_string(clang_getFileName(file));
+      *path=to_string(clang_getFileName(file));
     }
   }
 }

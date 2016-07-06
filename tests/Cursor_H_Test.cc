@@ -14,5 +14,5 @@ BOOST_AUTO_TEST_CASE(cursor) {
 
   auto cursor=tu.get_cursor(path, 103);
 
-  BOOST_CHECK(cursor.get_kind() == clang::CursorKind::ReturnStmt);
+  BOOST_CHECK(cursor.get_kind() == clang::Cursor::Kind::ReturnStmt);
 }

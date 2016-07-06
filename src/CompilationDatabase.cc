@@ -1,8 +1,7 @@
 #include "CompilationDatabase.h"
 #include <exception>
 
-clang::CompilationDatabase::
-CompilationDatabase(const std::string &project_path) {
+clang::CompilationDatabase::CompilationDatabase(const std::string &project_path) {
   CXCompilationDatabase_Error error;
   cx_db = clang_CompilationDatabase_fromDirectory(project_path.c_str(), &error);
   if(error) {
@@ -10,7 +9,6 @@ CompilationDatabase(const std::string &project_path) {
   }
 }
 
-clang::CompilationDatabase::
-~CompilationDatabase() {
+clang::CompilationDatabase::~CompilationDatabase() {
   clang_CompilationDatabase_dispose(cx_db);
 }

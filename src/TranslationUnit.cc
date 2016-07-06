@@ -63,7 +63,7 @@ void clang::TranslationUnit::parse(Index &index, const std::string &file_path,
 int clang::TranslationUnit::ReparseTranslationUnit(const std::string &buffer, unsigned flags) {
   CXUnsavedFile files[1];
   
-  auto file_path=clang::to_string(clang_getTranslationUnitSpelling(cx_tu));
+  auto file_path=to_string(clang_getTranslationUnitSpelling(cx_tu));
   
   files[0].Filename=file_path.c_str();
   files[0].Contents=buffer.c_str();
@@ -78,15 +78,15 @@ unsigned clang::TranslationUnit::DefaultFlags() {
 
 clang::CodeCompleteResults clang::TranslationUnit::get_code_completions(const std::string &buffer,
                                                                         unsigned line_number, unsigned column) {
-  clang::CodeCompleteResults results(cx_tu, buffer, line_number, column);
+  CodeCompleteResults results(cx_tu, buffer, line_number, column);
   return results;
 }
 
 std::vector<clang::Diagnostic> clang::TranslationUnit::get_diagnostics() {
-  std::vector<clang::Diagnostic> diagnostics;
+  std::vector<Diagnostic> diagnostics;
   for(unsigned c=0;c<clang_getNumDiagnostics(cx_tu);c++) {
     CXDiagnostic clang_diagnostic=clang_getDiagnostic(cx_tu, c);
-    diagnostics.emplace_back(clang::Diagnostic(cx_tu, clang_diagnostic));
+    diagnostics.emplace_back(Diagnostic(cx_tu, clang_diagnostic));
     clang_disposeDiagnostic(clang_diagnostic);
   }
   return diagnostics;
@@ -94,27 +94,27 @@ std::vector<clang::Diagnostic> clang::TranslationUnit::get_diagnostics() {
 
 std::unique_ptr<clang::Tokens> clang::TranslationUnit::get_tokens(unsigned start_offset, unsigned end_offset) {
   auto path=clang::to_string(clang_getTranslationUnitSpelling(cx_tu));
-  clang::SourceLocation start_location(cx_tu, path, start_offset);
-  clang::SourceLocation end_location(cx_tu, path, end_offset);
-  clang::SourceRange range(start_location, end_location);
+  SourceLocation start_location(cx_tu, path, start_offset);
+  SourceLocation end_location(cx_tu, path, end_offset);
+  SourceRange range(start_location, end_location);
   return std::unique_ptr<Tokens>(new Tokens(cx_tu, range));
 }
 
 std::unique_ptr<clang::Tokens> clang::TranslationUnit::get_tokens(unsigned start_line, unsigned start_column,
                                                                   unsigned end_line, unsigned end_column) {
-  auto path=clang::to_string(clang_getTranslationUnitSpelling(cx_tu));
-  clang::SourceLocation start_location(cx_tu, path, start_line, start_column);
-  clang::SourceLocation end_location(cx_tu, path, end_line, end_column);
-  clang::SourceRange range(start_location, end_location);
+  auto path=to_string(clang_getTranslationUnitSpelling(cx_tu));
+  SourceLocation start_location(cx_tu, path, start_line, start_column);
+  SourceLocation end_location(cx_tu, path, end_line, end_column);
+  SourceRange range(start_location, end_location);
   return std::unique_ptr<Tokens>(new Tokens(cx_tu, range));
 }
 
 clang::Cursor clang::TranslationUnit::get_cursor(std::string path, unsigned offset) {
-  clang::SourceLocation location(cx_tu, path, offset);
+  SourceLocation location(cx_tu, path, offset);
   return Cursor(clang_getCursor(cx_tu, location.cx_location));
 }
 
 clang::Cursor clang::TranslationUnit::get_cursor(std::string path, unsigned line, unsigned column) {
-  clang::SourceLocation location(cx_tu, path, line, column);
+  SourceLocation location(cx_tu, path, line, column);
   return Cursor(clang_getCursor(cx_tu, location.cx_location));
 }

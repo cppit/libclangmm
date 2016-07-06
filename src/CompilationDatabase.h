@@ -8,7 +8,6 @@ namespace clang {
   class CompilationDatabase {
   public:
     explicit CompilationDatabase(const std::string &project_path);
-    CompilationDatabase();
     ~CompilationDatabase();
 
     CXCompilationDatabase cx_db;
