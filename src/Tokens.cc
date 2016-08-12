@@ -1,7 +1,5 @@
 #include "Tokens.h"
 #include "Utility.h"
-#include <iostream> //TODO: remove
-using namespace std; //TODO: remove
 
 clang::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_tu(cx_tu) {
   clang_tokenize(cx_tu, range.cx_range, &cx_tokens, &num_tokens);
@@ -35,41 +33,4 @@ std::vector<std::pair<clang::Offset, clang::Offset> > clang::Tokens::get_similar
     }
   }
   return offsets;
-}
-
-std::vector<std::pair<std::string, clang::Offset> > clang::Tokens::get_cxx_methods() {
-  std::vector<std::pair<std::string, Offset> > methods;
-  Offset last_offset={(unsigned)-1,(unsigned) -1};
-  for(auto &token: *this) {
-    if(token.get_kind()==Token::Kind::Identifier) {
-      auto cursor=token.get_cursor();
-      auto kind=cursor.get_kind();
-      if(kind==Cursor::Kind::CXXMethod || kind==Cursor::Kind::Constructor || kind==Cursor::Kind::Destructor) {
-        auto offset=cursor.get_source_location().get_offset();
-        if(offset!=last_offset) {
-          std::string method;
-          if(kind==Cursor::Kind::CXXMethod) {
-            auto type=clang_getResultType(clang_getCursorType(cursor.cx_cursor));
-            method+=to_string(clang_getTypeSpelling(type));
-            auto pos=method.find(" ");
-            if(pos!=std::string::npos)
-              method.erase(pos, 1);
-            method+=" ";
-          }
-          
-          std::string parent_str;
-          auto parent=cursor.get_semantic_parent();
-          while(parent && parent.get_kind()!=Cursor::Kind::TranslationUnit) {
-            parent_str.insert(0, to_string(clang_getCursorDisplayName(parent.cx_cursor))+"::");
-            parent=parent.get_semantic_parent();
-          }
-          
-          method+=parent_str+to_string(clang_getCursorDisplayName(cursor.cx_cursor));
-          methods.emplace_back(method, offset);
-        }
-        last_offset=offset;
-      }
-    }
-  }
-  return methods;
 }

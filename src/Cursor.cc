@@ -34,6 +34,10 @@ std::string clang::Cursor::get_spelling() const {
   return to_string(clang_getCursorSpelling(cx_cursor));
 }
 
+std::string clang::Cursor::get_display_name() const {
+  return to_string(clang_getCursorDisplayName(cx_cursor));
+}
+
 std::string clang::Cursor::get_usr() const {
   return to_string(clang_getCursorUSR(cx_cursor));
 }

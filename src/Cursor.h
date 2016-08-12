@@ -193,6 +193,7 @@ namespace clang {
     SourceLocation get_source_location() const;
     SourceRange get_source_range() const;
     std::string get_spelling() const;
+    std::string get_display_name() const;
     std::string get_usr() const;
     Cursor get_referenced() const;
     Cursor get_canonical() const;
