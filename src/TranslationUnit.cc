@@ -73,7 +73,11 @@ int clang::TranslationUnit::ReparseTranslationUnit(const std::string &buffer, un
 }
 
 unsigned clang::TranslationUnit::DefaultFlags() {
-  return CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete | CXTranslationUnit_IncludeBriefCommentsInCodeCompletion;
+  auto flags=CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete | CXTranslationUnit_IncludeBriefCommentsInCodeCompletion;
+#if CINDEX_VERSION_MAJOR>0 || (CINDEX_VERSION_MAJOR==0 && CINDEX_VERSION_MINOR>=35)
+  flags|=CXTranslationUnit_KeepGoing;
+#endif
+  return flags;
 }
 
 clang::CodeCompleteResults clang::TranslationUnit::get_code_completions(const std::string &buffer,
