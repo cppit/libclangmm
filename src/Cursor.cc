@@ -74,15 +74,15 @@ bool clang::Cursor::operator==(const Cursor& rhs) const {
   return clang_equalCursors(cx_cursor, rhs.cx_cursor);
 }
 
-bool clang::Cursor::has_type_description() {
+bool clang::Cursor::is_valid_kind() const {
   auto referenced=clang_getCursorReferenced(cx_cursor);
   if(clang_Cursor_isNull(referenced))
     return false;
-  auto type=clang_getCursorType(referenced);
-  return type.kind!=0;
+  auto kind=get_kind();
+  return kind>Kind::UnexposedDecl && (kind<Kind::FirstInvalid || kind>Kind::LastInvalid);
 }
 
-std::string clang::Cursor::get_type_description() {
+std::string clang::Cursor::get_type_description() const {
   std::string spelling;
   auto referenced=clang_getCursorReferenced(cx_cursor);
   if(!clang_Cursor_isNull(referenced)) {
@@ -112,10 +112,13 @@ std::string clang::Cursor::get_type_description() {
 #endif
   }
   
+  if(spelling.empty())
+    return get_spelling();
+  
   return spelling;
 }
 
-std::string clang::Cursor::get_brief_comments() {
+std::string clang::Cursor::get_brief_comments() const {
   std::string comment_string;
   auto referenced=get_referenced();
   if(referenced) {

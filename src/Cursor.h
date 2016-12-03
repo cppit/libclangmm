@@ -203,9 +203,9 @@ namespace clang {
     operator bool() const;
     bool operator==(const Cursor& rhs) const;
     
-    bool has_type_description();
-    std::string get_type_description();
-    std::string get_brief_comments();
+    bool is_valid_kind() const;
+    std::string get_type_description() const;
+    std::string get_brief_comments() const;
     
     CXCursor cx_cursor;
   };

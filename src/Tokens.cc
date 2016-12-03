@@ -26,7 +26,7 @@ std::vector<std::pair<clang::Offset, clang::Offset> > clang::Tokens::get_similar
                                                                                                const std::string &usr) {
   std::vector<std::pair<Offset, Offset> > offsets;
   for(auto &token: *this) {
-    if(token.get_kind()==Token::Kind::Identifier) {
+    if(token.is_identifier()) {
       auto referenced=token.get_cursor().get_referenced();
       if(referenced && kind==referenced.get_kind() && spelling==token.get_spelling() && usr==referenced.get_usr())
         offsets.emplace_back(token.offsets);
