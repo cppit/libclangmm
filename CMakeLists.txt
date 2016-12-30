@@ -11,7 +11,7 @@ endif()
 
 add_subdirectory(src)
 
-if(libclangmm_BUILD_TESTS)
+if(LIBCLANGMM_BUILD_TESTS)
   enable_testing()
   add_subdirectory(tests)
 endif()

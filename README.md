@@ -16,17 +16,13 @@ See [installation guide](https://github.com/cppit/libclangmm/blob/master/docs/in
 # Tests #
 To run the unit tests, first enable the CMake option `LIBCLANGMM_BUILD_TESTS`:
 ```sh
-cmake -DLIBCLANGMM_BUILD_TESTS=ON .
+mkdir build && cd build
+cmake -DLIBCLANGMM_BUILD_TESTS=ON ..
 ```
-Then, simply call:
+Then, run the tests:
 ```sh
 make
-ctest
-```
-You may also run the test binary directly to get more details:
-```sh
-make
-cd tests
-./clangmm_tests --log_level=all
+cd ../tests
+../build/tests/clangmm_tests --log_level=all
 ```
 For more options, see the [documentation of boost’s unit testing framework](http://www.boost.org/doc/libs/1_58_0/libs/test/doc/html/utf/user-guide/runtime-config/reference.html).
