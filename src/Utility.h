@@ -3,7 +3,7 @@
 #include <clang-c/Index.h>
 #include <string>
 
-namespace clang {
+namespace clangmm {
   std::string to_string(CXString cx_string);
 }
 

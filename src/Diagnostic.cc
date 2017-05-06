@@ -3,7 +3,7 @@
 #include "Tokens.h"
 #include "Utility.h"
 
-clang::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnostic) {
+clangmm::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnostic) {
   severity=clang_getDiagnosticSeverity(cx_diagnostic);
   severity_spelling=get_severity_spelling(severity);
   spelling=to_string(clang_getDiagnosticSpelling(cx_diagnostic));
@@ -23,7 +23,7 @@ clang::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnos
   }
 }
 
-const std::string clang::Diagnostic::get_severity_spelling(unsigned severity) {
+const std::string clangmm::Diagnostic::get_severity_spelling(unsigned severity) {
   switch(severity) {
     case CXDiagnostic_Ignored:
       return "Ignored";

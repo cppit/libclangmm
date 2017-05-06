@@ -1,7 +1,7 @@
 #include "Tokens.h"
 #include "Utility.h"
 
-clang::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_tu(cx_tu) {
+clangmm::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_tu(cx_tu) {
   clang_tokenize(cx_tu, range.cx_range, &cx_tokens, &num_tokens);
   cx_cursors.resize(num_tokens);
   clang_annotateTokens(cx_tu, cx_tokens, num_tokens, cx_cursors.data());
@@ -14,14 +14,14 @@ clang::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_tu
   }
 }
 
-clang::Tokens::~Tokens() {
+clangmm::Tokens::~Tokens() {
   clang_disposeTokens(cx_tu, cx_tokens, size());
 }
 
 //This works across TranslationUnits! However, to get rename refactoring to work, 
 //one have to open all the files that might include a similar token
 //Similar tokens defined as tokens with equal referenced cursors. 
-std::vector<std::pair<clang::Offset, clang::Offset> > clang::Tokens::get_similar_token_offsets(Cursor::Kind kind,
+std::vector<std::pair<clangmm::Offset, clangmm::Offset> > clangmm::Tokens::get_similar_token_offsets(Cursor::Kind kind,
                                                                                                const std::string &spelling,
                                                                                                const std::string &usr) {
   std::vector<std::pair<Offset, Offset> > offsets;

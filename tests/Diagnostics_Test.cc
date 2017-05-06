@@ -8,9 +8,9 @@ using namespace std;
 BOOST_AUTO_TEST_CASE(diagnostics_test) {
   std::string path("./case/main_error.cpp");
 
-  clang::Index index(0, 0);
+  clangmm::Index index(0, 0);
 
-  clang::TranslationUnit tu(index, path, {});
+  clangmm::TranslationUnit tu(index, path, {});
   
   auto diagnostics=tu.get_diagnostics();
   BOOST_CHECK(diagnostics.size()==1);

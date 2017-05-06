@@ -11,7 +11,7 @@
 #include "CodeCompleteResults.h"
 #include "Cursor.h"
 
-namespace clang {
+namespace clangmm {
   class TranslationUnit {
   public:
     TranslationUnit(Index &index,
@@ -35,20 +35,20 @@ namespace clang {
                const std::map<std::string, std::string> &buffers,
                unsigned flags=DefaultFlags());
 
-    clang::CodeCompleteResults get_code_completions(const std::string &buffer,
+    clangmm::CodeCompleteResults get_code_completions(const std::string &buffer,
                                                     unsigned line_number, unsigned column);
 
-    std::vector<clang::Diagnostic> get_diagnostics();
+    std::vector<clangmm::Diagnostic> get_diagnostics();
 
     std::unique_ptr<Tokens> get_tokens(unsigned start_offset, unsigned end_offset);
     std::unique_ptr<Tokens> get_tokens(unsigned start_line, unsigned start_column,
                                        unsigned end_line, unsigned end_column);
 
-    clang::Cursor get_cursor(std::string path, unsigned offset);
-    clang::Cursor get_cursor(std::string path, unsigned line, unsigned column);
+    clangmm::Cursor get_cursor(std::string path, unsigned offset);
+    clangmm::Cursor get_cursor(std::string path, unsigned line, unsigned column);
 
     CXTranslationUnit cx_tu;
   };
-}  // namespace clang
+}  // namespace clangmm
 #endif  // TRANSLATIONUNIT_H_
 

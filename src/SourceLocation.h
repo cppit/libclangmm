@@ -3,13 +3,13 @@
 #include <clang-c/Index.h>
 #include <string>
 
-namespace clang {
+namespace clangmm {
   class Offset {
   public:
     Offset() {}
     Offset(unsigned line, unsigned index): line(line), index(index) {}
-    bool operator==(const clang::Offset &o) {return (line==o.line && index==o.index);}
-    bool operator!=(const clang::Offset &o) {return !(*this==o);}
+    bool operator==(const clangmm::Offset &o) {return (line==o.line && index==o.index);}
+    bool operator!=(const clangmm::Offset &o) {return !(*this==o);}
     unsigned line;
     unsigned index; //byte index in line (not char number)
   };
@@ -23,7 +23,7 @@ namespace clang {
 
   public:
     std::string get_path();
-    clang::Offset get_offset();
+    clangmm::Offset get_offset();
 
     CXSourceLocation cx_location;
     
@@ -31,5 +31,5 @@ namespace clang {
     void get_data(std::string *path, unsigned *line, unsigned *column, unsigned *offset);
   };
 
-}  // namespace clang
+}  // namespace clangmm
 #endif  // SOURCELOCATION_H_

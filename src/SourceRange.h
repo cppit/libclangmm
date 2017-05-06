@@ -5,13 +5,13 @@
 #include <string>
 #include <utility>
 
-namespace clang {  
+namespace clangmm {  
   class SourceRange {
   public:
     SourceRange(const CXSourceRange& cx_range) : cx_range(cx_range) {}
     SourceRange(SourceLocation &start, SourceLocation &end);
-    std::pair<clang::Offset, clang::Offset> get_offsets();
+    std::pair<clangmm::Offset, clangmm::Offset> get_offsets();
     CXSourceRange cx_range;
   };
-}  // namespace clang
+}  // namespace clangmm
 #endif  // SOURCERANGE_H_

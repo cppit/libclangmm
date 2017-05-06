@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace clang {
+namespace clangmm {
   class CompileCommands {
   public:
     CompileCommands(const std::string &filename, CompilationDatabase &db);

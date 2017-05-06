@@ -6,7 +6,7 @@
 #include "Cursor.h"
 #include <string>
 
-namespace clang {
+namespace clangmm {
   class Token {
     friend class Tokens;
   public:
@@ -25,14 +25,14 @@ namespace clang {
     std::string get_spelling() const;
     SourceLocation get_source_location() const;
     SourceRange get_source_range() const;
-    clang::Cursor get_cursor() const {return clang::Cursor(cx_cursor);}
+    clangmm::Cursor get_cursor() const {return clangmm::Cursor(cx_cursor);}
 
     bool is_identifier() const;
 
     CXTranslationUnit &cx_tu;
     CXToken& cx_token;
     CXCursor& cx_cursor;
-    std::pair<clang::Offset, clang::Offset> offsets;
+    std::pair<clangmm::Offset, clangmm::Offset> offsets;
   };
-}  // namespace clang
+}  // namespace clangmm
 #endif  // TOKEN_H_

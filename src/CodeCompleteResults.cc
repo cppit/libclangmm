@@ -3,7 +3,7 @@
 #include <exception>
 #include "Utility.h"
 
-clang::CodeCompleteResults::CodeCompleteResults(CXTranslationUnit &cx_tu, 
+clangmm::CodeCompleteResults::CodeCompleteResults(CXTranslationUnit &cx_tu, 
                                                 const std::string &buffer,
                                                 unsigned line_num, unsigned column) {
   CXUnsavedFile files[1];
@@ -23,23 +23,23 @@ clang::CodeCompleteResults::CodeCompleteResults(CXTranslationUnit &cx_tu,
     clang_sortCodeCompletionResults(cx_results->Results, cx_results->NumResults);
 }
 
-clang::CodeCompleteResults::~CodeCompleteResults() {
+clangmm::CodeCompleteResults::~CodeCompleteResults() {
   clang_disposeCodeCompleteResults(cx_results);
 }
 
-unsigned clang::CodeCompleteResults::size() const {
+unsigned clangmm::CodeCompleteResults::size() const {
   if(cx_results==NULL)
     return 0;
   return cx_results->NumResults;
 }
 
-clang::CompletionString clang::CodeCompleteResults::get(unsigned i) const {
+clangmm::CompletionString clangmm::CodeCompleteResults::get(unsigned i) const {
   if (i >= size()) {
-    throw std::invalid_argument("clang::CodeCompleteResults::get(unsigned i): i>=size()");
+    throw std::invalid_argument("clangmm::CodeCompleteResults::get(unsigned i): i>=size()");
   }
   return CompletionString(cx_results->Results[i].CompletionString);
 }
 
-std::string clang::CodeCompleteResults::get_usr() const {
+std::string clangmm::CodeCompleteResults::get_usr() const {
   return to_string(clang_codeCompleteGetContainerUSR(cx_results));
 }

@@ -6,14 +6,14 @@
 #include <unordered_map>
 #include <vector>
 
-namespace clang {
-  class Tokens : public std::vector<clang::Token> {
+namespace clangmm {
+  class Tokens : public std::vector<clangmm::Token> {
     friend class TranslationUnit;
     friend class Diagnostic;
     Tokens(CXTranslationUnit &cx_tu, const SourceRange &range);
   public:
     ~Tokens();
-    std::vector<std::pair<clang::Offset, clang::Offset> > get_similar_token_offsets(Cursor::Kind kind,
+    std::vector<std::pair<clangmm::Offset, clangmm::Offset> > get_similar_token_offsets(Cursor::Kind kind,
                                                                                     const std::string &spelling,
                                                                                     const std::string &usr);
   private:
@@ -22,5 +22,5 @@ namespace clang {
     std::vector<CXCursor> cx_cursors;
     CXTranslationUnit& cx_tu;
   };
-}  // namespace clang
+}  // namespace clangmm
 #endif  // TOKENS_H_

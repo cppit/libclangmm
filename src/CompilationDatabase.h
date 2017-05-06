@@ -4,7 +4,7 @@
 #include <clang-c/Index.h>
 #include <string>
 
-namespace clang {
+namespace clangmm {
   class CompilationDatabase {
   public:
     explicit CompilationDatabase(const std::string &project_path);

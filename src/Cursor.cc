@@ -2,63 +2,63 @@
 #include "Utility.h"
 #include <algorithm>
 
-std::string clang::Cursor::Type::get_spelling() const {
+std::string clangmm::Cursor::Type::get_spelling() const {
   return to_string(clang_getTypeSpelling(cx_type));
 }
 
-clang::Cursor::Type clang::Cursor::Type::get_result() const {
+clangmm::Cursor::Type clangmm::Cursor::Type::get_result() const {
   return Type(clang_getResultType(cx_type));
 }
 
-bool clang::Cursor::Type::operator==(const Cursor::Type& rhs) const {
+bool clangmm::Cursor::Type::operator==(const Cursor::Type& rhs) const {
   return clang_equalTypes(cx_type, rhs.cx_type);
 }
 
-clang::Cursor::Kind clang::Cursor::get_kind() const {
+clangmm::Cursor::Kind clangmm::Cursor::get_kind() const {
   return static_cast<Kind>(clang_getCursorKind(cx_cursor));
 }
 
-clang::Cursor::Type clang::Cursor::get_type() const {
+clangmm::Cursor::Type clangmm::Cursor::get_type() const {
   return Type(clang_getCursorType(cx_cursor));
 }
 
-clang::SourceLocation clang::Cursor::get_source_location() const {
+clangmm::SourceLocation clangmm::Cursor::get_source_location() const {
   return SourceLocation(clang_getCursorLocation(cx_cursor));
 }
 
-clang::SourceRange clang::Cursor::get_source_range() const {
+clangmm::SourceRange clangmm::Cursor::get_source_range() const {
   return SourceRange(clang_getCursorExtent(cx_cursor));
 }
 
-std::string clang::Cursor::get_spelling() const {
+std::string clangmm::Cursor::get_spelling() const {
   return to_string(clang_getCursorSpelling(cx_cursor));
 }
 
-std::string clang::Cursor::get_display_name() const {
+std::string clangmm::Cursor::get_display_name() const {
   return to_string(clang_getCursorDisplayName(cx_cursor));
 }
 
-std::string clang::Cursor::get_usr() const {
+std::string clangmm::Cursor::get_usr() const {
   return to_string(clang_getCursorUSR(cx_cursor));
 }
 
-clang::Cursor clang::Cursor::get_referenced() const {
+clangmm::Cursor clangmm::Cursor::get_referenced() const {
   return Cursor(clang_getCursorReferenced(cx_cursor));
 }
 
-clang::Cursor clang::Cursor::get_canonical() const {
+clangmm::Cursor clangmm::Cursor::get_canonical() const {
   return Cursor(clang_getCanonicalCursor(cx_cursor));
 }
 
-clang::Cursor clang::Cursor::get_definition() const {
+clangmm::Cursor clangmm::Cursor::get_definition() const {
   return Cursor(clang_getCursorDefinition(cx_cursor));
 }
 
-clang::Cursor clang::Cursor::get_semantic_parent() const {
+clangmm::Cursor clangmm::Cursor::get_semantic_parent() const {
   return Cursor(clang_getCursorSemanticParent(cx_cursor));
 }
 
-std::vector<clang::Cursor> clang::Cursor::get_arguments() const {
+std::vector<clangmm::Cursor> clangmm::Cursor::get_arguments() const {
   std::vector<Cursor> cursors;
   auto size=clang_Cursor_getNumArguments(cx_cursor);
   for(int c=0;c<size;++c)
@@ -66,15 +66,15 @@ std::vector<clang::Cursor> clang::Cursor::get_arguments() const {
   return cursors;
 }
 
-clang::Cursor::operator bool() const {
+clangmm::Cursor::operator bool() const {
   return !clang_Cursor_isNull(cx_cursor);
 }
 
-bool clang::Cursor::operator==(const Cursor& rhs) const {
+bool clangmm::Cursor::operator==(const Cursor& rhs) const {
   return clang_equalCursors(cx_cursor, rhs.cx_cursor);
 }
 
-bool clang::Cursor::is_valid_kind() const {
+bool clangmm::Cursor::is_valid_kind() const {
   auto referenced=clang_getCursorReferenced(cx_cursor);
   if(clang_Cursor_isNull(referenced))
     return false;
@@ -82,7 +82,7 @@ bool clang::Cursor::is_valid_kind() const {
   return kind>Kind::UnexposedDecl && (kind<Kind::FirstInvalid || kind>Kind::LastInvalid);
 }
 
-std::string clang::Cursor::get_type_description() const {
+std::string clangmm::Cursor::get_type_description() const {
   std::string spelling;
   auto referenced=clang_getCursorReferenced(cx_cursor);
   if(!clang_Cursor_isNull(referenced)) {
@@ -118,7 +118,7 @@ std::string clang::Cursor::get_type_description() const {
   return spelling;
 }
 
-std::string clang::Cursor::get_brief_comments() const {
+std::string clangmm::Cursor::get_brief_comments() const {
   std::string comment_string;
   auto referenced=get_referenced();
   if(referenced) {

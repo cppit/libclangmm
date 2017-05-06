@@ -2,7 +2,7 @@
 #include "CompileCommands.h"
 #include "Utility.h"
 
-std::string clang::CompileCommand::get_command() {
+std::string clangmm::CompileCommand::get_command() {
   std::string res;
   unsigned N = clang_CompileCommand_getNumArgs(cx_command);
   for (unsigned i = 0; i < N; i++) {
@@ -11,7 +11,7 @@ std::string clang::CompileCommand::get_command() {
   return res;
 }
 
-std::vector<std::string> clang::CompileCommand::get_command_as_args() {
+std::vector<std::string> clangmm::CompileCommand::get_command_as_args() {
   unsigned N = clang_CompileCommand_getNumArgs(cx_command);
   std::vector<std::string> res(N);
   for (unsigned i = 0; i < N; i++) {

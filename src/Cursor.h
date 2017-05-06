@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace clang {
+namespace clangmm {
   class Cursor {
   public:
     enum class Kind {
@@ -209,5 +209,5 @@ namespace clang {
     
     CXCursor cx_cursor;
   };
-}  // namespace clang
+}  // namespace clangmm
 #endif  // CURSOR_H_

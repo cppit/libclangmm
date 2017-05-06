@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-namespace clang {
+namespace clangmm {
   class CompileCommand {
   public:
     CompileCommand(const CXCompileCommand& cx_command) : cx_command(cx_command) {};

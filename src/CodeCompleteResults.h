@@ -5,7 +5,7 @@
 #include <string>
 #include "CompletionString.h"
 
-namespace clang {
+namespace clangmm {
   class CodeCompleteResults {
     friend class TranslationUnit;
     
@@ -19,5 +19,5 @@ namespace clang {
 
     CXCodeCompleteResults *cx_results;
   };
-}  // namespace clang
+}  // namespace clangmm
 #endif  // CODECOMPLETERESULTS_H_

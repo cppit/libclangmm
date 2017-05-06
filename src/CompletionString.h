@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace clang {
+namespace clangmm {
   enum CompletionChunkKind {
     CompletionChunk_Optional,  CompletionChunk_TypedText,
     CompletionChunk_Text, CompletionChunk_Placeholder,
@@ -36,5 +36,5 @@ namespace clang {
     
     CXCompletionString cx_completion_sting;
   };
-}  // namespace clang
+}  // namespace clangmm
 #endif  // COMPLETIONSTRING_H_

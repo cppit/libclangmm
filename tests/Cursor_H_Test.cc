@@ -7,12 +7,12 @@ BOOST_AUTO_TEST_CASE(cursor) {
 
   std::string path("./case/main.cpp");
 
-  clang::Index index(0, 0);
-  clang::TranslationUnit tu(index, path, {});
+  clangmm::Index index(0, 0);
+  clangmm::TranslationUnit tu(index, path, {});
 
   // ]
 
   auto cursor=tu.get_cursor(path, 103);
 
-  BOOST_CHECK(cursor.get_kind() == clang::Cursor::Kind::ReturnStmt);
+  BOOST_CHECK(cursor.get_kind() == clangmm::Cursor::Kind::ReturnStmt);
 }
