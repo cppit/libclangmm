@@ -195,6 +195,8 @@ namespace clangmm {
     std::string get_spelling() const;
     std::string get_display_name() const;
     std::string get_usr() const;
+    /// Improved usr that is also template and argument invariant
+    std::string get_usr_extended() const;
     Cursor get_referenced() const;
     Cursor get_canonical() const;
     Cursor get_definition() const;

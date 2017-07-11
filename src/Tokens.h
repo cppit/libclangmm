@@ -13,9 +13,7 @@ namespace clangmm {
     Tokens(CXTranslationUnit &cx_tu, const SourceRange &range);
   public:
     ~Tokens();
-    std::vector<std::pair<clangmm::Offset, clangmm::Offset> > get_similar_token_offsets(Cursor::Kind kind,
-                                                                                    const std::string &spelling,
-                                                                                    const std::string &usr);
+    std::vector<std::pair<clangmm::Offset, clangmm::Offset> > get_similar_token_offsets(const std::string &spelling, const std::string &usr);
   private:
     CXToken *cx_tokens;
     unsigned num_tokens;

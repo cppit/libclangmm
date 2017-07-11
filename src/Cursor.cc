@@ -42,6 +42,34 @@ std::string clangmm::Cursor::get_usr() const {
   return to_string(clang_getCursorUSR(cx_cursor));
 }
 
+std::string clangmm::Cursor::get_usr_extended() const {
+  if(!is_valid_kind())
+    return std::string();
+  
+  const auto token_spelling=[](const std::string &spelling) -> std::string {
+    for(size_t i=0;i<spelling.size();++i) {
+      if(spelling[i]=='<' || spelling[i]=='(')
+        return spelling.substr(0, i);
+    }
+    return spelling;
+  };
+  std::string usr=token_spelling(get_spelling());
+  auto cursor=get_semantic_parent();
+  Kind kind;
+  while((kind=cursor.get_kind())!=Kind::TranslationUnit && cursor.is_valid_kind()) {
+    if(kind==Kind::CXXMethod || kind==Kind::FunctionDecl || kind==Kind::FunctionTemplate ||
+       kind==Kind::Constructor || kind==Kind::Destructor) {
+      auto canonical=get_canonical();
+      auto location=canonical.get_source_location();
+      auto offset=location.get_offset();
+      return std::to_string(offset.line)+':'+std::to_string(offset.index)+':'+location.get_path();
+    }
+    usr+=':'+token_spelling(cursor.get_spelling());
+    cursor=cursor.get_semantic_parent();
+  }
+  return usr;
+}
+
 clangmm::Cursor clangmm::Cursor::get_referenced() const {
   return Cursor(clang_getCursorReferenced(cx_cursor));
 }
