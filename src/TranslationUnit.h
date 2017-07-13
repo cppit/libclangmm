@@ -14,13 +14,11 @@
 namespace clangmm {
   class TranslationUnit {
   public:
-    TranslationUnit(Index &index,
-                    const std::string &file_path,
+    TranslationUnit(Index &index, const std::string &file_path,
                     const std::vector<std::string> &command_line_args,
                     const std::string &buffer,
                     unsigned flags=DefaultFlags());
-    TranslationUnit(Index &index,
-                    const std::string &file_path,
+    TranslationUnit(Index &index, const std::string &file_path,
                     const std::vector<std::string> &command_line_args,
                     unsigned flags=DefaultFlags());
     ~TranslationUnit();
@@ -35,17 +33,18 @@ namespace clangmm {
                const std::map<std::string, std::string> &buffers,
                unsigned flags=DefaultFlags());
 
-    clangmm::CodeCompleteResults get_code_completions(const std::string &buffer,
-                                                    unsigned line_number, unsigned column);
+    CodeCompleteResults get_code_completions(const std::string &buffer,
+                                             unsigned line_number, unsigned column);
 
-    std::vector<clangmm::Diagnostic> get_diagnostics();
+    std::vector<Diagnostic> get_diagnostics();
 
     std::unique_ptr<Tokens> get_tokens(unsigned start_offset, unsigned end_offset);
     std::unique_ptr<Tokens> get_tokens(unsigned start_line, unsigned start_column,
                                        unsigned end_line, unsigned end_column);
 
-    clangmm::Cursor get_cursor(std::string path, unsigned offset);
-    clangmm::Cursor get_cursor(std::string path, unsigned line, unsigned column);
+    Cursor get_cursor(const std::string &path, unsigned offset);
+    Cursor get_cursor(const std::string &path, unsigned line, unsigned column);
+    Cursor get_cursor(const SourceLocation &location);
 
     CXTranslationUnit cx_tu;
   };
