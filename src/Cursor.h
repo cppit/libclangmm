@@ -5,6 +5,7 @@
 #include "SourceRange.h"
 #include <string>
 #include <vector>
+#include <unordered_set>
 
 namespace clangmm {
   class Cursor {
@@ -197,6 +198,8 @@ namespace clangmm {
     std::string get_usr() const;
     /// Improved usr that is also template and argument invariant
     std::string get_usr_extended() const;
+    /// Also get overridden cursors
+    std::unordered_set<std::string> get_all_usr_extended() const;
     Cursor get_referenced() const;
     Cursor get_canonical() const;
     Cursor get_definition() const;

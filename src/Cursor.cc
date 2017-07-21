@@ -70,6 +70,30 @@ std::string clangmm::Cursor::get_usr_extended() const {
   return usr;
 }
 
+std::unordered_set<std::string> clangmm::Cursor::get_all_usr_extended() const {
+  std::unordered_set<std::string> usrs;
+  if(get_kind()==Kind::CXXMethod) {
+    class Recursive {
+    public:
+      static void overridden(std::unordered_set<std::string> &usrs, const Cursor &cursor) {
+        usrs.emplace(cursor.get_usr_extended());
+        CXCursor *cursors;
+        unsigned size;
+        clang_getOverriddenCursors(cursor.cx_cursor, &cursors, &size);
+        for(unsigned c=0;c<size;++c)
+          overridden(usrs, cursors[c]);
+        clang_disposeOverriddenCursors(cursors);
+      }
+    };
+    Recursive::overridden(usrs, *this);
+    return usrs;
+  }
+  else {
+    usrs.emplace(get_usr_extended());
+    return usrs;
+  }
+}
+
 clangmm::Cursor clangmm::Cursor::get_referenced() const {
   return Cursor(clang_getCursorReferenced(cx_cursor));
 }
