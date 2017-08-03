@@ -5,6 +5,8 @@
 
 namespace clangmm {
   std::string to_string(CXString cx_string);
+  
+  void remove_include_guard(std::string &buffer);
 }
 
 #endif  // UTILITY_H_
