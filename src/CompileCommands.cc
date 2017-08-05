@@ -1,9 +1,9 @@
 #include "CompileCommands.h"
 
 clangmm::CompileCommands::CompileCommands(const std::string &filename, CompilationDatabase &db) {
-  cx_commands =
-    clang_CompilationDatabase_getCompileCommands(db.cx_db, filename.c_str());
-  if(clang_CompileCommands_getSize(cx_commands)==0)
+  if(!filename.empty())
+    cx_commands = clang_CompilationDatabase_getCompileCommands(db.cx_db, filename.c_str());
+  if(filename.empty() || clang_CompileCommands_getSize(cx_commands)==0)
     cx_commands = clang_CompilationDatabase_getAllCompileCommands(db.cx_db);
 }
 
@@ -12,10 +12,9 @@ clangmm::CompileCommands::~CompileCommands() {
 }
 
 std::vector<clangmm::CompileCommand> clangmm::CompileCommands::get_commands() {
-  unsigned N = clang_CompileCommands_getSize(cx_commands);
-  std::vector<CompileCommand> res;
-  for (unsigned i = 0; i < N; i++) {
-    res.emplace_back(clang_CompileCommands_getCommand(cx_commands, i));
-  }
-  return res;
+  unsigned size = clang_CompileCommands_getSize(cx_commands);
+  std::vector<CompileCommand> commands;
+  for (unsigned i = 0; i < size; i++)
+    commands.emplace_back(clang_CompileCommands_getCommand(cx_commands, i));
+  return commands;
 }
