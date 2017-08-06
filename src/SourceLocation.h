@@ -6,12 +6,11 @@
 namespace clangmm {
   class Offset {
   public:
-    Offset() {}
-    Offset(unsigned line, unsigned index): line(line), index(index) {}
-    bool operator==(const clangmm::Offset &o) {return (line==o.line && index==o.index);}
+    bool operator==(const clangmm::Offset &o) {return offset==o.offset;}
     bool operator!=(const clangmm::Offset &o) {return !(*this==o);}
     unsigned line;
     unsigned index; //byte index in line (not char number)
+    unsigned offset;
   };
   
   class SourceLocation {

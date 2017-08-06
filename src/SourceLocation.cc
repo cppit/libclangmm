@@ -16,13 +16,13 @@ clangmm::SourceLocation::SourceLocation(CXTranslationUnit &tu, const std::string
 
 std::string clangmm::SourceLocation::get_path() {
   std::string path;
-  get_data(&path, NULL, NULL, NULL);
+  get_data(&path, nullptr, nullptr, nullptr);
   return path;
 }
 clangmm::Offset clangmm::SourceLocation::get_offset() {
-  unsigned line, index;
-  get_data(NULL, &line, &index, NULL);
-  return {line, index};
+  unsigned line, index, offset;
+  get_data(nullptr, &line, &index, &offset);
+  return {line, index, offset};
 }
 
 void clangmm::SourceLocation::get_data(std::string* path, unsigned *line, unsigned *column, unsigned *offset) {

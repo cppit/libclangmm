@@ -14,6 +14,7 @@ clangmm::CompileCommands::~CompileCommands() {
 std::vector<clangmm::CompileCommand> clangmm::CompileCommands::get_commands() {
   unsigned size = clang_CompileCommands_getSize(cx_commands);
   std::vector<CompileCommand> commands;
+  commands.reserve(size);
   for (unsigned i = 0; i < size; i++)
     commands.emplace_back(clang_CompileCommands_getCommand(cx_commands, i));
   return commands;
