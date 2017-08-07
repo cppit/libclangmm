@@ -15,5 +15,5 @@ BOOST_AUTO_TEST_CASE(translation_unit) {
                        "return 0\n"
                        "}\n";
 
-  BOOST_CHECK(tu.ReparseTranslationUnit(buffer) == 0);
+  BOOST_CHECK(tu.reparse(buffer) == 0);
 }

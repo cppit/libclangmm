@@ -60,7 +60,7 @@ void clangmm::TranslationUnit::parse(Index &index, const std::string &file_path,
                                      args.size(), files.data(), files.size(), flags);
 }
 
-int clangmm::TranslationUnit::ReparseTranslationUnit(const std::string &buffer, unsigned flags) {
+int clangmm::TranslationUnit::reparse(const std::string &buffer, unsigned flags) {
   CXUnsavedFile files[1];
   
   auto file_path=to_string(clang_getTranslationUnitSpelling(cx_tu));
@@ -94,6 +94,18 @@ std::vector<clangmm::Diagnostic> clangmm::TranslationUnit::get_diagnostics() {
     clang_disposeDiagnostic(clang_diagnostic);
   }
   return diagnostics;
+}
+
+std::unique_ptr<clangmm::Tokens> clangmm::TranslationUnit::get_tokens() {
+  SourceRange range(clang_getCursorExtent(clang_getTranslationUnitCursor(cx_tu)));
+  return std::unique_ptr<Tokens>(new Tokens(cx_tu, range));
+}
+
+std::unique_ptr<clangmm::Tokens> clangmm::TranslationUnit::get_tokens(const std::string &path, unsigned start_offset, unsigned end_offset) {
+  SourceLocation start_location(cx_tu, path, start_offset);
+  SourceLocation end_location(cx_tu, path, end_offset);
+  SourceRange range(start_location, end_location);
+  return std::unique_ptr<Tokens>(new Tokens(cx_tu, range));
 }
 
 std::unique_ptr<clangmm::Tokens> clangmm::TranslationUnit::get_tokens(unsigned start_offset, unsigned end_offset) {

@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE(completion_string) {
                      "return 0\n"
                      "}";
 
-  tu.ReparseTranslationUnit(buffer);
+  tu.reparse(buffer);
   auto results=tu.get_code_completions(buffer, 4, 5);
   // ]
 

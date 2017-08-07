@@ -20,7 +20,7 @@ BOOST_AUTO_TEST_CASE(code_complete_results) {
 
   // ]
 
-  tu.ReparseTranslationUnit(buffer);
+  tu.reparse(buffer);
   auto results=tu.get_code_completions(buffer, 4, 5);
 
   bool substr_found=false;

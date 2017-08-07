@@ -23,7 +23,7 @@ namespace clangmm {
                     unsigned flags=DefaultFlags());
     ~TranslationUnit();
     
-    int ReparseTranslationUnit(const std::string &buffer, unsigned flags=DefaultFlags());
+    int reparse(const std::string &buffer, unsigned flags=DefaultFlags());
     
     static unsigned DefaultFlags();
     
@@ -38,6 +38,8 @@ namespace clangmm {
 
     std::vector<Diagnostic> get_diagnostics();
 
+    std::unique_ptr<Tokens> get_tokens();
+    std::unique_ptr<Tokens> get_tokens(const std::string &path, unsigned start_offset, unsigned end_offset);
     std::unique_ptr<Tokens> get_tokens(unsigned start_offset, unsigned end_offset);
     std::unique_ptr<Tokens> get_tokens(unsigned start_line, unsigned start_column,
                                        unsigned end_line, unsigned end_column);
