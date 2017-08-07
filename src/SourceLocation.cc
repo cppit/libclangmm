@@ -20,9 +20,9 @@ std::string clangmm::SourceLocation::get_path() {
   return path;
 }
 clangmm::Offset clangmm::SourceLocation::get_offset() {
-  unsigned line, index, offset;
-  get_data(nullptr, &line, &index, &offset);
-  return {line, index, offset};
+  unsigned line, index;
+  get_data(nullptr, &line, &index, nullptr);
+  return {line, index};
 }
 
 void clangmm::SourceLocation::get_data(std::string* path, unsigned *line, unsigned *column, unsigned *offset) {
