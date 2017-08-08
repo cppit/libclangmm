@@ -22,34 +22,20 @@ clangmm::Tokens::~Tokens() {
 //This works across TranslationUnits. Similar tokens defined as tokens with equal canonical cursors. 
 std::vector<std::pair<clangmm::Offset, clangmm::Offset> > clangmm::Tokens::get_similar_token_offsets(Cursor::Kind kind, const std::string &spelling,
                                                                                                      const std::unordered_set<std::string> &usrs) {
-  // Special case for virtual and override functions
-  if(kind==Cursor::Kind::CXXMethod) {
-    std::vector<std::pair<Offset, Offset> > offsets;
-    for(auto &token: *this) {
-      if(token.is_identifier()) {
-        auto referenced=token.get_cursor().get_referenced();
-        if(referenced && referenced.get_kind()==Cursor::Kind::CXXMethod && spelling==token.get_spelling()) {
-          auto referenced_usrs=referenced.get_all_usr_extended();
-          for(auto &usr: referenced_usrs) {
-            if(usrs.count(usr)) {
-              offsets.emplace_back(token.offsets);
-              break;
-            }
+  std::vector<std::pair<Offset, Offset> > offsets;
+  for(auto &token: *this) {
+    if(token.is_identifier()) {
+      auto referenced=token.get_cursor().get_referenced();
+      if(referenced && (kind!=Cursor::Kind::CXXMethod || kind==referenced.get_kind()) && spelling==token.get_spelling()) {
+        auto referenced_usrs=referenced.get_all_usr_extended();
+        for(auto &usr: referenced_usrs) {
+          if(usrs.count(usr)) {
+            offsets.emplace_back(token.offsets);
+            break;
           }
         }
       }
     }
-    return offsets;
   }
-  else {
-    std::vector<std::pair<Offset, Offset> > offsets;
-    for(auto &token: *this) {
-      if(token.is_identifier()) {
-        auto referenced=token.get_cursor().get_referenced();
-        if(referenced && spelling==token.get_spelling() && usrs.count(referenced.get_usr_extended()))
-          offsets.emplace_back(token.offsets);
-      }
-    }
-    return offsets;
-  }
+  return offsets;
 }
