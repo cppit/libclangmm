@@ -10,7 +10,7 @@ using namespace std; //TODO: remove
 
 clangmm::TranslationUnit::TranslationUnit(Index &index, const std::string &file_path,
                                           const std::vector<std::string> &command_line_args,
-                                          const std::string &buffer, unsigned flags) {
+                                          const std::string &buffer, int flags) {
   std::vector<const char*> args;
   for(auto &a: command_line_args) {
     args.push_back(a.c_str());
@@ -27,7 +27,7 @@ clangmm::TranslationUnit::TranslationUnit(Index &index, const std::string &file_
 
 clangmm::TranslationUnit::TranslationUnit(Index &index, const std::string &file_path,
                                           const std::vector<std::string> &command_line_args,
-                                          unsigned flags) {
+                                          int flags) {
   std::vector<const char*> args;
   for(auto &a: command_line_args) {
     args.push_back(a.c_str());
@@ -43,7 +43,7 @@ clangmm::TranslationUnit::~TranslationUnit() {
 
 void clangmm::TranslationUnit::parse(Index &index, const std::string &file_path,
                                      const std::vector<std::string> &command_line_args,
-                                     const std::map<std::string, std::string>  &buffers, unsigned flags) {
+                                     const std::map<std::string, std::string>  &buffers, int flags) {
   std::vector<CXUnsavedFile> files;
   for (auto &buffer : buffers) {
     CXUnsavedFile file;
@@ -60,7 +60,7 @@ void clangmm::TranslationUnit::parse(Index &index, const std::string &file_path,
                                      args.size(), files.data(), files.size(), flags);
 }
 
-int clangmm::TranslationUnit::reparse(const std::string &buffer, unsigned flags) {
+int clangmm::TranslationUnit::reparse(const std::string &buffer, int flags) {
   CXUnsavedFile files[1];
   
   auto file_path=to_string(clang_getTranslationUnitSpelling(cx_tu));
@@ -72,8 +72,8 @@ int clangmm::TranslationUnit::reparse(const std::string &buffer, unsigned flags)
   return clang_reparseTranslationUnit(cx_tu, 1, files, flags);
 }
 
-unsigned clangmm::TranslationUnit::DefaultFlags() {
-  auto flags=CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete | CXTranslationUnit_IncludeBriefCommentsInCodeCompletion;
+int clangmm::TranslationUnit::DefaultFlags() {
+  int flags=CXTranslationUnit_CacheCompletionResults | CXTranslationUnit_PrecompiledPreamble | CXTranslationUnit_Incomplete | CXTranslationUnit_IncludeBriefCommentsInCodeCompletion;
 #if CINDEX_VERSION_MAJOR>0 || (CINDEX_VERSION_MAJOR==0 && CINDEX_VERSION_MINOR>=35)
   flags|=CXTranslationUnit_KeepGoing;
 #endif
