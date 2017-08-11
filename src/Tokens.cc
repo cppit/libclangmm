@@ -1,6 +1,7 @@
 #include "Tokens.h"
 #include "Utility.h"
 #include <unordered_set>
+#include <cstring>
 
 clangmm::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_tu(cx_tu) {
   clang_tokenize(cx_tu, range.cx_range, &cx_tokens, &num_tokens);
@@ -58,12 +59,19 @@ std::vector<std::pair<clangmm::Offset, clangmm::Offset> > clangmm::Tokens::get_s
   for(auto &token: *this) {
     if(token.is_identifier()) {
       auto referenced=token.get_cursor().get_referenced();
-      if(referenced && spelling==token.get_spelling()) {
-        auto referenced_usrs=referenced.get_all_usr_extended();
-        for(auto &usr: referenced_usrs) {
-          if(usrs.count(usr)) {
-            offsets.emplace_back(token.offsets);
-            break;
+      if(referenced) {
+        const char *strstr_ptr=nullptr;
+        auto cx_string=clang_getTokenSpelling(cx_tu, token.cx_token);
+        if(cx_string.data)
+          strstr_ptr=std::strstr(static_cast<const char*>(cx_string.data), spelling.c_str());
+        clang_disposeString(cx_string);
+        if(strstr_ptr) {
+          auto referenced_usrs=referenced.get_all_usr_extended();
+          for(auto &usr: referenced_usrs) {
+            if(usrs.count(usr)) {
+              offsets.emplace_back(token.offsets);
+              break;
+            }
           }
         }
       }
