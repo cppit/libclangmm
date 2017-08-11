@@ -6,8 +6,8 @@
 namespace clangmm {
   class Offset {
   public:
-    bool operator==(const clangmm::Offset &o) {return line==o.line && index==o.index;}
-    bool operator!=(const clangmm::Offset &o) {return !(*this==o);}
+    bool operator==(const clangmm::Offset &o) const {return line==o.line && index==o.index;}
+    bool operator!=(const clangmm::Offset &o) const {return !(*this==o);}
     unsigned line;
     unsigned index; //byte index in line (not char number)
   };
