@@ -46,16 +46,31 @@ std::string clangmm::Cursor::get_usr_extended() const {
   if(!is_valid_kind())
     return std::string();
   
-  const auto token_spelling=[](const std::string &spelling) -> std::string {
+  const auto token_spelling=[](const std::string &spelling_) -> std::string {
+    std::string spelling;
+    if(!spelling_.empty() && spelling_[0]=='~')
+      spelling=spelling_.substr(1);
+    else
+      spelling=spelling_;
     for(size_t i=0;i<spelling.size();++i) {
       if(spelling[i]=='<' || spelling[i]=='(')
         return spelling.substr(0, i);
     }
     return spelling;
   };
-  std::string usr=token_spelling(get_spelling());
-  auto cursor=get_semantic_parent();
-  Kind kind;
+  
+  auto cursor=*this;
+  auto kind=cursor.get_kind();
+  // If constructor, destructor or function template, and the token spelling is equal, set cursor to parent
+  if(kind==clangmm::Cursor::Kind::Constructor || kind==clangmm::Cursor::Kind::Destructor ||
+     kind==clangmm::Cursor::Kind::FunctionTemplate) {
+    auto parent=cursor.get_semantic_parent();
+    if(token_spelling(cursor.get_spelling())==token_spelling(parent.get_spelling()))
+    cursor=parent;
+  }
+  
+  std::string usr=token_spelling(cursor.get_spelling());
+  cursor=cursor.get_semantic_parent();
   while((kind=cursor.get_kind())!=Kind::TranslationUnit && cursor.is_valid_kind()) {
     if(kind==Kind::CXXMethod || kind==Kind::FunctionDecl || kind==Kind::FunctionTemplate ||
        kind==Kind::Constructor || kind==Kind::Destructor) {

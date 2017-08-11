@@ -52,13 +52,13 @@ clangmm::Tokens::~Tokens() {
 }
 
 //This works across TranslationUnits. Similar tokens defined as tokens with equal canonical cursors. 
-std::vector<std::pair<clangmm::Offset, clangmm::Offset> > clangmm::Tokens::get_similar_token_offsets(Cursor::Kind kind, const std::string &spelling,
+std::vector<std::pair<clangmm::Offset, clangmm::Offset> > clangmm::Tokens::get_similar_token_offsets(const std::string &spelling,
                                                                                                      const std::unordered_set<std::string> &usrs) {
   std::vector<std::pair<Offset, Offset> > offsets;
   for(auto &token: *this) {
     if(token.is_identifier()) {
       auto referenced=token.get_cursor().get_referenced();
-      if(referenced && (kind!=Cursor::Kind::CXXMethod || kind==referenced.get_kind()) && spelling==token.get_spelling()) {
+      if(referenced && spelling==token.get_spelling()) {
         auto referenced_usrs=referenced.get_all_usr_extended();
         for(auto &usr: referenced_usrs) {
           if(usrs.count(usr)) {
