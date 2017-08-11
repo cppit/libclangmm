@@ -46,16 +46,16 @@ std::string clangmm::Cursor::get_usr_extended() const {
   if(!is_valid_kind())
     return std::string();
   
-  const auto token_spelling=[](const std::string &spelling_) -> std::string {
-    std::string spelling;
-    if(!spelling_.empty() && spelling_[0]=='~')
-      spelling=spelling_.substr(1);
-    else
-      spelling=spelling_;
+  const auto token_spelling=[](const std::string &spelling) -> std::string {
     for(size_t i=0;i<spelling.size();++i) {
-      if(spelling[i]=='<' || spelling[i]=='(')
+      if(spelling[i]=='<' || spelling[i]=='(') {
+        if(i>0 && spelling[0]=='~')
+          return spelling.substr(1, i);
         return spelling.substr(0, i);
+      }
     }
+    if(!spelling.empty() && spelling[0]=='~')
+      return spelling.substr(1);
     return spelling;
   };
   
