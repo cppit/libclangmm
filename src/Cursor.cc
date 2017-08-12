@@ -74,7 +74,7 @@ std::string clangmm::Cursor::get_usr_extended() const {
   while((kind=cursor.get_kind())!=Kind::TranslationUnit && cursor.is_valid_kind()) {
     if(kind==Kind::CXXMethod || kind==Kind::FunctionDecl || kind==Kind::FunctionTemplate ||
        kind==Kind::Constructor || kind==Kind::Destructor) {
-      auto canonical=get_canonical();
+      auto canonical=cursor.get_canonical();
       auto location=canonical.get_source_location();
       auto offset=location.get_offset();
       return std::to_string(offset.line)+':'+std::to_string(offset.index)+':'+location.get_path();
