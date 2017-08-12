@@ -35,7 +35,7 @@ bool clangmm::Token::is_identifier() const {
       return true;
   }
   else if(token_kind==clangmm::Token::Kind::Punctuation && cursor.is_valid_kind()) {
-    auto referenced=get_cursor().get_referenced();
+    auto referenced=cursor.get_referenced();
     if(referenced) {
       auto referenced_kind=referenced.get_kind();
       if(referenced_kind==Cursor::Kind::FunctionDecl || referenced_kind==Cursor::Kind::CXXMethod || referenced_kind==Cursor::Kind::Constructor)

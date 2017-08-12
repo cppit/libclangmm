@@ -5,6 +5,7 @@
 #include "Token.h"
 #include <unordered_set>
 #include <vector>
+#include <memory>
 
 namespace clangmm {
   class Tokens : public std::vector<clangmm::Token> {
@@ -17,8 +18,7 @@ namespace clangmm {
                                                                                         const std::unordered_set<std::string> &usrs);
   private:
     CXToken *cx_tokens;
-    unsigned num_tokens;
-    std::vector<CXCursor> cx_cursors;
+    std::unique_ptr<CXCursor[]> cx_cursors;
     CXTranslationUnit& cx_tu;
   };
 }  // namespace clangmm

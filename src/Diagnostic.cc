@@ -13,7 +13,7 @@ clangmm::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagn
   auto start_offset=start_location.get_offset();
   Tokens tokens(cx_tu, SourceRange(start_location, start_location));
   if(tokens.size()==1)
-    offsets={start_offset, tokens.begin()->offsets.second};
+    offsets={start_offset, tokens.begin()->get_source_range().get_offsets().second};
   
   unsigned num_fix_its=clang_getDiagnosticNumFixIts(cx_diagnostic);
   for(unsigned c=0;c<num_fix_its;c++) {

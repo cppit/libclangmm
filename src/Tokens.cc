@@ -4,9 +4,10 @@
 #include <cstring>
 
 clangmm::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_tu(cx_tu) {
+  unsigned num_tokens;
   clang_tokenize(cx_tu, range.cx_range, &cx_tokens, &num_tokens);
-  cx_cursors.resize(num_tokens);
-  clang_annotateTokens(cx_tu, cx_tokens, num_tokens, cx_cursors.data());
+  cx_cursors=std::unique_ptr<CXCursor[]>(new CXCursor[num_tokens]); // To avoid allocation with initialization
+  clang_annotateTokens(cx_tu, cx_tokens, num_tokens, cx_cursors.get());
   for (unsigned i = 0; i < num_tokens; i++) {
     if(cx_cursors[i].kind==CXCursor_DeclRefExpr) { // Temporary fix to a libclang bug
       auto real_cursor=clang_getCursor(cx_tu, clang_getTokenLocation(cx_tu, cx_tokens[i]));
@@ -16,7 +17,8 @@ clangmm::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_
     else if(cx_cursors[i].kind==CXCursor_ClassDecl || cx_cursors[i].kind==CXCursor_StructDecl) {
       Token token(cx_tu, cx_tokens[i], cx_cursors[i]);
       auto cursor=token.get_cursor();
-      if(token.offsets.second!=cursor.get_source_range().get_offsets().second && token.offsets.first!=cursor.get_source_location().get_offset() && token.is_identifier()) {
+      auto token_offsets=token.get_source_range().get_offsets();
+      if(token_offsets.second!=cursor.get_source_range().get_offsets().second && token_offsets.first!=cursor.get_source_location().get_offset() && token.is_identifier()) {
         class VisitorData {
         public:
           std::string path;
@@ -24,7 +26,7 @@ clangmm::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_
           std::pair<Offset, Offset> offsets;
           CXCursor found_cursor;
         };
-        VisitorData data{token.get_source_location().get_path(), false, token.offsets, clang_getNullCursor()};
+        VisitorData data{token.get_source_location().get_path(), false, token_offsets, clang_getNullCursor()};
         auto translation_unit_cursor = clang_getTranslationUnitCursor(cx_tu);
         clang_visitChildren(translation_unit_cursor, [](CXCursor cx_cursor, CXCursor cx_parent, CXClientData data_) {
           auto data=static_cast<VisitorData*>(data_);
@@ -69,7 +71,7 @@ std::vector<std::pair<clangmm::Offset, clangmm::Offset> > clangmm::Tokens::get_s
           auto referenced_usrs=referenced.get_all_usr_extended();
           for(auto &usr: referenced_usrs) {
             if(usrs.count(usr)) {
-              offsets.emplace_back(token.offsets);
+              offsets.emplace_back(token.get_source_range().get_offsets());
               break;
             }
           }

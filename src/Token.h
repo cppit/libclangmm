@@ -20,7 +20,7 @@ namespace clangmm {
     };
   private:
     Token(CXTranslationUnit &cx_tu, CXToken &cx_token, CXCursor &cx_cursor): 
-      cx_tu(cx_tu), cx_token(cx_token), cx_cursor(cx_cursor), offsets(get_source_range().get_offsets()) {};
+      cx_tu(cx_tu), cx_token(cx_token), cx_cursor(cx_cursor) {}
   public:
     Kind get_kind() const;
     std::string get_spelling() const;
@@ -42,7 +42,6 @@ namespace clangmm {
     CXTranslationUnit &cx_tu;
     CXToken& cx_token;
     CXCursor& cx_cursor;
-    std::pair<clangmm::Offset, clangmm::Offset> offsets;
   };
 }  // namespace clangmm
 #endif  // TOKEN_H_
