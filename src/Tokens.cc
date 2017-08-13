@@ -62,12 +62,12 @@ std::vector<std::pair<clangmm::Offset, clangmm::Offset> > clangmm::Tokens::get_s
     if(token.is_identifier()) {
       auto referenced=token.get_cursor().get_referenced();
       if(referenced) {
-        const char *strstr_ptr=nullptr;
+        bool equal_spelling=false;
         auto cx_string=clang_getTokenSpelling(cx_tu, token.cx_token);
         if(cx_string.data)
-          strstr_ptr=std::strstr(static_cast<const char*>(cx_string.data), spelling.c_str());
+          equal_spelling=std::strcmp(static_cast<const char*>(cx_string.data), spelling.c_str())==0;
         clang_disposeString(cx_string);
-        if(strstr_ptr) {
+        if(equal_spelling) {
           auto referenced_usrs=referenced.get_all_usr_extended();
           for(auto &usr: referenced_usrs) {
             if(usrs.count(usr)) {
