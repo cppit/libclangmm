@@ -4,7 +4,15 @@ clangmm::SourceRange::SourceRange(clangmm::SourceLocation &start, clangmm::Sourc
   cx_range = clang_getRange(start.cx_location, end.cx_location);
 }
 
-std::pair<clangmm::Offset, clangmm::Offset> clangmm::SourceRange::get_offsets() {
-  SourceLocation start(clang_getRangeStart(cx_range)), end(clang_getRangeEnd(cx_range));
-  return {start.get_offset(), end.get_offset()};
+clangmm::SourceLocation clangmm::SourceRange::get_start() const {
+  return SourceLocation(clang_getRangeStart(cx_range));
+}
+
+clangmm::SourceLocation clangmm::SourceRange::get_end() const {
+  return SourceLocation(clang_getRangeEnd(cx_range));
+}
+
+
+std::pair<clangmm::Offset, clangmm::Offset> clangmm::SourceRange::get_offsets() const {
+  return {get_start().get_offset(), get_end().get_offset()};
 }
