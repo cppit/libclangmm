@@ -191,6 +191,7 @@ namespace clangmm {
     Cursor() { cx_cursor=clang_getNullCursor(); }
     Cursor(const CXCursor &cx_cursor) : cx_cursor(cx_cursor) {}
     Kind get_kind() const;
+    static bool is_similar_kind(Kind kind, Kind other_kind);
     Type get_type() const;
     SourceLocation get_source_location() const;
     SourceRange get_source_range() const;

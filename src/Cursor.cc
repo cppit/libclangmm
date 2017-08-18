@@ -18,6 +18,27 @@ clangmm::Cursor::Kind clangmm::Cursor::get_kind() const {
   return static_cast<Kind>(clang_getCursorKind(cx_cursor));
 }
 
+bool clangmm::Cursor::is_similar_kind(Kind kind, Kind other_kind) {
+  auto is_function_or_method=[](Kind kind) {
+    if(kind==Kind::FunctionDecl || kind==Kind::CXXMethod || kind==Kind::FunctionTemplate)
+      return true;
+    return false;
+  };
+  auto is_class_or_struct=[](Kind kind) {
+    if(kind==Kind::ClassDecl || kind==Kind::StructDecl || kind==Kind::ClassTemplate ||
+       kind==Cursor::Kind::Constructor || kind==Cursor::Kind::Destructor || kind==Cursor::Kind::FunctionTemplate)
+      return true;
+    return false;
+  };
+  if(kind==Kind::FunctionTemplate)
+    return is_function_or_method(other_kind) || is_class_or_struct(other_kind);
+  if(is_function_or_method(kind))
+    return is_function_or_method(other_kind);
+  if(is_class_or_struct(kind))
+    return is_class_or_struct(other_kind);
+  return kind==other_kind;
+}
+
 clangmm::Cursor::Type clangmm::Cursor::get_type() const {
   return Type(clang_getCursorType(cx_cursor));
 }
