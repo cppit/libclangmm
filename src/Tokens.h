@@ -11,7 +11,7 @@ namespace clangmm {
   class Tokens : public std::vector<clangmm::Token> {
     friend class TranslationUnit;
     friend class Diagnostic;
-    Tokens(CXTranslationUnit &cx_tu, const SourceRange &range);
+    Tokens(CXTranslationUnit &cx_tu, const SourceRange &range, bool annotate_tokens=true);
   public:
     ~Tokens();
     std::vector<std::pair<clangmm::Offset, clangmm::Offset> > get_similar_token_offsets(Cursor::Kind kind, const std::string &spelling,

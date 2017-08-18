@@ -11,7 +11,7 @@ clangmm::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagn
   SourceLocation start_location(clang_getDiagnosticLocation(cx_diagnostic));
   path=start_location.get_path();
   auto start_offset=start_location.get_offset();
-  Tokens tokens(cx_tu, SourceRange(start_location, start_location));
+  Tokens tokens(cx_tu, SourceRange(start_location, start_location), false);
   if(tokens.size()==1)
     offsets={start_offset, tokens.begin()->get_source_range().get_offsets().second};
   

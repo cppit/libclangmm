@@ -4,9 +4,19 @@
 #include <cstring>
 #include <map>
 
-clangmm::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range): cx_tu(cx_tu) {
+clangmm::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range, bool annotate_tokens): cx_tu(cx_tu) {
   unsigned num_tokens;
   clang_tokenize(cx_tu, range.cx_range, &cx_tokens, &num_tokens);
+  
+  if(!annotate_tokens) {
+    cx_cursors=std::unique_ptr<CXCursor[]>(new CXCursor[num_tokens]);
+    for (unsigned i = 0; i < num_tokens; i++) {
+      cx_cursors[i]=clang_getNullCursor();
+      emplace_back(Token(cx_tu, cx_tokens[i], cx_cursors[i]));
+    }
+    return;
+  }
+  
   cx_cursors=std::unique_ptr<CXCursor[]>(new CXCursor[num_tokens]); // To avoid allocation with initialization
   clang_annotateTokens(cx_tu, cx_tokens, num_tokens, cx_cursors.get());
   
