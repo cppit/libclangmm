@@ -1,6 +1,6 @@
 #include "SourceRange.h"
 
-clangmm::SourceRange::SourceRange(clangmm::SourceLocation &start, clangmm::SourceLocation &end) {
+clangmm::SourceRange::SourceRange(const clangmm::SourceLocation &start, const clangmm::SourceLocation &end) {
   cx_range = clang_getRange(start.cx_location, end.cx_location);
 }
 

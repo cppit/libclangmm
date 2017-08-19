@@ -9,7 +9,7 @@ namespace clangmm {
   class SourceRange {
   public:
     SourceRange(const CXSourceRange& cx_range) : cx_range(cx_range) {}
-    SourceRange(SourceLocation &start, SourceLocation &end);
+    SourceRange(const SourceLocation &start, const SourceLocation &end);
     SourceLocation get_start() const;
     SourceLocation get_end() const;
     std::pair<clangmm::Offset, clangmm::Offset> get_offsets() const;
