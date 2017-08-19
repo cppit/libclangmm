@@ -8,12 +8,13 @@ clangmm::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagn
   severity_spelling=get_severity_spelling(severity);
   spelling=to_string(clang_getDiagnosticSpelling(cx_diagnostic));
   
-  SourceLocation start_location(clang_getDiagnosticLocation(cx_diagnostic));
-  path=start_location.get_path();
-  auto start_offset=start_location.get_offset();
-  Tokens tokens(cx_tu, SourceRange(start_location, start_location), false);
+  SourceLocation location(clang_getDiagnosticLocation(cx_diagnostic));
+  path=location.get_path();
+  auto offset=location.get_offset();
+  auto corrected_location=SourceLocation(cx_tu, path.c_str(), offset.line, offset.index); // to avoid getting macro tokens
+  Tokens tokens(cx_tu, SourceRange(corrected_location, corrected_location), false);
   if(tokens.size()==1)
-    offsets={start_offset, tokens.begin()->get_source_range().get_offsets().second};
+    offsets={offset, tokens.begin()->get_source_range().get_offsets().second};
   
   unsigned num_fix_its=clang_getDiagnosticNumFixIts(cx_diagnostic);
   for(unsigned c=0;c<num_fix_its;c++) {

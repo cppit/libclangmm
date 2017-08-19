@@ -2,6 +2,7 @@
 #define SOURCELOCATION_H_
 #include <clang-c/Index.h>
 #include <string>
+#include <ostream>
 
 namespace clangmm {
   class Offset {
@@ -15,19 +16,26 @@ namespace clangmm {
   
   class SourceLocation {
     friend class TranslationUnit;
+    friend class Diagnostic;
     SourceLocation(CXTranslationUnit &tu, const std::string &filepath, unsigned offset);
     SourceLocation(CXTranslationUnit &tu, const std::string &filepath, unsigned line, unsigned column);
   public:
     SourceLocation(const CXSourceLocation& cx_location) : cx_location(cx_location) {}
 
   public:
-    std::string get_path();
-    clangmm::Offset get_offset();
+    std::string get_path() const;
+    clangmm::Offset get_offset() const;
+
+    friend std::ostream &operator<<(std::ostream &os, const SourceLocation &location) {
+      auto offset=location.get_offset();
+      os << location.get_path() << ':' << offset.line << ':' << offset.index;
+      return os;
+    }
 
     CXSourceLocation cx_location;
     
   private:
-    void get_data(std::string *path, unsigned *line, unsigned *column, unsigned *offset);
+    void get_data(std::string *path, unsigned *line, unsigned *column, unsigned *offset) const;
   };
 
 }  // namespace clangmm

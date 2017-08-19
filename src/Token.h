@@ -5,7 +5,6 @@
 #include "SourceRange.h"
 #include "Cursor.h"
 #include <string>
-#include <ostream>
 
 namespace clangmm {
   class Token {
@@ -31,11 +30,7 @@ namespace clangmm {
     bool is_identifier() const;
     
     friend std::ostream &operator<<(std::ostream &os, const Token &token) {
-      auto offsets=token.get_source_range().get_offsets();
-      os << token.get_source_location().get_path() << ":"
-         << offsets.first.line << ":" << offsets.first.index << "-"
-         << offsets.second.line << ":" << offsets.second.index << " "
-         << token.get_spelling();
+      os << token.get_source_range() << ' ' << token.get_spelling();
       return os;
     }
 

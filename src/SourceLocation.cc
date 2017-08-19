@@ -14,18 +14,18 @@ clangmm::SourceLocation::SourceLocation(CXTranslationUnit &tu, const std::string
   cx_location = clang_getLocation(tu, file, line, column);
 }
 
-std::string clangmm::SourceLocation::get_path() {
+std::string clangmm::SourceLocation::get_path() const {
   std::string path;
   get_data(&path, nullptr, nullptr, nullptr);
   return path;
 }
-clangmm::Offset clangmm::SourceLocation::get_offset() {
+clangmm::Offset clangmm::SourceLocation::get_offset() const {
   unsigned line, index;
   get_data(nullptr, &line, &index, nullptr);
   return {line, index};
 }
 
-void clangmm::SourceLocation::get_data(std::string* path, unsigned *line, unsigned *column, unsigned *offset) {
+void clangmm::SourceLocation::get_data(std::string* path, unsigned *line, unsigned *column, unsigned *offset) const {
   if(path==nullptr)
     clang_getExpansionLocation(cx_location, NULL, line, column, offset);
   else {

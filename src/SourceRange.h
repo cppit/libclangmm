@@ -13,6 +13,12 @@ namespace clangmm {
     SourceLocation get_start() const;
     SourceLocation get_end() const;
     std::pair<clangmm::Offset, clangmm::Offset> get_offsets() const;
+    
+    friend std::ostream &operator<<(std::ostream &os, const SourceRange &range) {
+      os << range.get_start() << '-' << range.get_end();
+      return os;
+    }
+    
     CXSourceRange cx_range;
   };
 }  // namespace clangmm

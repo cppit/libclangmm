@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 #include <unordered_set>
-#include <ostream>
 
 namespace clangmm {
   class Cursor {
@@ -215,11 +214,7 @@ namespace clangmm {
     std::string get_brief_comments() const;
     
     friend std::ostream &operator<<(std::ostream &os, const Cursor &cursor) {
-      auto offsets=cursor.get_source_range().get_offsets();
-      os << cursor.get_source_location().get_path() << ":"
-         << offsets.first.line << ":" << offsets.first.index << "-"
-         << offsets.second.line << ":" << offsets.second.index << " "
-         << cursor.get_spelling();
+      os << cursor.get_source_range() << ' ' << cursor.get_spelling();
       return os;
     }
     
