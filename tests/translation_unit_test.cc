@@ -1,10 +1,11 @@
-#include <boost/test/unit_test.hpp>
 #include "clangmm.h"
 #include <string>
 #include <map>
+#include <cassert>
 
-BOOST_AUTO_TEST_CASE(translation_unit) {
-  std::string path("./case/main.cpp");
+int main() {
+  std::string tests_path=LIBCLANGMM_TESTS_PATH;
+  std::string path(tests_path+"/case/main.cpp");
 
   clangmm::Index index(0, 0);
   
@@ -15,5 +16,5 @@ BOOST_AUTO_TEST_CASE(translation_unit) {
                        "return 0\n"
                        "}\n";
 
-  BOOST_CHECK(tu.reparse(buffer) == 0);
+  assert(tu.reparse(buffer) == 0);
 }

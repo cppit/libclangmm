@@ -14,15 +14,10 @@ Developed for [juCi++](https://github.com/cppit/jucipp), a lightweight, platform
 See [installation guide](https://github.com/cppit/libclangmm/blob/master/docs/install.md)
 
 # Tests #
-To run the unit tests, first enable the CMake option `LIBCLANGMM_BUILD_TESTS`:
+To run the unit tests:
 ```sh
 mkdir build && cd build
-cmake -DLIBCLANGMM_BUILD_TESTS=ON ..
-```
-Then, run the tests:
-```sh
+cmake -DBUILD_TESTING=1 ..
 make
-cd ../tests
-../build/tests/clangmm_tests --log_level=all
+make test
 ```
-For more options, see the [documentation of boost’s unit testing framework](http://www.boost.org/doc/libs/1_58_0/libs/test/doc/html/utf/user-guide/runtime-config/reference.html).

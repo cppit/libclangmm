@@ -1,12 +1,10 @@
-#include <boost/test/unit_test.hpp>
 #include "clangmm.h"
 #include <string>
+#include <cassert>
 
-BOOST_AUTO_TEST_CASE(code_complete_results) {
-
-  // [ Should be changed with mockery
-
-  std::string path("./case/main.cpp");
+int main() {
+  std::string tests_path=LIBCLANGMM_TESTS_PATH;
+  std::string path(tests_path+"/case/main.cpp");
 
   clangmm::Index index(0, 0);
   clangmm::TranslationUnit tu(index, path, {});
@@ -18,8 +16,6 @@ BOOST_AUTO_TEST_CASE(code_complete_results) {
                      "return 0\n"
                      "}";
 
-  // ]
-
   tu.reparse(buffer);
   auto results=tu.get_code_completions(buffer, 4, 5);
 
@@ -30,5 +26,5 @@ BOOST_AUTO_TEST_CASE(code_complete_results) {
       break;
     }
   }
-  BOOST_CHECK(substr_found);
+  assert(substr_found);
 }

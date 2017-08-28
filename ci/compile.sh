@@ -7,10 +7,10 @@ if [ "${cmake_command}" == "" ]; then
     else
       mingw="mingw32"
     fi
-    cmake_command="cmake -G\"MSYS Makefiles\" -DCMAKE_INSTALL_PREFIX=/${mingw} -LIBCLANGMM_BUILD_TESTS=ON .."
+    cmake_command="cmake -G\"MSYS Makefiles\" -DCMAKE_INSTALL_PREFIX=/${mingw} -DBUILD_TESTING=1 .."
     make_command="make"
   else
-    cmake_command="cmake -LIBCLANGMM_BUILD_TESTS=ON .."
+    cmake_command="cmake -DBUILD_TESTING=1 .."
   fi
 fi
 
