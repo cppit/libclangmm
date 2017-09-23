@@ -21,18 +21,18 @@ namespace clangmm {
 
   class CompletionChunk {
   public:
-    CompletionChunk(std::string chunk, CompletionChunkKind kind);
-    std::string chunk;
+    CompletionChunk(std::string text, CompletionChunkKind kind);
+    std::string text;
     CompletionChunkKind kind;
   };
 
   class CompletionString {
   public:
     explicit CompletionString(const CXCompletionString &cx_completion_sting);
-    bool available();
-    std::vector<CompletionChunk> get_chunks();
-    std::string get_brief_comments();
-    unsigned get_num_chunks();
+    bool available() const;
+    std::vector<CompletionChunk> get_chunks() const;
+    std::string get_brief_comments() const;
+    unsigned get_num_chunks() const;
     
     CXCompletionString cx_completion_sting;
   };
