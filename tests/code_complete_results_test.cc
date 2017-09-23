@@ -21,7 +21,7 @@ int main() {
 
   bool substr_found=false;
   for(unsigned c=0;c<results.size();c++) {
-    if(results.get(c).get_chunks()[1].chunk=="substr") {
+    if(results.get(c).get_chunks()[1].text=="substr") {
       substr_found=true;
       break;
     }

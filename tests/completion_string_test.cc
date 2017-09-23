@@ -6,7 +6,7 @@ int main() {
   {
     clangmm::CompletionChunk str("(", clangmm::CompletionChunk_LeftBrace);
   
-    assert(str.chunk == "(");
+    assert(str.text == "(");
     assert(str.kind == clangmm::CompletionChunk_LeftBrace);
   }
   
