@@ -23,6 +23,6 @@ std::vector<clangmm::CompletionChunk> clangmm::CompletionString::get_chunks() co
   return chunks;
 }
 
-std::string clangmm::CompletionString::get_brief_comments() const {
+std::string clangmm::CompletionString::get_brief_comment() const {
   return to_string(clang_getCompletionBriefComment(cx_completion_sting));
 }

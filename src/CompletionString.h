@@ -31,7 +31,7 @@ namespace clangmm {
     explicit CompletionString(const CXCompletionString &cx_completion_sting);
     bool available() const;
     std::vector<CompletionChunk> get_chunks() const;
-    std::string get_brief_comments() const;
+    std::string get_brief_comment() const;
     unsigned get_num_chunks() const;
     
     CXCompletionString cx_completion_sting;
