@@ -1,6 +1,5 @@
 #include "CodeCompleteResults.h"
 #include "CompletionString.h"
-#include <exception>
 #include "Utility.h"
 
 clangmm::CodeCompleteResults::CodeCompleteResults(CXTranslationUnit &cx_tu, 
@@ -34,9 +33,6 @@ unsigned clangmm::CodeCompleteResults::size() const {
 }
 
 clangmm::CompletionString clangmm::CodeCompleteResults::get(unsigned i) const {
-  if (i >= size()) {
-    throw std::invalid_argument("clangmm::CodeCompleteResults::get(unsigned i): i>=size()");
-  }
   return CompletionString(cx_results->Results[i].CompletionString);
 }
 
