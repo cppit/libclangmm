@@ -2,7 +2,6 @@
 #define UTILITY_H_
 #include <clang-c/Index.h>
 #include <string>
-#include <memory>
 
 namespace clangmm {
   std::string to_string(CXString cx_string);
