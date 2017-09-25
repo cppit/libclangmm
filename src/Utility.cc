@@ -10,14 +10,14 @@ std::string clangmm::to_string(CXString cx_string) {
   return string;
 }
 
-clangmm::CString::CString(const CXString &cx_string) : cx_string(cx_string) {
+clangmm::String::String(const CXString &cx_string) : cx_string(cx_string) {
   if(cx_string.data!=NULL)
-    data=clang_getCString(cx_string);
+    c_str=clang_getCString(cx_string);
   else
-    data="";
+    c_str="";
 }
 
-clangmm::CString::~CString() {
+clangmm::String::~String() {
   if(cx_string.data!=NULL)
     clang_disposeString(cx_string);
 }

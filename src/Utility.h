@@ -6,12 +6,12 @@
 namespace clangmm {
   std::string to_string(CXString cx_string);
   
-  class CString {
+  class String {
   public:
-    CString(const CXString &cx_string);
-    ~CString();
+    String(const CXString &cx_string);
+    ~String();
     CXString cx_string;
-    const char *data;
+    const char *c_str;
   };
   
   void remove_include_guard(std::string &buffer);
