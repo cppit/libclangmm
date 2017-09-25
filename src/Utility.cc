@@ -10,6 +10,18 @@ std::string clangmm::to_string(CXString cx_string) {
   return string;
 }
 
+clangmm::CString::CString(const CXString &cx_string) : cx_string(cx_string) {
+  if(cx_string.data!=NULL)
+    data=clang_getCString(cx_string);
+  else
+    data="";
+}
+
+clangmm::CString::~CString() {
+  if(cx_string.data!=NULL)
+    clang_disposeString(cx_string);
+}
+
 void clangmm::remove_include_guard(std::string &buffer) {
   static std::regex ifndef_regex1("^[ \t]*#[ \t]*ifndef[ \t]+([A-Za-z0-9_]+).*$");
   static std::regex ifndef_regex2("^[ \t]*#[ \t]*if[ \t]+![ \t]*defined[ \t]*\\([ \t]*([A-Za-z0-9_]+).*$");
