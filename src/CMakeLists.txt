@@ -15,9 +15,6 @@ add_library(clangmm
   Utility.cc
 )
 
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake_modules")
-find_package(LibClang REQUIRED)
-
 include_directories(${LIBCLANG_INCLUDE_DIRS})
 target_link_libraries(clangmm ${LIBCLANG_LIBRARIES})
 target_include_directories(clangmm PUBLIC ${LIBCLANG_INCLUDE_DIRS} .)

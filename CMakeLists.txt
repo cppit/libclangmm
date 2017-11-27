@@ -12,6 +12,9 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
   set(NOT_SUB_PROJECT 1)
 endif()
 
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake_modules")
+find_package(LibClang REQUIRED)
+
 add_subdirectory(src)
 
 option(BUILD_TESTING OFF)
