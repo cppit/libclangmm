@@ -19,7 +19,6 @@ if [ "${make_command}" == "" ]; then
 fi
 
 cd libclangmm || echo "Can't cd into libclangmm"
-git submodule update --init --recursive # appveyor doesn't checkout recursively
 mkdir -p build && cd build || echo "Error making build directory"
 sh -c "${cmake_command}" || echo "Cmake configuration failed"
 exec sh -c "${make_command}"

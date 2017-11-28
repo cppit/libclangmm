@@ -14,7 +14,6 @@ before_install:
   - ./ci/update_ci.sh
 
 script:
-  - script=compile CXX=clang++ CC=clang ./ci/execute.sh
+  - script=static_analysis ./ci/execute.sh
   - script=clean ./ci/execute.sh
   - script=compile CXX=g++ CC=gcc ./ci/execute.sh
-  - script=static_analysis ./ci/execute.sh
