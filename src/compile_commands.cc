@@ -1,4 +1,4 @@
-#include "CompileCommands.h"
+#include "compile_commands.h"
 
 clangmm::CompileCommands::CompileCommands(const std::string &filename, CompilationDatabase &db) {
   if(!filename.empty())

@@ -1,5 +1,5 @@
-#include "Tokens.h"
-#include "Utility.h"
+#include "tokens.h"
+#include "utility.h"
 #include <unordered_set>
 #include <cstring>
 #include <map>

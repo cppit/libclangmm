@@ -1,5 +1,5 @@
-#include "Cursor.h"
-#include "Utility.h"
+#include "cursor.h"
+#include "utility.h"
 #include <algorithm>
 
 std::string clangmm::Cursor::Type::get_spelling() const {

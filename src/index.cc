@@ -1,4 +1,4 @@
-#include "Index.h"
+#include "index.h"
 
 clangmm::Index::Index(int excludeDeclarationsFromPCH, int displayDiagnostics) {
   cx_index = clang_createIndex(excludeDeclarationsFromPCH, displayDiagnostics);

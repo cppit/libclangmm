@@ -1,7 +1,7 @@
 #ifndef COMPILECOMMANDS_H_
 #define COMPILECOMMANDS_H_
-#include "CompilationDatabase.h"
-#include "CompileCommand.h"
+#include "compilation_database.h"
+#include "compile_command.h"
 #include <clang-c/CXCompilationDatabase.h>
 #include <string>
 #include <vector>

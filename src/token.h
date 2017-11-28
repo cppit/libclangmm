@@ -1,9 +1,9 @@
 #ifndef TOKEN_H_
 #define TOKEN_H_
 #include <clang-c/Index.h>
-#include "SourceLocation.h"
-#include "SourceRange.h"
-#include "Cursor.h"
+#include "source_location.h"
+#include "source_range.h"
+#include "cursor.h"
 #include <string>
 
 namespace clangmm {

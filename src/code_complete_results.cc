@@ -1,6 +1,6 @@
-#include "CodeCompleteResults.h"
-#include "CompletionString.h"
-#include "Utility.h"
+#include "code_complete_results.h"
+#include "completion_string.h"
+#include "utility.h"
 
 clangmm::CodeCompleteResults::CodeCompleteResults(CXTranslationUnit &cx_tu, 
                                                 const std::string &buffer,

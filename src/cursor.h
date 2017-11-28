@@ -1,8 +1,8 @@
 #ifndef CURSOR_H_
 #define CURSOR_H_
 #include <clang-c/Index.h>
-#include "SourceLocation.h"
-#include "SourceRange.h"
+#include "source_location.h"
+#include "source_range.h"
 #include <string>
 #include <vector>
 #include <unordered_set>

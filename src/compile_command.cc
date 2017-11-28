@@ -1,6 +1,6 @@
-#include "CompileCommand.h"
-#include "CompileCommands.h"
-#include "Utility.h"
+#include "compile_command.h"
+#include "compile_commands.h"
+#include "utility.h"
 
 std::vector<std::string> clangmm::CompileCommand::get_arguments() {
   unsigned size = clang_CompileCommand_getNumArgs(cx_command);

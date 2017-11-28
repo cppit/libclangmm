@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <clang-c/Index.h>
-#include "SourceRange.h"
+#include "source_range.h"
 
 namespace clangmm {
   class Diagnostic {

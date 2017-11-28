@@ -1,4 +1,4 @@
-#include "CompilationDatabase.h"
+#include "compilation_database.h"
 #include <exception>
 
 clangmm::CompilationDatabase::CompilationDatabase(const std::string &project_path) {

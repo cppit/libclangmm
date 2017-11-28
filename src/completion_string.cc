@@ -1,5 +1,5 @@
-#include "CompletionString.h"
-#include "Utility.h"
+#include "completion_string.h"
+#include "utility.h"
 
 clangmm::CompletionChunk::CompletionChunk(std::string text, CompletionChunkKind kind)
     : text(std::move(text)), kind(kind) {}

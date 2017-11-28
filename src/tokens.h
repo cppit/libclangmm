@@ -1,8 +1,8 @@
 #ifndef TOKENS_H_
 #define TOKENS_H_
 #include <clang-c/Index.h>
-#include "SourceRange.h"
-#include "Token.h"
+#include "source_range.h"
+#include "token.h"
 #include <unordered_set>
 #include <vector>
 #include <memory>

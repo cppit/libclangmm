@@ -3,7 +3,7 @@
 #include <clang-c/Index.h>
 #include <map>
 #include <string>
-#include "CompletionString.h"
+#include "completion_string.h"
 
 namespace clangmm {
   class CodeCompleteResults {

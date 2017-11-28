@@ -1,7 +1,7 @@
-#include "TranslationUnit.h"
-#include "SourceLocation.h"
-#include "Tokens.h"
-#include "Utility.h"
+#include "translation_unit.h"
+#include "source_location.h"
+#include "tokens.h"
+#include "utility.h"
 #include <fstream>
 #include <sstream>
 

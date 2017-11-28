@@ -1,7 +1,7 @@
-#include "Diagnostic.h"
-#include "SourceLocation.h"
-#include "Tokens.h"
-#include "Utility.h"
+#include "diagnostic.h"
+#include "source_location.h"
+#include "tokens.h"
+#include "utility.h"
 
 clangmm::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnostic) {
   severity=clang_getDiagnosticSeverity(cx_diagnostic);

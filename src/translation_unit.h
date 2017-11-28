@@ -5,11 +5,11 @@
 #include <vector>
 #include <map>
 #include <memory>
-#include "Index.h"
-#include "Diagnostic.h"
-#include "Tokens.h"
-#include "CodeCompleteResults.h"
-#include "Cursor.h"
+#include "index.h"
+#include "diagnostic.h"
+#include "tokens.h"
+#include "code_complete_results.h"
+#include "cursor.h"
 
 namespace clangmm {
   class TranslationUnit {
