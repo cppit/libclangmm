@@ -12,6 +12,9 @@ namespace clangmm {
     CodeCompleteResults(CXTranslationUnit &cx_tu, const std::string &buffer,
                         unsigned line_num, unsigned column);
   public:
+    CodeCompleteResults(CodeCompleteResults &&rhs) : cx_results(rhs.cx_results) {
+      rhs.cx_results = nullptr;
+    }
     ~CodeCompleteResults();
     CompletionString get(unsigned index) const;
     unsigned size() const;

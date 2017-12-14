@@ -34,7 +34,7 @@ namespace clangmm {
     std::string get_brief_comment() const;
     unsigned get_num_chunks() const;
     
-    CXCompletionString cx_completion_sting;
+    CXCompletionString cx_completion_string;
   };
 }  // namespace clangmm
 #endif  // COMPLETIONSTRING_H_
