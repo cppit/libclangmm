@@ -4,8 +4,8 @@
 clangmm::CompletionChunk::CompletionChunk(std::string text, CompletionChunkKind kind)
     : text(std::move(text)), kind(kind) {}
 
-clangmm::CompletionString::CompletionString(const CXCompletionString &cx_completion_sting)
-    : cx_completion_string(cx_completion_sting) {}
+clangmm::CompletionString::CompletionString(const CXCompletionString &cx_completion_string)
+    : cx_completion_string(cx_completion_string) {}
 
 bool clangmm::CompletionString::available() const {
   return clang_getCompletionAvailability(cx_completion_string) == CXAvailability_Available;

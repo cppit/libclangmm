@@ -28,7 +28,7 @@ namespace clangmm {
 
   class CompletionString {
   public:
-    explicit CompletionString(const CXCompletionString &cx_completion_sting);
+    explicit CompletionString(const CXCompletionString &cx_completion_string);
     bool available() const;
     std::vector<CompletionChunk> get_chunks() const;
     std::string get_brief_comment() const;
