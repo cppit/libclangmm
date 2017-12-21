@@ -18,16 +18,31 @@ clangmm::CodeCompleteResults::CodeCompleteResults(CXTranslationUnit &cx_tu,
                                   files,
                                   1,
                                   clang_defaultCodeCompleteOptions()|CXCodeComplete_IncludeBriefComments);
-  if(cx_results!=NULL)
+  if(cx_results)
     clang_sortCodeCompletionResults(cx_results->Results, cx_results->NumResults);
 }
 
+clangmm::CodeCompleteResults::CodeCompleteResults(CodeCompleteResults &&rhs) : cx_results(rhs.cx_results) {
+  rhs.cx_results = nullptr;
+}
+
+clangmm::CodeCompleteResults &clangmm::CodeCompleteResults::operator=(CodeCompleteResults &&rhs) {
+  if(this!=&rhs) {
+    if(cx_results)
+      clang_disposeCodeCompleteResults(cx_results);
+    cx_results=rhs.cx_results;
+    rhs.cx_results=nullptr;
+  }
+  return *this;
+}
+
 clangmm::CodeCompleteResults::~CodeCompleteResults() {
-  clang_disposeCodeCompleteResults(cx_results);
+  if(cx_results)
+    clang_disposeCodeCompleteResults(cx_results);
 }
 
 unsigned clangmm::CodeCompleteResults::size() const {
-  if(cx_results==NULL)
+  if(!cx_results)
     return 0;
   return cx_results->NumResults;
 }
@@ -37,5 +52,7 @@ clangmm::CompletionString clangmm::CodeCompleteResults::get(unsigned i) const {
 }
 
 std::string clangmm::CodeCompleteResults::get_usr() const {
+  if(!cx_results)
+    return std::string();
   return to_string(clang_codeCompleteGetContainerUSR(cx_results));
 }
