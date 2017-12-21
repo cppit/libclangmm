@@ -3,6 +3,7 @@
 #include <clang-c/Index.h>
 #include <string>
 #include <vector>
+#include "cursor.h"
 
 namespace clangmm {
   enum CompletionChunkKind {
@@ -31,8 +32,11 @@ namespace clangmm {
     explicit CompletionString(const CXCompletionString &cx_completion_string);
     bool available() const;
     std::vector<CompletionChunk> get_chunks() const;
-    std::string get_brief_comment() const;
     unsigned get_num_chunks() const;
+    std::string get_brief_comment() const;
+    
+    /// Search for the corresponding cursor
+    Cursor get_cursor(CXTranslationUnit &tu) const;
     
     CXCompletionString cx_completion_string;
   };

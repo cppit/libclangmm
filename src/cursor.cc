@@ -59,6 +59,20 @@ std::string clangmm::Cursor::get_display_name() const {
   return to_string(clang_getCursorDisplayName(cx_cursor));
 }
 
+std::string clangmm::Cursor::get_token_spelling() const {
+  auto spelling=get_spelling();
+  for(size_t i=0;i<spelling.size();++i) {
+    if(spelling[i]=='<' || spelling[i]=='(') {
+      if(i>0 && spelling[0]=='~')
+        return spelling.substr(1, i-1);
+      return spelling.substr(0, i);
+    }
+  }
+  if(!spelling.empty() && spelling[0]=='~')
+    return spelling.substr(1);
+  return spelling;
+}
+
 std::string clangmm::Cursor::get_usr() const {
   return to_string(clang_getCursorUSR(cx_cursor));
 }
@@ -66,19 +80,6 @@ std::string clangmm::Cursor::get_usr() const {
 std::string clangmm::Cursor::get_usr_extended() const {
   if(!is_valid_kind())
     return std::string();
-  
-  const auto token_spelling=[](const std::string &spelling) -> std::string {
-    for(size_t i=0;i<spelling.size();++i) {
-      if(spelling[i]=='<' || spelling[i]=='(') {
-        if(i>0 && spelling[0]=='~')
-          return spelling.substr(1, i-1);
-        return spelling.substr(0, i);
-      }
-    }
-    if(!spelling.empty() && spelling[0]=='~')
-      return spelling.substr(1);
-    return spelling;
-  };
   
   auto cursor=*this;
   auto kind=cursor.get_kind();
@@ -88,11 +89,11 @@ std::string clangmm::Cursor::get_usr_extended() const {
     auto parent=cursor.get_semantic_parent();
     auto parent_kind=parent.get_kind();
     if((parent_kind==Cursor::Kind::ClassDecl || parent_kind==Cursor::Kind::StructDecl || parent_kind==Cursor::Kind::ClassTemplate) &&
-       token_spelling(cursor.get_spelling())==token_spelling(parent.get_spelling()))
+       cursor.get_token_spelling()==parent.get_token_spelling())
       cursor=parent;
   }
   
-  std::string usr=token_spelling(cursor.get_spelling());
+  std::string usr=cursor.get_token_spelling();
   auto parent=cursor.get_semantic_parent();
   while((kind=parent.get_kind())!=Kind::TranslationUnit && parent.is_valid_kind()) {
     if(kind==Kind::CXXMethod || kind==Kind::FunctionDecl || kind==Kind::FunctionTemplate ||
@@ -102,7 +103,7 @@ std::string clangmm::Cursor::get_usr_extended() const {
       auto offset=location.get_offset();
       return std::to_string(offset.line)+':'+std::to_string(offset.index)+':'+location.get_path();
     }
-    usr+=':'+token_spelling(parent.get_spelling());
+    usr+=':'+parent.get_token_spelling();
     parent=parent.get_semantic_parent();
   }
   return usr;

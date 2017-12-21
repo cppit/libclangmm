@@ -196,6 +196,7 @@ namespace clangmm {
     SourceRange get_source_range() const;
     std::string get_spelling() const;
     std::string get_display_name() const;
+    std::string get_token_spelling() const;
     std::string get_usr() const;
     /// Improved usr that is also template and argument invariant
     std::string get_usr_extended() const;
