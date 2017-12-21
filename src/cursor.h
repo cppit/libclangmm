@@ -182,6 +182,7 @@ namespace clangmm {
       Type(const CXType &cx_type) : cx_type(cx_type) {}
       std::string get_spelling() const;
       Type get_result() const;
+      Cursor get_cursor() const;
       bool operator==(const Cursor::Type& rhs) const;
       
       CXType cx_type;

@@ -10,6 +10,10 @@ clangmm::Cursor::Type clangmm::Cursor::Type::get_result() const {
   return Type(clang_getResultType(cx_type));
 }
 
+clangmm::Cursor clangmm::Cursor::Type::get_cursor() const {
+  return Cursor(clang_getTypeDeclaration(cx_type));
+}
+
 bool clangmm::Cursor::Type::operator==(const Cursor::Type& rhs) const {
   return clang_equalTypes(cx_type, rhs.cx_type);
 }
