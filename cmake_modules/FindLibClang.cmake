@@ -14,10 +14,10 @@
 #               Known LLVM release numbers.
 
 # most recent versions come first
-set(LIBCLANG_KNOWN_LLVM_VERSIONS 6.0.0 6.0
-  5.0.1 5.0.0 5.0
+set(LIBCLANG_KNOWN_LLVM_VERSIONS 6.0.0 6.0 6
+  5.0.1 5.0.0 5.0 5
   4.0.1
-  4.0.0_1 4.0.0 4.0
+  4.0.0_1 4.0.0 4.0 4
   3.9.1
   3.9.0 3.9
   3.8.1
@@ -41,6 +41,8 @@ foreach (version ${LIBCLANG_KNOWN_LLVM_VERSIONS})
   list(APPEND libclang_llvm_header_search_paths
     # LLVM Debian/Ubuntu nightly packages: http://llvm.org/apt/
     "/usr/lib/llvm-${version}/include"
+    # LLVM Gentoo
+    "/usr/lib/llvm/${version}/include"
     # LLVM MacPorts
     "/opt/local/libexec/llvm-${version}/include"
     # LLVM Homebrew
@@ -52,6 +54,9 @@ foreach (version ${LIBCLANG_KNOWN_LLVM_VERSIONS})
   list(APPEND libclang_llvm_lib_search_paths
     # LLVM Debian/Ubuntu nightly packages: http://llvm.org/apt/
     "/usr/lib/llvm-${version}/lib/"
+    # LLVM Gentoo
+    "/usr/lib/llvm/${version}/lib64/"
+    "/usr/lib/llvm/${version}/lib32/"
     # LLVM MacPorts
     "/opt/local/libexec/llvm-${version}/lib"
     # LLVM Homebrew
