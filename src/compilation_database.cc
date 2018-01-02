@@ -2,13 +2,13 @@
 #include <exception>
 
 clangmm::CompilationDatabase::CompilationDatabase(const std::string &project_path) {
-  CXCompilationDatabase_Error error;
-  cx_db = clang_CompilationDatabase_fromDirectory(project_path.c_str(), &error);
-  if(error) {
-    //TODO: compile_commands.json is missing, create it?
-  }
+  cx_db = clang_CompilationDatabase_fromDirectory(project_path.c_str(), &cx_db_error);
 }
 
 clangmm::CompilationDatabase::~CompilationDatabase() {
   clang_CompilationDatabase_dispose(cx_db);
+}
+
+clangmm::CompilationDatabase::operator bool() const {
+  return !static_cast<bool>(cx_db_error);
 }

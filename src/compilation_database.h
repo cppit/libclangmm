@@ -6,9 +6,12 @@
 
 namespace clangmm {
   class CompilationDatabase {
+    CXCompilationDatabase_Error cx_db_error;
   public:
     explicit CompilationDatabase(const std::string &project_path);
     ~CompilationDatabase();
+    
+    operator bool() const;
 
     CXCompilationDatabase cx_db;
   };
