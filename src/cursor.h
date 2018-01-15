@@ -208,6 +208,7 @@ namespace clangmm {
     Cursor get_definition() const;
     Cursor get_semantic_parent() const;
     std::vector<Cursor> get_arguments() const;
+    std::vector<Cursor> get_all_overridden_cursors() const;
     operator bool() const;
     bool operator==(const Cursor& rhs) const;
     

@@ -161,6 +161,28 @@ std::vector<clangmm::Cursor> clangmm::Cursor::get_arguments() const {
   return cursors;
 }
 
+std::vector<clangmm::Cursor> clangmm::Cursor::get_all_overridden_cursors() const {
+  std::vector<Cursor> result;
+  if(get_kind()!=Kind::CXXMethod)
+    return result;
+  
+  class Recursive {
+  public:
+    static void overridden(std::vector<Cursor> &result, const Cursor &cursor, int depth) {
+      if(depth>0)
+        result.emplace_back(cursor);
+      CXCursor *cursors;
+      unsigned size;
+      clang_getOverriddenCursors(cursor.cx_cursor, &cursors, &size);
+      for(unsigned c=0;c<size;++c)
+        overridden(result, cursors[c], depth+1);
+      clang_disposeOverriddenCursors(cursors);
+    }
+  };
+  Recursive::overridden(result, *this, 0);
+  return result;
+}
+
 clangmm::Cursor::operator bool() const {
   return !clang_Cursor_isNull(cx_cursor);
 }
