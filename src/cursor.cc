@@ -22,6 +22,10 @@ clangmm::Cursor::Kind clangmm::Cursor::get_kind() const {
   return static_cast<Kind>(clang_getCursorKind(cx_cursor));
 }
 
+std::string clangmm::Cursor::get_kind_spelling() const {
+  return to_string(clang_getCursorKindSpelling(clang_getCursorKind(cx_cursor)));
+}
+
 bool clangmm::Cursor::is_similar_kind(Kind kind, Kind other_kind) {
   auto is_function_or_method=[](Kind kind) {
     if(kind==Kind::FunctionDecl || kind==Kind::CXXMethod || kind==Kind::FunctionTemplate)
