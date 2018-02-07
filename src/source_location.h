@@ -10,6 +10,9 @@ namespace clangmm {
     bool operator==(const Offset &o) const {return line==o.line && index==o.index;}
     bool operator!=(const Offset &o) const {return !(*this==o);}
     bool operator<(const Offset &o) const {return line<o.line || (line==o.line && index<o.index);}
+    bool operator>(const Offset &o) const {return o < *this;}
+    bool operator<=(const Offset &o) const {return (*this == o) || (*this < o);}
+    bool operator>=(const Offset &o) const {return (*this == o) || (*this > o);}
     unsigned line;
     unsigned index; //byte index in line (not char number)
   };
