@@ -157,6 +157,18 @@ clangmm::Cursor clangmm::Cursor::get_semantic_parent() const {
   return Cursor(clang_getCursorSemanticParent(cx_cursor));
 }
 
+std::vector<clangmm::Cursor> clangmm::Cursor::get_children() const {
+  std::vector<Cursor> result;
+  clang_visitChildren(cx_cursor,
+    [](CXCursor cur, CXCursor /*parent*/, CXClientData data) {
+      static_cast<std::vector<Cursor>*>(data)->emplace_back(cur);
+      return CXChildVisit_Continue;
+    },
+    &result
+  );
+  return result;
+}
+
 std::vector<clangmm::Cursor> clangmm::Cursor::get_arguments() const {
   std::vector<Cursor> cursors;
   auto size=clang_Cursor_getNumArguments(cx_cursor);
