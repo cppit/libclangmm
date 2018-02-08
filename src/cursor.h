@@ -212,6 +212,7 @@ namespace clangmm {
     std::vector<Cursor> get_all_overridden_cursors() const;
     operator bool() const;
     bool operator==(const Cursor& rhs) const;
+    unsigned hash() const;
     
     bool is_valid_kind() const;
     std::string get_type_description() const;

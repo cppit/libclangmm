@@ -195,6 +195,10 @@ bool clangmm::Cursor::operator==(const Cursor& rhs) const {
   return clang_equalCursors(cx_cursor, rhs.cx_cursor);
 }
 
+unsigned clangmm::Cursor::hash() const {
+  return clang_hashCursor(cx_cursor);
+}
+
 bool clangmm::Cursor::is_valid_kind() const {
   auto referenced=clang_getCursorReferenced(cx_cursor);
   if(clang_Cursor_isNull(referenced))
