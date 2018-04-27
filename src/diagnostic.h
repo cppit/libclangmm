@@ -10,6 +10,14 @@ namespace clangmm {
     friend class TranslationUnit;
     Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnostic);
   public:
+    enum class Severity {
+      Ignored = 0,
+      Note,
+      Warning,
+      Error,
+      Fatal
+    };
+    
     class FixIt {
     public:
       FixIt(const std::string &source, const std::pair<clangmm::Offset, clangmm::Offset> &offsets):
@@ -17,11 +25,8 @@ namespace clangmm {
       std::string source;
       std::pair<clangmm::Offset, clangmm::Offset> offsets;
     };
-    
-    static const std::string get_severity_spelling(unsigned severity);
 
-    unsigned severity;
-    std::string severity_spelling;
+    Severity severity;
     std::string spelling;
     std::string path;
     std::pair<clangmm::Offset, clangmm::Offset> offsets;

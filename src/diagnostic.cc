@@ -4,8 +4,7 @@
 #include "utility.h"
 
 clangmm::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagnostic) {
-  severity=clang_getDiagnosticSeverity(cx_diagnostic);
-  severity_spelling=get_severity_spelling(severity);
+  severity=static_cast<Severity>(clang_getDiagnosticSeverity(cx_diagnostic));
   spelling=to_string(clang_getDiagnosticSpelling(cx_diagnostic));
   
   SourceLocation location(clang_getDiagnosticLocation(cx_diagnostic));
@@ -21,22 +20,5 @@ clangmm::Diagnostic::Diagnostic(CXTranslationUnit& cx_tu, CXDiagnostic& cx_diagn
     CXSourceRange fix_it_range;
     auto source=to_string(clang_getDiagnosticFixIt(cx_diagnostic, c, &fix_it_range));
     fix_its.emplace_back(source, SourceRange(fix_it_range).get_offsets());
-  }
-}
-
-const std::string clangmm::Diagnostic::get_severity_spelling(unsigned severity) {
-  switch(severity) {
-    case CXDiagnostic_Ignored:
-      return "Ignored";
-    case CXDiagnostic_Note:
-      return "Note";
-    case CXDiagnostic_Warning:
-      return "Warning";
-    case CXDiagnostic_Error:
-      return "Error";
-    case CXDiagnostic_Fatal:
-      return "Fatal";
-    default:
-      return "";
   }
 }

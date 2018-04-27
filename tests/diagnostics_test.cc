@@ -27,5 +27,5 @@ int main() {
   auto diagnostics=tu.get_diagnostics();
   assert(diagnostics.size()>0);
   assert(!diagnostics[0].spelling.empty());
-  assert(diagnostics[0].severity==3);
+  assert(diagnostics[0].severity==clangmm::Diagnostic::Severity::Error);
 }
