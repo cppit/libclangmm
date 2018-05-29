@@ -63,14 +63,16 @@ clangmm::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range, bool
         if(clang_getCursorKind(cx_cursor)==CXCursor_FieldDecl) {
           Cursor cursor(cx_cursor);
           auto clang_offset=cursor.get_source_location().get_offset();
-          for(auto it=data->invalid_tokens.begin();it!=data->invalid_tokens.end();++it) {
+          for(auto it=data->invalid_tokens.begin();it!=data->invalid_tokens.end();) {
             if(it->second==clang_offset) {
               (*data->tokens)[it->first].cx_cursor=cursor.cx_cursor;
-              data->invalid_tokens.erase(it);
+              it=data->invalid_tokens.erase(it);
               if(data->invalid_tokens.empty())
                 return CXChildVisit_Break;
               break;
             }
+            else
+              ++it;
           }
         }
         return CXChildVisit_Recurse;
