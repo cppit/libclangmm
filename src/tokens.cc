@@ -75,6 +75,8 @@ clangmm::Tokens::Tokens(CXTranslationUnit &cx_tu, const SourceRange &range, bool
         }
         return CXChildVisit_Recurse;
       }, &data);
+      if(invalid_tokens.empty())
+        break;
     }
   }
 }
