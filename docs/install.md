@@ -6,7 +6,7 @@ sudo apt-get install git cmake make g++ libclang-dev
 ```
 
 ```sh
-git clone https://github.com/cppit/libclangmm.git
+git clone https://gitlab.com/cppit/libclangmm.git
 cd libclangmm
 cmake .
 make
@@ -19,7 +19,7 @@ brew install cmake --with-clang llvm
 ```
 
 ```sh
-git clone https://github.com/cppit/libclangmm.git
+git clone https://gitlab.com/cppit/libclangmm.git
 cd libclangmm
 cmake .
 make
@@ -34,7 +34,7 @@ pacman -S git mingw-w64-x86_64-cmake make mingw-w64-x86_64-toolchain mingw-w64-x
 
 Compile and install (replace `mingw64` with `mingw32` for 32-bit MSYS2 installs):
 ```sh
-git clone https://github.com/cppit/libclangmm.git
+git clone https://gitlab.com/cppit/libclangmm.git
 cd libclangmm
 cmake -G"MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=/mingw64 .
 make
@@ -51,7 +51,7 @@ git cmake make gcc-g++ libclang-devel
 ```
 Then run the following in the Cygwin Terminal:
 ```sh
-git clone https://github.com/cppit/libclangmm.git
+git clone https://gitlab.com/cppit/libclangmm.git
 cd libclangmm
 cmake .
 make
